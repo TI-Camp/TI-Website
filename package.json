@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "cloudinary": "^2.0.0"
+    "cloudinary": "^2.9.0"
+  },
+  "devDependencies": {
+    "dotenv": "^17.3.1"
   }
 }

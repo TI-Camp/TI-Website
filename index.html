@@ -25,268 +25,9 @@
       font-family: 'Lato', sans-serif;
       background-color: var(--cream);
       color: var(--text-dark);
+      padding-top: 60px;
     }
 
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 3rem 1.5rem;
-      background: linear-gradient(160deg, var(--cream) 0%, var(--cream-dark) 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 20% 80%, rgba(30, 77, 43, 0.06) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 20%, rgba(74, 140, 92, 0.08) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    .hero-logo {
-      width: min(320px, 72vw);
-      height: auto;
-      margin-bottom: 2.5rem;
-      filter: drop-shadow(0 4px 16px rgba(30, 77, 43, 0.18));
-      animation: fadeUp 0.9s ease both;
-    }
-
-    .centennial-badge {
-      display: inline-block;
-      background: var(--green-dark);
-      color: var(--cream);
-      font-family: 'Lato', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      padding: 0.45rem 1.2rem;
-      border-radius: 2rem;
-      margin-bottom: 1.4rem;
-      animation: fadeUp 0.9s 0.15s ease both;
-    }
-
-    .hero-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 700;
-      color: var(--green-dark);
-      line-height: 1.15;
-      margin-bottom: 0.6rem;
-      animation: fadeUp 0.9s 0.25s ease both;
-    }
-
-    .hero-subtitle {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
-      font-weight: 400;
-      font-style: italic;
-      color: var(--green-mid);
-      margin-bottom: 0.5rem;
-      animation: fadeUp 0.9s 0.35s ease both;
-    }
-
-    .hero-location {
-      font-size: 0.9rem;
-      font-weight: 300;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-mid);
-      margin-bottom: 2.8rem;
-      animation: fadeUp 0.9s 0.4s ease both;
-    }
-
-    .hero-divider {
-      width: 60px;
-      height: 2px;
-      background: var(--amber);
-      margin: 0 auto 2.8rem;
-      animation: fadeUp 0.9s 0.45s ease both;
-    }
-
-    .hero-tagline {
-      font-size: clamp(0.95rem, 2vw, 1.15rem);
-      font-weight: 300;
-      color: var(--text-mid);
-      max-width: 520px;
-      line-height: 1.75;
-      animation: fadeUp 0.9s 0.5s ease both;
-    }
-
-    /* ── SLIDESHOW ── */
-    .slideshow-section {
-      background: var(--green-dark);
-      padding: 3rem 1.5rem;
-      text-align: center;
-    }
-
-    .slideshow-section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      font-weight: 700;
-      color: var(--cream);
-      margin-bottom: 1.5rem;
-    }
-
-    .slideshow-container {
-      position: relative;
-      max-width: 900px;
-      margin: 0 auto;
-      aspect-ratio: 4 / 3;
-      background: var(--text-dark);
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    }
-
-    .slideshow-container img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: var(--text-dark);
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-
-    .slideshow-container img.active {
-      opacity: 1;
-    }
-
-    .slideshow-caption {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      color: var(--cream);
-      opacity: 0.7;
-      font-style: italic;
-    }
-
-    .slideshow-counter {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      padding: 0.4rem 0.8rem;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      font-family: 'Lato', sans-serif;
-    }
-
-    .slideshow-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .slideshow-controls button {
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: var(--cream);
-      padding: 0.6rem 1.2rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-family: 'Lato', sans-serif;
-      font-size: 0.9rem;
-      transition: background 0.2s ease;
-    }
-
-    .slideshow-controls button:hover {
-      background: rgba(255, 255, 255, 0.25);
-    }
-
-    .slideshow-cta {
-      margin-top: 1.5rem;
-      font-size: 0.95rem;
-      color: var(--cream);
-      opacity: 0.85;
-    }
-
-    .slideshow-cta a {
-      color: var(--amber);
-      text-decoration: none;
-    }
-
-    .slideshow-cta a:hover {
-      text-decoration: underline;
-    }
-
-    .slideshow-photo-caption {
-      margin-top: 1rem;
-      font-size: 1.1rem;
-      color: var(--cream);
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      min-height: 1.5em;
-    }
-
-    /* ── CENTENNIAL BAND ── */
-    .centennial-band {
-      background: var(--green-dark);
-      color: var(--cream);
-      text-align: center;
-      padding: 3.5rem 1.5rem;
-    }
-
-    .centennial-band h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 700;
-      margin-bottom: 0.8rem;
-    }
-
-    .centennial-band p {
-      font-size: clamp(0.9rem, 1.8vw, 1.05rem);
-      font-weight: 300;
-      opacity: 0.85;
-      max-width: 560px;
-      margin: 0 auto;
-      line-height: 1.7;
-    }
-
-    .year-range {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--amber);
-      display: block;
-      margin-bottom: 0.6rem;
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--cream-dark);
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.82rem;
-      color: var(--text-mid);
-      letter-spacing: 0.05em;
-      border-top: 1px solid rgba(30, 77, 43, 0.12);
-    }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(22px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 480px) {
-      .hero { padding: 2.5rem 1rem; }
-    }
     /* ── NAVIGATION ── */
     .nav {
       position: fixed;
@@ -340,7 +81,6 @@
       font-weight: 700;
     }
 
-    /* Hamburger menu (hidden on desktop) */
     .nav-toggle {
       display: none;
       background: none;
@@ -358,16 +98,10 @@
       transition: 0.3s;
     }
 
-    /* Mobile styles */
     @media (max-width: 768px) {
-      .nav {
-        padding: 0 1rem;
-      }
-
-      .nav-toggle {
-        display: block;
-      }
-
+      .nav { padding: 0 1rem; }
+      .nav-logo { left: 1rem; }
+      .nav-toggle { display: block; }
       .nav-links {
         position: absolute;
         top: 60px;
@@ -380,25 +114,190 @@
         display: none;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       }
-
-      .nav-links.open {
-        display: flex;
-      }
-
+      .nav-links.open { display: flex; }
       .nav-links a {
         padding: 0.75rem 1rem;
         border-radius: 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
-
-      .nav-links li:last-child a {
-        border-bottom: none;
-      }
+      .nav-links li:last-child a { border-bottom: none; }
     }
 
-    /* Offset body for fixed nav */
-    body {
-      padding-top: 60px;
+    /* ── HERO SLIDESHOW ── */
+    .hero-slideshow {
+      background: var(--green-dark);
+      padding: 2rem 1.5rem 3rem;
+      text-align: center;
+    }
+
+    .hero-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .centennial-badge {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--green-dark);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(0.95rem, 2vw, 1.2rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--cream);
+      opacity: 0.85;
+    }
+
+    .slideshow-container {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      aspect-ratio: 4 / 3;
+      background: var(--text-dark);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .slideshow-container img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: var(--text-dark);
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .slideshow-container img.active {
+      opacity: 1;
+    }
+
+    .slideshow-counter {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: 'Lato', sans-serif;
+    }
+
+    .slideshow-photo-caption {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: var(--cream);
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      min-height: 1.5em;
+    }
+
+    .slideshow-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .slideshow-controls button {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--cream);
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      transition: background 0.2s ease;
+    }
+
+    .slideshow-controls button:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .slideshow-cta {
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      color: var(--cream);
+      opacity: 0.85;
+    }
+
+    .slideshow-cta a {
+      color: var(--amber);
+      text-decoration: none;
+    }
+
+    .slideshow-cta a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── CENTENNIAL BAND ── */
+    .centennial-band {
+      background: var(--cream);
+      color: var(--text-dark);
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+    }
+
+    .centennial-band h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 0.8rem;
+    }
+
+    .centennial-band p {
+      font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+      font-weight: 300;
+      color: var(--text-mid);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .year-range {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--cream-dark);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      letter-spacing: 0.05em;
+      border-top: 1px solid rgba(30, 77, 43, 0.12);
     }
 
   </style>
@@ -417,28 +316,17 @@
       <li><a href="how-to.html">How-to</a></li>
       <li><a href="family.html">Family</a></li>
       <li><a href="schedule.html">Schedule</a></li>
-      <li><a href="booking.html">Book</a></li>
+      <li><a href="archive.html">Archive</a></li>
     </ul>
   </nav>
 
-  <section class="hero">
-    <img src="logo.png" alt="Treasure Island Camp logo" class="hero-logo" />
-    <span class="centennial-badge">Celebrating 100 Years &nbsp;·&nbsp; 1926 – 2026</span>
-    <h1 class="hero-title">Treasure Island Camp</h1>
-    <p class="hero-subtitle">A family tradition since 1926</p>
-    <p class="hero-location">Pointe au Baril &nbsp;·&nbsp; Georgian Bay &nbsp;·&nbsp; Ontario</p>
-    <div class="hero-divider"></div>
-    <p class="hero-tagline">
-      For one hundred years, the families of Treasure Island Camp
-      have gathered on these rocky shores — swimming, paddling,
-      and carrying forward the spirit of Annis Richardson's beloved island.
-    </p>
-  </section>
-
-  <section class="slideshow-section">
-    <h2>A Century of Memories</h2>
+  <section class="hero-slideshow">
+    <div class="hero-header">
+      <span class="centennial-badge">1926 – 2026 &nbsp;·&nbsp; 100 Years</span>
+      <h1 class="hero-title">Treasure Island Camp</h1>
+      <p class="hero-subtitle">A family tradition on Georgian Bay</p>
+    </div>
     <div class="slideshow-container" id="slideshow">
-      <!-- Images loaded by JavaScript -->
       <div class="slideshow-counter" id="counter">1 / 48</div>
     </div>
     <p class="slideshow-photo-caption" id="photoCaption"></p>
@@ -480,7 +368,6 @@
     let intervalId;
     let images;
 
-    // Load photos from JSON
     fetch(basePath + "photos.json")
       .then(response => response.json())
       .then(data => {
@@ -489,7 +376,6 @@
       });
 
     function initSlideshow() {
-      // Create all image elements
       photos.forEach((photo, index) => {
         const img = document.createElement("img");
         img.src = basePath + encodeURIComponent(photo.file);
@@ -545,7 +431,6 @@
       clearInterval(intervalId);
     }
 
-    // Event listeners
     pauseBtn.addEventListener("click", () => {
       isPaused = !isPaused;
       pauseBtn.textContent = isPaused ? "Play" : "Pause";

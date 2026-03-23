@@ -1,5 +1,6 @@
 # Planning docs (private)
 PLANNING.md
+WORKLOG.md
 
 # Data files (source databases, reference images)
 data/
@@ -15,3 +16,13 @@ data/
 *.swo
 .vscode/
 .idea/
+
+# Environment files (secrets)
+.env.local
+.env*.local
+
+# Node
+node_modules/
+
+# Local dev files
+local-server.cjs
