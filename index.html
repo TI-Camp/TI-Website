@@ -254,6 +254,25 @@
       text-decoration: underline;
     }
 
+    .upload-btn {
+      background: var(--amber);
+      color: var(--green-dark);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .upload-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
     /* ── CENTENNIAL BAND ── */
     .centennial-band {
       background: var(--cream);
@@ -336,7 +355,7 @@
       <button id="nextBtn">Next &#8594;</button>
     </div>
     <p class="slideshow-cta">
-      Have photos to share? Email them to <a href="mailto:treasureislandcamp@gmail.com">treasureislandcamp@gmail.com</a>
+      Have photos to share? <button class="upload-btn" id="uploadBtn">Upload Photos</button>
     </p>
   </section>
 
@@ -354,31 +373,62 @@
     <p>Treasure Island Camp &nbsp;&middot;&nbsp; Pointe au Baril, Ontario &nbsp;&middot;&nbsp; Est. 1926</p>
   </footer>
 
+  <!-- Cloudinary Upload Widget -->
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+
   <script>
-    const basePath = "images/ti_photos_landing_page/";
-    const container = document.getElementById("slideshow");
-    const counter = document.getElementById("counter");
-    const captionEl = document.getElementById("photoCaption");
-    const pauseBtn = document.getElementById("pauseBtn");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
+    // Cloudinary configuration
+    const CLOUD_NAME = "dqni1tcfn";
+    const UPLOAD_PRESET = "ti-camp";
+    const FOLDER = "ti-camp-photos";
+
+    // Slideshow state
     let photos = [];
     let currentIndex = 0;
     let isPaused = false;
     let intervalId;
     let images;
 
-    fetch(basePath + "photos.json")
-      .then(response => response.json())
-      .then(data => {
-        photos = data.photos;
-        initSlideshow();
-      });
+    const container = document.getElementById("slideshow");
+    const counter = document.getElementById("counter");
+    const captionEl = document.getElementById("photoCaption");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const uploadBtn = document.getElementById("uploadBtn");
+
+    // Load photos from Cloudinary via API
+    loadPhotos();
+
+    function loadPhotos() {
+      fetch('/api/photos')
+        .then(response => {
+          if (!response.ok) throw new Error('API returned ' + response.status);
+          return response.json();
+        })
+        .then(data => {
+          if (data.photos && data.photos.length > 0) {
+            photos = data.photos;
+            initSlideshow();
+          } else {
+            container.innerHTML = '<p style="color: var(--cream); padding: 2rem;">No photos yet. Be the first to upload!</p>';
+            counter.textContent = "0 / 0";
+          }
+        })
+        .catch(err => {
+          console.error("Failed to load photos:", err);
+          container.innerHTML = '<p style="color: var(--cream); padding: 2rem;">Unable to load photos. Please try again later.</p>';
+        });
+    }
 
     function initSlideshow() {
+      // Clear existing content except counter
+      const existingImages = container.querySelectorAll("img");
+      existingImages.forEach(img => img.remove());
+
       photos.forEach((photo, index) => {
         const img = document.createElement("img");
-        img.src = basePath + encodeURIComponent(photo.file);
+        img.src = photo.url;
         img.alt = photo.caption || "Treasure Island Camp memory";
         if (index === 0) img.classList.add("active");
         container.appendChild(img);
@@ -390,17 +440,8 @@
       startAutoPlay();
     }
 
-    function formatCaption(photo) {
-      if (!photo.caption && !photo.year) return "";
-      let text = photo.caption || "";
-      if (photo.year) {
-        text = text ? text + " (" + photo.year + ")" : photo.year;
-      }
-      return text;
-    }
-
     function updateCaption() {
-      captionEl.textContent = formatCaption(photos[currentIndex]);
+      captionEl.textContent = photos[currentIndex]?.caption || "";
     }
 
     function updateCounter() {
@@ -408,6 +449,7 @@
     }
 
     function goToSlide(newIndex) {
+      if (!images || images.length === 0) return;
       images[currentIndex].classList.remove("active");
       currentIndex = (newIndex + photos.length) % photos.length;
       images[currentIndex].classList.add("active");
@@ -424,6 +466,7 @@
     }
 
     function startAutoPlay() {
+      if (intervalId) clearInterval(intervalId);
       intervalId = setInterval(nextSlide, 7000);
     }
 
@@ -455,6 +498,49 @@
         stopAutoPlay();
         startAutoPlay();
       }
+    });
+
+    // Cloudinary upload widget
+    const uploadWidget = cloudinary.createUploadWidget(
+      {
+        cloudName: CLOUD_NAME,
+        uploadPreset: UPLOAD_PRESET,
+        folder: FOLDER,
+        tags: ["ti-slideshow"],
+        sources: ["local", "camera", "url"],
+        multiple: true,
+        maxFiles: 20,
+        resourceType: "image",
+        clientAllowedFormats: ["jpg", "jpeg", "png", "gif", "webp"],
+        maxFileSize: 10000000,
+        styles: {
+          palette: {
+            window: "#1e4d2b",
+            windowBorder: "#c8860a",
+            tabIcon: "#f5f0e6",
+            menuIcons: "#c8860a",
+            textDark: "#1a2e1e",
+            textLight: "#f5f0e6",
+            link: "#c8860a",
+            action: "#c8860a",
+            inactiveTabIcon: "#4a8c5c",
+            error: "#e74c3c",
+            inProgress: "#c8860a",
+            complete: "#4a8c5c",
+            sourceBg: "#f5f0e6"
+          }
+        }
+      },
+      (error, result) => {
+        if (!error && result && result.event === "close") {
+          // Reload photos after widget closes
+          loadPhotos();
+        }
+      }
+    );
+
+    uploadBtn.addEventListener("click", () => {
+      uploadWidget.open();
     });
   </script>
 
