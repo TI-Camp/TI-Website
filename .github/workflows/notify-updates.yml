@@ -40,6 +40,6 @@ jobs:
 
             ${{ steps.commits.outputs.messages }}
 
-            View the site: https://ti-website-one.vercel.app
+            View the site: https://ti-website-gamma.vercel.app
 
             - Ben (via automated update)
