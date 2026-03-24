@@ -203,6 +203,13 @@
       border-radius: 4px;
       font-size: 0.85rem;
       font-family: 'Lato', sans-serif;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .slideshow-counter.visible {
+      opacity: 1;
     }
 
     .slideshow-photo-caption {
@@ -271,6 +278,288 @@
     .upload-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ── UPLOAD MODAL ── */
+    .upload-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .upload-overlay.open {
+      display: flex;
+    }
+
+    .upload-modal {
+      background: var(--cream);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 720px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+    }
+
+    .upload-modal-header {
+      background: var(--green-dark);
+      color: var(--cream);
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .upload-modal-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      margin: 0;
+    }
+
+    .upload-close-btn {
+      background: none;
+      border: none;
+      color: var(--cream);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
+      line-height: 1;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .upload-close-btn:hover {
+      opacity: 1;
+    }
+
+    .upload-modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* Drop zone */
+    .upload-dropzone {
+      border: 2px dashed var(--green-mid);
+      border-radius: 8px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .upload-dropzone:hover,
+    .upload-dropzone.dragover {
+      border-color: var(--amber);
+      background: rgba(200, 134, 10, 0.06);
+    }
+
+    .upload-dropzone p {
+      color: var(--text-mid);
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .upload-dropzone .browse-link {
+      color: var(--amber);
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .upload-dropzone .file-types {
+      font-size: 0.8rem;
+      color: var(--text-mid);
+      opacity: 0.7;
+      margin-top: 0.5rem;
+    }
+
+    /* Review list */
+    .upload-review-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .upload-review-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      background: white;
+      border-radius: 8px;
+      padding: 0.8rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .upload-review-thumb {
+      width: 100px;
+      height: 75px;
+      object-fit: cover;
+      border-radius: 6px;
+      flex-shrink: 0;
+      background: var(--cream-dark);
+    }
+
+    .upload-review-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      min-width: 0;
+    }
+
+    .upload-review-name {
+      font-size: 0.8rem;
+      color: var(--text-mid);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .upload-review-caption {
+      width: 100%;
+      padding: 0.5rem 0.6rem;
+      border: 1px solid var(--cream-dark);
+      border-radius: 4px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      resize: none;
+      transition: border-color 0.2s;
+    }
+
+    .upload-review-caption:focus {
+      outline: none;
+      border-color: var(--green-mid);
+    }
+
+    .upload-review-remove {
+      background: none;
+      border: none;
+      color: var(--text-mid);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.2rem;
+      line-height: 1;
+      opacity: 0.5;
+      flex-shrink: 0;
+      transition: opacity 0.2s, color 0.2s;
+    }
+
+    .upload-review-remove:hover {
+      opacity: 1;
+      color: #c0392b;
+    }
+
+    .upload-review-progress {
+      height: 4px;
+      background: var(--cream-dark);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .upload-review-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--green-mid);
+      border-radius: 2px;
+      transition: width 0.3s ease;
+    }
+
+    .upload-review-progress-bar.done {
+      background: var(--green-mid);
+    }
+
+    .upload-review-progress-bar.error {
+      background: #c0392b;
+    }
+
+    .upload-review-status {
+      font-size: 0.75rem;
+      color: var(--text-mid);
+    }
+
+    .upload-review-status.done {
+      color: var(--green-mid);
+    }
+
+    .upload-review-status.error {
+      color: #c0392b;
+    }
+
+    /* Footer actions */
+    .upload-modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--cream-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .upload-modal-footer .photo-count {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+    }
+
+    .upload-modal-footer .btn-group {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .upload-cancel-btn {
+      background: none;
+      border: 1px solid var(--cream-dark);
+      color: var(--text-mid);
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+
+    .upload-cancel-btn:hover {
+      border-color: var(--text-mid);
+    }
+
+    .upload-confirm-btn {
+      background: var(--green-dark);
+      color: var(--cream);
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+
+    .upload-confirm-btn:hover {
+      background: var(--green-mid);
+    }
+
+    .upload-confirm-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 520px) {
+      .upload-review-item {
+        flex-direction: column;
+      }
+      .upload-review-thumb {
+        width: 100%;
+        height: 120px;
+      }
     }
 
     /* ── CENTENNIAL BAND ── */
@@ -346,7 +635,7 @@
       <p class="hero-subtitle">A family tradition on Georgian Bay</p>
     </div>
     <div class="slideshow-container" id="slideshow">
-      <div class="slideshow-counter" id="counter">1 / 48</div>
+      <div class="slideshow-counter" id="counter"></div>
     </div>
     <p class="slideshow-photo-caption" id="photoCaption"></p>
     <div class="slideshow-controls">
@@ -373,8 +662,32 @@
     <p>Treasure Island Camp &nbsp;&middot;&nbsp; Pointe au Baril, Ontario &nbsp;&middot;&nbsp; Est. 1926</p>
   </footer>
 
-  <!-- Cloudinary Upload Widget -->
-  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <!-- Upload Modal -->
+  <div class="upload-overlay" id="uploadOverlay">
+    <div class="upload-modal">
+      <div class="upload-modal-header">
+        <h2>Upload Photos</h2>
+        <button class="upload-close-btn" id="uploadCloseBtn">&times;</button>
+      </div>
+      <div class="upload-modal-body">
+        <div class="upload-dropzone" id="dropzone">
+          <p>Drag & drop photos here</p>
+          <p>or <span class="browse-link">browse files</span></p>
+          <p class="file-types">JPG, PNG, GIF, WebP &middot; Up to 10 MB each &middot; Max 20 photos</p>
+          <input type="file" id="fileInput" accept="image/jpeg,image/png,image/gif,image/webp" multiple hidden />
+        </div>
+        <ul class="upload-review-list" id="reviewList"></ul>
+      </div>
+      <div class="upload-modal-footer" id="uploadFooter" style="display: none;">
+        <span class="photo-count" id="photoCount"></span>
+        <div class="btn-group">
+          <button class="upload-cancel-btn" id="addMoreBtn">+ Add More</button>
+          <button class="upload-cancel-btn" id="uploadCancelBtn">Cancel</button>
+          <button class="upload-confirm-btn" id="uploadConfirmBtn">Upload All</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     // Cloudinary configuration
@@ -383,6 +696,7 @@
     const FOLDER = "ti-camp-photos";
 
     // Slideshow state
+    const PINNED_FIRST = "Grammie_-_90th_bday_-_1962_-_Happy";
     let photos = [];
     let currentIndex = 0;
     let isPaused = false;
@@ -409,6 +723,18 @@
         .then(data => {
           if (data.photos && data.photos.length > 0) {
             photos = data.photos;
+            // Pin the grammie photo first, shuffle the rest
+            const pinnedIdx = photos.findIndex(p => p.publicId.includes(PINNED_FIRST));
+            let pinned = null;
+            if (pinnedIdx !== -1) {
+              pinned = photos.splice(pinnedIdx, 1)[0];
+            }
+            // Fisher-Yates shuffle
+            for (let i = photos.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [photos[i], photos[j]] = [photos[j], photos[i]];
+            }
+            if (pinned) photos.unshift(pinned);
             initSlideshow();
           } else {
             container.innerHTML = '<p style="color: var(--cream); padding: 2rem;">No photos yet. Be the first to upload!</p>';
@@ -430,13 +756,25 @@
         const img = document.createElement("img");
         img.src = photo.url;
         img.alt = photo.caption || "Treasure Island Camp memory";
-        if (index === 0) img.classList.add("active");
+        if (index === 0) {
+          img.classList.add("active");
+          // Show counter and caption once the first image loads
+          const showCounter = () => {
+            updateCounter();
+            updateCaption();
+            counter.classList.add("visible");
+          };
+          if (img.complete) {
+            showCounter();
+          } else {
+            img.addEventListener("load", showCounter);
+          }
+        }
         container.appendChild(img);
       });
 
       images = container.querySelectorAll("img");
-      updateCounter();
-      updateCaption();
+      currentIndex = 0;
       startAutoPlay();
     }
 
@@ -448,21 +786,23 @@
       counter.textContent = (currentIndex + 1) + " / " + photos.length;
     }
 
-    function goToSlide(newIndex) {
+    function showSlide(newIndex) {
       if (!images || images.length === 0) return;
       images[currentIndex].classList.remove("active");
-      currentIndex = (newIndex + photos.length) % photos.length;
+      currentIndex = newIndex;
       images[currentIndex].classList.add("active");
       updateCounter();
       updateCaption();
     }
 
     function nextSlide() {
-      goToSlide(currentIndex + 1);
+      if (!images || images.length === 0) return;
+      showSlide((currentIndex + 1) % photos.length);
     }
 
     function prevSlide() {
-      goToSlide(currentIndex - 1);
+      if (!images || images.length === 0) return;
+      showSlide((currentIndex - 1 + photos.length) % photos.length);
     }
 
     function startAutoPlay() {
@@ -500,48 +840,301 @@
       }
     });
 
-    // Cloudinary upload widget
-    const uploadWidget = cloudinary.createUploadWidget(
-      {
-        cloudName: CLOUD_NAME,
-        uploadPreset: UPLOAD_PRESET,
-        folder: FOLDER,
-        tags: ["ti-slideshow"],
-        sources: ["local", "camera", "url"],
-        multiple: true,
-        maxFiles: 20,
-        resourceType: "image",
-        clientAllowedFormats: ["jpg", "jpeg", "png", "gif", "webp"],
-        maxFileSize: 10000000,
-        styles: {
-          palette: {
-            window: "#1e4d2b",
-            windowBorder: "#c8860a",
-            tabIcon: "#f5f0e6",
-            menuIcons: "#c8860a",
-            textDark: "#1a2e1e",
-            textLight: "#f5f0e6",
-            link: "#c8860a",
-            action: "#c8860a",
-            inactiveTabIcon: "#4a8c5c",
-            error: "#e74c3c",
-            inProgress: "#c8860a",
-            complete: "#4a8c5c",
-            sourceBg: "#f5f0e6"
-          }
-        }
-      },
-      (error, result) => {
-        if (!error && result && result.event === "close") {
-          // Reload photos after widget closes
-          loadPhotos();
+    // ── CUSTOM UPLOAD MODAL ──
+    const overlay = document.getElementById("uploadOverlay");
+    const dropzone = document.getElementById("dropzone");
+    const fileInput = document.getElementById("fileInput");
+    const reviewList = document.getElementById("reviewList");
+    const uploadFooter = document.getElementById("uploadFooter");
+    const photoCount = document.getElementById("photoCount");
+    const confirmBtn = document.getElementById("uploadConfirmBtn");
+    const cancelBtn = document.getElementById("uploadCancelBtn");
+    const closeBtn = document.getElementById("uploadCloseBtn");
+
+    const addMoreBtn = document.getElementById("addMoreBtn");
+
+    const MAX_FILES = 20;
+    const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
+    const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+
+    let pendingFiles = []; // { file, caption, id }
+    let isUploading = false;
+
+    // Open / close modal
+    uploadBtn.addEventListener("click", () => {
+      overlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+    });
+
+    function closeModal() {
+      if (isUploading) return; // don't close mid-upload
+      overlay.classList.remove("open");
+      document.body.style.overflow = "";
+      resetModal();
+    }
+
+    closeBtn.addEventListener("click", closeModal);
+    cancelBtn.addEventListener("click", closeModal);
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeModal();
+    });
+
+    function resetModal() {
+      pendingFiles = [];
+      reviewList.innerHTML = "";
+      uploadFooter.style.display = "none";
+      dropzone.style.display = "";
+      addMoreBtn.style.display = "";
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = "Upload All";
+      isUploading = false;
+    }
+
+    // Drag & drop
+    dropzone.addEventListener("click", () => fileInput.click());
+
+    dropzone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropzone.classList.add("dragover");
+    });
+
+    dropzone.addEventListener("dragleave", () => {
+      dropzone.classList.remove("dragover");
+    });
+
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("dragover");
+      handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener("change", () => {
+      handleFiles(fileInput.files);
+      fileInput.value = ""; // reset so same files can be re-selected
+    });
+
+    addMoreBtn.addEventListener("click", () => fileInput.click());
+
+    function handleFiles(fileList) {
+      const files = Array.from(fileList);
+      for (const file of files) {
+        if (pendingFiles.length >= MAX_FILES) break;
+        if (!ALLOWED_TYPES.includes(file.type)) continue;
+        if (file.size > MAX_SIZE) continue;
+        // Skip duplicates by name+size
+        if (pendingFiles.some(p => p.file.name === file.name && p.file.size === file.size)) continue;
+
+        const id = "upload-" + Math.random().toString(36).slice(2, 9);
+        pendingFiles.push({ file, caption: "", id });
+      }
+      renderReviewList();
+    }
+
+    function renderReviewList() {
+      reviewList.innerHTML = "";
+
+      if (pendingFiles.length === 0) {
+        dropzone.style.display = "";
+        uploadFooter.style.display = "none";
+        return;
+      }
+
+      dropzone.style.display = "none";
+      uploadFooter.style.display = "flex";
+      photoCount.textContent = pendingFiles.length + " photo" + (pendingFiles.length === 1 ? "" : "s");
+
+      pendingFiles.forEach((item, idx) => {
+        const li = document.createElement("li");
+        li.className = "upload-review-item";
+        li.id = item.id;
+
+        const thumb = document.createElement("img");
+        thumb.className = "upload-review-thumb";
+        thumb.src = URL.createObjectURL(item.file);
+
+        const info = document.createElement("div");
+        info.className = "upload-review-info";
+
+        const name = document.createElement("div");
+        name.className = "upload-review-name";
+        name.textContent = item.file.name;
+
+        const caption = document.createElement("textarea");
+        caption.className = "upload-review-caption";
+        caption.placeholder = "Add a caption (optional)";
+        caption.rows = 2;
+        caption.value = item.caption;
+        caption.addEventListener("input", () => {
+          pendingFiles[idx].caption = caption.value;
+        });
+
+        const progress = document.createElement("div");
+        progress.className = "upload-review-progress";
+        progress.style.display = "none";
+        const progressBar = document.createElement("div");
+        progressBar.className = "upload-review-progress-bar";
+        progress.appendChild(progressBar);
+
+        const status = document.createElement("div");
+        status.className = "upload-review-status";
+
+        info.appendChild(name);
+        info.appendChild(caption);
+        info.appendChild(progress);
+        info.appendChild(status);
+
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "upload-review-remove";
+        removeBtn.innerHTML = "&times;";
+        removeBtn.title = "Remove";
+        removeBtn.addEventListener("click", () => {
+          pendingFiles.splice(idx, 1);
+          renderReviewList();
+        });
+
+        li.appendChild(thumb);
+        li.appendChild(info);
+        li.appendChild(removeBtn);
+        reviewList.appendChild(li);
+      });
+    }
+
+    // Upload to Cloudinary
+    function reattachConfirmHandler() {
+      confirmBtn.onclick = handleConfirmUpload;
+    }
+
+    async function handleConfirmUpload() {
+      if (pendingFiles.length === 0 || isUploading) return;
+      isUploading = true;
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = "Uploading...";
+
+      // Disable remove buttons, caption editing, and add more during upload
+      addMoreBtn.style.display = "none";
+      reviewList.querySelectorAll(".upload-review-remove").forEach(b => b.style.display = "none");
+      reviewList.querySelectorAll(".upload-review-caption").forEach(t => t.disabled = true);
+
+      let successCount = 0;
+      const uploadedIds = [];
+
+      for (let i = 0; i < pendingFiles.length; i++) {
+        const item = pendingFiles[i];
+        const li = document.getElementById(item.id);
+        const progressEl = li.querySelector(".upload-review-progress");
+        const barEl = li.querySelector(".upload-review-progress-bar");
+        const statusEl = li.querySelector(".upload-review-status");
+
+        progressEl.style.display = "";
+
+        try {
+          const result = await uploadToCloudinary(item.file, item.caption, (pct) => {
+            barEl.style.width = pct + "%";
+          });
+          barEl.style.width = "100%";
+          barEl.classList.add("done");
+          statusEl.textContent = "Uploaded";
+          statusEl.className = "upload-review-status done";
+          uploadedIds.push(result.public_id);
+          successCount++;
+        } catch (err) {
+          barEl.style.width = "100%";
+          barEl.classList.add("error");
+          statusEl.textContent = "Failed — " + (err.message || "unknown error");
+          statusEl.className = "upload-review-status error";
         }
       }
-    );
 
-    uploadBtn.addEventListener("click", () => {
-      uploadWidget.open();
-    });
+      // Send moderation email if any succeeded
+      if (uploadedIds.length > 0) {
+        try {
+          await fetch('/api/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ publicIds: uploadedIds }),
+          });
+        } catch (e) {
+          console.error('Failed to send notification:', e);
+        }
+      }
+
+      isUploading = false;
+
+      // Show "submitted for review" message
+      reviewList.innerHTML = '';
+      const msg = document.createElement('div');
+      msg.style.cssText = 'text-align:center;padding:2rem 1rem;';
+      msg.innerHTML = '<p style="font-size:1.1rem;color:var(--green-dark);font-weight:700;margin-bottom:0.5rem;">'
+        + 'Photos submitted for review</p>'
+        + '<p style="color:var(--text-mid);font-size:0.9rem;">'
+        + successCount + ' photo' + (successCount === 1 ? '' : 's')
+        + ' uploaded. You\'ll see them on the site once approved.</p>';
+      reviewList.appendChild(msg);
+
+      // Replace footer with "Upload More" and "Done" buttons
+      cancelBtn.textContent = "Done";
+      confirmBtn.textContent = "Upload More";
+      confirmBtn.disabled = false;
+
+      // "Done" closes modal
+      cancelBtn.onclick = () => {
+        overlay.classList.remove("open");
+        document.body.style.overflow = "";
+        resetModal();
+        cancelBtn.onclick = closeModal;
+        cancelBtn.textContent = "Cancel";
+      };
+
+      // "Upload More" resets to dropzone for another batch
+      confirmBtn.onclick = () => {
+        pendingFiles = [];
+        reviewList.innerHTML = "";
+        dropzone.style.display = "";
+        uploadFooter.style.display = "none";
+        addMoreBtn.style.display = "";
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = "Upload All";
+        confirmBtn.onclick = null;
+        cancelBtn.textContent = "Cancel";
+        cancelBtn.onclick = closeModal;
+        reattachConfirmHandler();
+      };
+    }
+
+    reattachConfirmHandler();
+
+    function uploadToCloudinary(file, caption, onProgress) {
+      return new Promise((resolve, reject) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", UPLOAD_PRESET);
+        formData.append("folder", FOLDER);
+        formData.append("tags", "ti-pending");
+        if (caption.trim()) {
+          formData.append("context", "caption=" + caption.trim());
+        }
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://api.cloudinary.com/v1_1/" + CLOUD_NAME + "/image/upload");
+
+        xhr.upload.addEventListener("progress", (e) => {
+          if (e.lengthComputable) {
+            onProgress(Math.round((e.loaded / e.total) * 100));
+          }
+        });
+
+        xhr.addEventListener("load", () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve(JSON.parse(xhr.responseText));
+          } else {
+            reject(new Error("Upload failed (" + xhr.status + ")"));
+          }
+        });
+
+        xhr.addEventListener("error", () => reject(new Error("Network error")));
+        xhr.send(formData);
+      });
+    }
   </script>
 
 </body>
