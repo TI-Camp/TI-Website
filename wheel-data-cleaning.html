@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Wheel — Data Cleaning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Lato', sans-serif;
+      background: #f5f0e6;
+      color: #1a2e1e;
+      margin: 0;
+      padding: 1rem;
+    }
+    h1 { text-align: center; margin-bottom: 0.25rem; }
+    p.info { text-align: center; color: #3d5a42; margin-bottom: 1rem; font-size: 0.9rem; }
+    #wheel-container {
+      display: flex;
+      justify-content: center;
+      overflow: auto;
+    }
+    svg { cursor: grab; }
+    svg:active { cursor: grabbing; }
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .controls button {
+      background: #1e4d2b;
+      color: #f5f0e6;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+    }
+    .controls button:hover { background: #2e6b3e; }
+    .tooltip {
+      position: fixed;
+      background: #1e4d2b;
+      color: #f5f0e6;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      pointer-events: none;
+      display: none;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <h1>Family Wheel — Data Cleaning Template</h1>
+  <p class="info">Hover over any wedge to see its label. Zoom in/out to read smaller layers.</p>
+  <div class="controls">
+    <button onclick="zoomIn()">Zoom In (+)</button>
+    <button onclick="zoomOut()">Zoom Out (−)</button>
+    <button onclick="resetZoom()">Reset</button>
+  </div>
+  <div id="wheel-container">
+    <svg id="wheel" width="1200" height="1200"></svg>
+  </div>
+  <div class="tooltip" id="tooltip"></div>
+
+  <script>
+    const layers = [
+      { prefix: "0",  count: 1,  label: "Gen 0 — Grammie" },
+      { prefix: "A", count: 4,  label: "Gen 1 — Children" },
+      { prefix: "B", count: 15, label: "Gen 2" },
+      { prefix: "C", count: 52, label: "Gen 3" },
+      { prefix: "D", count: 99, label: "Gen 4" },
+      { prefix: "E", count: 32, label: "Gen 5" },
+    ];
+
+    // Colorblind-safe palette
+    const colors = [
+      "rgba(86, 180, 233, 0.6)",
+      "rgba(230, 159, 0, 0.6)",
+      "rgba(204, 121, 167, 0.6)",
+      "rgba(0, 158, 115, 0.6)",
+      "rgba(240, 228, 66, 0.6)",
+      "rgba(0, 114, 178, 0.6)",
+    ];
+
+    const svg = document.getElementById("wheel");
+    const tooltip = document.getElementById("tooltip");
+    const cx = 600, cy = 600;
+    const centerR = 60;
+    const ringWidths = [0, 50, 70, 100, 130, 90]; // per layer ring width
+    const ns = "http://www.w3.org/2000/svg";
+
+    let scale = 1;
+
+    function getOuterRadius(layerIdx) {
+      let r = centerR;
+      for (let i = 1; i <= layerIdx; i++) r += ringWidths[i];
+      return r;
+    }
+
+    function polarToCart(cx, cy, r, angleDeg) {
+      const rad = (angleDeg - 90) * Math.PI / 180; // -90 so 0° is top
+      return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+    }
+
+    function drawArc(innerR, outerR, startAngle, endAngle, fill, id) {
+      const g = document.createElementNS(ns, "g");
+
+      // If full circle (center)
+      if (endAngle - startAngle >= 360) {
+        const circle = document.createElementNS(ns, "circle");
+        circle.setAttribute("cx", cx);
+        circle.setAttribute("cy", cy);
+        circle.setAttribute("r", innerR || outerR);
+        circle.setAttribute("fill", fill);
+        circle.setAttribute("stroke", "#1a2e1e");
+        circle.setAttribute("stroke-width", "1");
+        g.appendChild(circle);
+      } else {
+        const p1 = polarToCart(cx, cy, innerR, startAngle);
+        const p2 = polarToCart(cx, cy, outerR, startAngle);
+        const p3 = polarToCart(cx, cy, outerR, endAngle);
+        const p4 = polarToCart(cx, cy, innerR, endAngle);
+        const largeArc = (endAngle - startAngle > 180) ? 1 : 0;
+
+        const d = [
+          `M ${p1.x} ${p1.y}`,
+          `L ${p2.x} ${p2.y}`,
+          `A ${outerR} ${outerR} 0 ${largeArc} 1 ${p3.x} ${p3.y}`,
+          `L ${p4.x} ${p4.y}`,
+          `A ${innerR} ${innerR} 0 ${largeArc} 0 ${p1.x} ${p1.y}`,
+          "Z"
+        ].join(" ");
+
+        const path = document.createElementNS(ns, "path");
+        path.setAttribute("d", d);
+        path.setAttribute("fill", fill);
+        path.setAttribute("stroke", "#1a2e1e");
+        path.setAttribute("stroke-width", "0.5");
+        g.appendChild(path);
+      }
+
+      // Label
+      const midAngle = (startAngle + endAngle) / 2;
+      const midR = (innerR + outerR) / 2 || outerR * 0.5;
+      const labelPos = polarToCart(cx, cy, midR, midAngle);
+      const angleSpan = endAngle - startAngle;
+
+      // Only show text if wedge is big enough
+      const fontSize = angleSpan > 15 ? 11 : angleSpan > 5 ? 8 : angleSpan > 2.5 ? 6 : 0;
+
+      if (fontSize > 0) {
+        const text = document.createElementNS(ns, "text");
+        text.setAttribute("x", labelPos.x);
+        text.setAttribute("y", labelPos.y);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("dominant-baseline", "central");
+        text.setAttribute("font-family", "Lato, sans-serif");
+        text.setAttribute("font-size", fontSize);
+        text.setAttribute("fill", "#1a2e1e");
+        text.setAttribute("pointer-events", "none");
+        text.textContent = id;
+        g.appendChild(text);
+      }
+
+      // Hover target (invisible wider path for small wedges)
+      g.addEventListener("mouseenter", (e) => {
+        tooltip.textContent = id;
+        tooltip.style.display = "block";
+        g.querySelector("path, circle").setAttribute("stroke-width", "2.5");
+      });
+      g.addEventListener("mousemove", (e) => {
+        tooltip.style.left = e.clientX + 12 + "px";
+        tooltip.style.top = e.clientY - 8 + "px";
+      });
+      g.addEventListener("mouseleave", () => {
+        tooltip.style.display = "none";
+        g.querySelector("path, circle").setAttribute("stroke-width", g.querySelector("circle") ? "1" : "0.5");
+      });
+
+      svg.appendChild(g);
+      return g;
+    }
+
+    // Draw center
+    drawArc(0, centerR, 0, 360, colors[0], "Annis Richardson");
+
+    // Draw each layer
+    for (let li = 1; li < layers.length; li++) {
+      const layer = layers[li];
+      const innerR = getOuterRadius(li - 1);
+      const outerR = getOuterRadius(li);
+      const angleStep = 360 / layer.count;
+
+      for (let wi = 0; wi < layer.count; wi++) {
+        const startAngle = wi * angleStep;
+        const endAngle = (wi + 1) * angleStep;
+        const id = `${layer.prefix}${wi + 1}`;
+        drawArc(innerR, outerR, startAngle, endAngle, colors[li], id);
+      }
+    }
+
+    // Zoom
+    function applyZoom() {
+      svg.setAttribute("viewBox", `${cx - cx/scale} ${cy - cy/scale} ${1200/scale} ${1200/scale}`);
+    }
+    function zoomIn() { scale *= 1.4; applyZoom(); }
+    function zoomOut() { scale /= 1.4; if (scale < 0.5) scale = 0.5; applyZoom(); }
+    function resetZoom() { scale = 1; svg.removeAttribute("viewBox"); }
+  </script>
+</body>
+</html>
