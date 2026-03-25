@@ -31,10 +31,10 @@ jobs:
           username: ${{ secrets.GMAIL_USERNAME }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "Treasure Island Website Updated"
-          to: jillbo323@gmail.com, boughtonbd@gmail.com
+          to: jillbo323@gmail.com, boughtonbd@gmail.com, bjboughton@aol.com
           from: Treasure Island Website <boughtonbd@gmail.com>
           body: |
-            Hi Mom!
+            Hi mom and dad!
 
             The Treasure Island website has been updated. Here's what changed:
 
