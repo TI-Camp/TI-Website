@@ -57,6 +57,14 @@ Original source: `data/Richardson Family Circle Data.rmgc` (SQLite database)
 
 ---
 
+## Naming Convention
+
+**Decision: Use birth/maiden names as the display name.**
+
+The tree displays people by their birth name (e.g., "Betsy Boughton", "Sarah Horning"). Spouse names appear separately via the "m." notation. This matches what the RootsMagic database stores, so the extracted data is correct for display names — but relationship structure and spelling still need manual verification.
+
+---
+
 ## Color Ramp (for generation coloring)
 
 **Current implementation:** Light pastels at 60% opacity with dark text (#1a2e1e)

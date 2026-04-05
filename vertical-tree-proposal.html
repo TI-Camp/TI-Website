@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Richardson Family Circle — Treasure Island Camp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:  #1e4d2b;
+      --green-mid:   #2e6b3e;
+      --green-light: #4a8c5c;
+      --cream:       #f5f0e6;
+      --cream-dark:  #ede6d8;
+      --amber:       #c8860a;
+      --text-dark:   #1a2e1e;
+      --text-mid:    #3d5a42;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      padding-top: 60px;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* ── NAVIGATION ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: var(--green-dark);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: center;
+      height: 60px; z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .nav-logo {
+      position: absolute; left: 2rem; top: 50%;
+      transform: translateY(-50%); height: 40px; width: auto;
+    }
+    .nav-links { display: flex; gap: 0.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--cream); text-decoration: none;
+      font-family: 'Lato', sans-serif; font-size: 0.9rem; font-weight: 400;
+      letter-spacing: 0.05em; padding: 0.5rem 1rem; border-radius: 4px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .nav-links a:hover { background: rgba(255, 255, 255, 0.1); }
+    .nav-links a.active { background: var(--amber); color: var(--green-dark); font-weight: 700; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--cream); margin: 5px 0; transition: 0.3s; }
+
+    @media (max-width: 768px) {
+      .nav { padding: 0 1rem; }
+      .nav-logo { left: 1rem; }
+      .nav-toggle { display: block; }
+      .nav-links {
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: var(--green-dark); flex-direction: column;
+        padding: 1rem; gap: 0; display: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 0.75rem 1rem; border-radius: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+      .nav-links li:last-child a { border-bottom: none; }
+    }
+
+    /* ── HEADER ── */
+    .branch-header {
+      position: fixed; top: 60px; left: 0; right: 0;
+      background: var(--cream); padding: 0.75rem 2rem; z-index: 100;
+      border-bottom: 1px solid rgba(30, 77, 43, 0.12);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .branch-header-left { display: flex; align-items: center; gap: 1rem; }
+    .back-link {
+      color: var(--green-mid); text-decoration: none; font-size: 0.85rem;
+      display: flex; align-items: center; gap: 0.3rem; transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--green-dark); }
+    .branch-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--green-dark); }
+    .branch-subtitle { font-size: 0.85rem; color: var(--text-mid); font-weight: 300; }
+    .branch-controls { display: flex; gap: 0.5rem; align-items: center; }
+    .btn {
+      background: var(--green-dark); color: var(--cream); border: none;
+      padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.8rem; transition: background 0.2s;
+    }
+    .btn:hover { background: var(--green-mid); }
+
+    .proposal-badge {
+      position: fixed; bottom: 1rem; right: 1rem;
+      background: var(--amber); color: var(--green-dark);
+      padding: 0.4rem 1rem; border-radius: 6px; font-size: 0.8rem;
+      font-weight: 700; letter-spacing: 0.08em; z-index: 101;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2); border: 2px solid var(--green-dark);
+    }
+
+    /* ── TREE CANVAS ── */
+    #tree-container { position: fixed; top: 120px; left: 0; right: 0; bottom: 0; }
+    #tree-container svg { width: 100%; height: 100%; cursor: grab; }
+    #tree-container svg:active { cursor: grabbing; }
+
+    .node-card { cursor: pointer; transition: filter 0.2s; }
+    .node-card:hover { filter: drop-shadow(0 2px 6px rgba(30, 77, 43, 0.25)); }
+    .node-card:hover rect, .node-card:hover .founders-bg { stroke: var(--amber) !important; stroke-width: 2.5 !important; }
+
+    .legend {
+      position: fixed; bottom: 1rem; left: 1rem; background: white;
+      border: 1px solid rgba(30, 77, 43, 0.15); border-radius: 8px;
+      padding: 0.6rem 1rem; font-size: 0.75rem; display: flex; gap: 1rem; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.3rem; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
+
+    .search-input {
+      padding: 0.4rem 0.8rem; width: 200px; font-family: 'Lato', sans-serif;
+      font-size: 0.85rem; border: 2px solid var(--green-mid); border-radius: 20px;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-input:focus { border-color: var(--green-dark); box-shadow: 0 0 0 3px rgba(46, 107, 62, 0.2); }
+    .search-input::placeholder { color: var(--text-mid); }
+    .search-result-info { font-size: 0.8rem; color: var(--text-mid); margin-left: 0.5rem; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html"><img src="logo.png" alt="Treasure Island" class="nav-logo" /></a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="how-to.html">How-to</a></li>
+      <li><a href="family.html" class="active">Family</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="archive.html">Archive</a></li>
+    </ul>
+  </nav>
+
+  <div class="proposal-badge">PROPOSAL</div>
+
+  <header class="branch-header">
+    <div class="branch-header-left">
+      <a href="family.html" class="back-link">&larr; Family Circle</a>
+      <div>
+        <div class="branch-title">The Richardson Family Circle</div>
+        <div class="branch-subtitle">204 descendants across 6 generations</div>
+      </div>
+    </div>
+    <div class="branch-controls">
+      <input type="text" class="search-input" id="search-input" placeholder="Search for a family member..." />
+      <span class="search-result-info" id="search-info"></span>
+      <button class="btn" onclick="fitToScreen()">Fit to Screen</button>
+      <button class="btn" onclick="expandAll()">Expand All</button>
+      <button class="btn" onclick="collapseToGen1()">Collapse</button>
+    </div>
+  </header>
+
+  <div id="tree-container">
+    <svg id="tree-svg"></svg>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(86, 180, 233, 0.6)"></div> Founders</div>
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(230, 159, 0, 0.6)"></div> Gen 1</div>
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(204, 121, 167, 0.6)"></div> Gen 2</div>
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(0, 158, 115, 0.6)"></div> Gen 3</div>
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(240, 228, 66, 0.6)"></div> Gen 4</div>
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(0, 114, 178, 0.6)"></div> Gen 5</div>
+  </div>
+
+  <script>
+    // ══════════════════════════════════════════════
+    // DATA — Full tree starting from Grammie
+    // ══════════════════════════════════════════════
+
+    const treeData = {
+      name: "Sarah Annis Withenbury",
+      spouse: "James Clement Richardson Jr.",
+      generation: 0,
+      isFounders: true,
+      children: [
+        {
+          name: "Roland Richardson",
+          nickname: "Bobo",
+          spouse: "Althea Ford",
+          generation: 1,
+          children: [
+            {
+              name: "Emily Richardson",
+              spouse: "Joe Boughton",
+              generation: 2,
+              children: [
+                {
+                  name: "David Boughton",
+                  spouse: "Lori Urenovitch",
+                  generation: 3,
+                  children: [
+                    { name: "Chloe Boughton", generation: 4 },
+                    { name: "Cassidy Boughton", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Betsy Boughton",
+                  spouses: ["Tim Horning", "James Michael Lohr"],
+                  generation: 3,
+                  children: [
+                    {
+                      name: "Peter Horning",
+                      spouse: "Jacqueline Joos",
+                      generation: 4,
+                      children: [
+                        { name: "Eila Horning", generation: 5 },
+                        { name: "Anderson Horning", generation: 5 },
+                        { name: "Frances Horning", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Sarah Horning",
+                      spouse: "Noah Pollack",
+                      generation: 4,
+                      children: [
+                        { name: "Jesse Pollack", generation: 5 },
+                        { name: "Abigail Pollack", generation: 5 }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "Bill Boughton",
+                  spouse: "Jill Courts",
+                  generation: 3,
+                  children: [
+                    { name: "Benjamin Boughton", generation: 4 },
+                    { name: "Jennifer Boughton", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Sarah Boughton",
+                  spouse: "Max Holt",
+                  generation: 3,
+                  children: [
+                    { name: "Charles Holt", generation: 4 },
+                    { name: "McAlester Holt", generation: 4 }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "Ted Richardson",
+              spouse: "Priscilla Grandin",
+              generation: 2,
+              children: [
+                {
+                  name: "Michael Richardson",
+                  spouses: ["Mary Sahm", "Cindy Stopper"],
+                  generation: 3,
+                  children: [
+                    {
+                      name: "Michael Richardson",
+                      spouse: "Laura Curcio",
+                      generation: 4,
+                      children: [
+                        { name: "Madelyn Richardson", generation: 5 },
+                        { name: "Blake Richardson", generation: 5 },
+                        { name: "Hailey Richardson", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Tyler Richardson",
+                      spouse: "Abigail Craig",
+                      generation: 4,
+                      children: [
+                        { name: "Cash Richardson", generation: 5 },
+                        { name: "Colt Richardson", generation: 5 }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "Andrew Richardson",
+                  spouse: "Janie Wentz",
+                  generation: 3,
+                  children: [
+                    { name: "Jared Richardson", generation: 4 },
+                    {
+                      name: "Brian Richardson",
+                      generation: 4,
+                      children: [
+                        { name: "Tessa Richardson", generation: 5 }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "Polly Richardson",
+                  spouse: "Greg Rentfro",
+                  generation: 3,
+                  children: [
+                    { name: "Heather Rentfro", generation: 4 },
+                    { name: "Theodore Rentfro", generation: 4 }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "Betsy Richardson",
+              spouse: "George Kurlin",
+              generation: 2,
+              children: [
+                { name: "Nancy Kurlin", generation: 3 }
+              ]
+            },
+            {
+              name: "Althea Richardson",
+              nickname: "Fifi",
+              spouses: ["John Mathers McCaslin", "Jim Surface"],
+              generation: 2,
+              children: [
+                {
+                  name: "John Mathers McCaslin",
+                  spouse: "Constance Plattenburg",
+                  generation: 3,
+                  children: [
+                    {
+                      name: "Henry Plattenburg McCaslin",
+                      spouse: "Sarah Anne Kipling",
+                      generation: 4,
+                      children: [
+                        { name: "Jesse Albert McKay", generation: 5 },
+                        { name: "Robin Ragone McKay", generation: 5 }
+                      ]
+                    },
+                    { name: "Will Roland McCaslin", generation: 4 },
+                    { name: "Jack Theodore McCaslin", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Susan McCaslin",
+                  spouse: "Vic Henningsen",
+                  generation: 3,
+                  children: [
+                    { name: "Ned Henningsen", generation: 4 },
+                    { name: "Caitlin Henningsen", spouse: "Russell Ford Rennie", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Bob McCaslin",
+                  spouse: "Francine Allee",
+                  generation: 3,
+                  children: [
+                    { name: "Caitlin McCaslin", generation: 4 },
+                    { name: "Jenny Eloise McCaslin", generation: 4 },
+                    { name: "Coombs McCaslin", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Hugh McCaslin",
+                  spouses: ["Rebecca Heath", "Liz Merryman"],
+                  generation: 3,
+                  children: [
+                    {
+                      name: "Aaron McCaslin",
+                      spouse: "Erin Saunders",
+                      generation: 4,
+                      children: [
+                        { name: "Issabella Erin Elena McCaslin", generation: 5 }
+                      ]
+                    },
+                    { name: "Addason McCaslin", spouse: "Kimberly Iwaki", generation: 4 },
+                    {
+                      name: "Lara Heath",
+                      spouse: "William Allen",
+                      generation: 4,
+                      children: [
+                        { name: "Luke Henry Allen", generation: 5 },
+                        { name: "Noah Albert Allen", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Erik Heath",
+                      spouse: "Jaime Wilson",
+                      generation: 4,
+                      children: [
+                        { name: "Adalee Heath", generation: 5 },
+                        { name: "Kellan Erik Heath", generation: 5 }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Emily Richardson",
+          spouses: ["Clarence Burton", "Jim Carruthers"],
+          generation: 1,
+          isPlaceholder: true,
+          descendantCount: 19
+        },
+        {
+          name: "Coombs Richardson",
+          spouses: ["Henry LaBoiteaux", "Robert Fillmore Lovett"],
+          generation: 1,
+          isPlaceholder: true,
+          descendantCount: 51
+        },
+        {
+          name: "Adelaide Richardson",
+          spouse: "Hugh Garvin",
+          generation: 1,
+          isPlaceholder: true,
+          descendantCount: 57
+        }
+      ]
+    };
+
+    // ══════════════════════════════════════════════
+    // CONFIGURATION
+    // ══════════════════════════════════════════════
+
+    const genColors = [
+      "rgba(86, 180, 233, 0.6)",   // Gen 0 - Sky blue
+      "rgba(230, 159, 0, 0.6)",    // Gen 1 - Orange
+      "rgba(204, 121, 167, 0.6)",  // Gen 2 - Reddish purple
+      "rgba(0, 158, 115, 0.6)",    // Gen 3 - Bluish green
+      "rgba(240, 228, 66, 0.6)",   // Gen 4 - Yellow
+      "rgba(0, 114, 178, 0.6)",    // Gen 5 - Blue
+    ];
+
+    const genColorsSolid = ["#56B4E9", "#E69F00", "#CC79A7", "#009E73", "#F0E442", "#0072B2"];
+
+    const CARD_W = 170;
+    const CARD_H = 60;
+    const FOUNDERS_W = 260;
+    const FOUNDERS_H = 130;
+    const H_SPACING = 210;
+    const V_SPACING = 150;
+
+    // ══════════════════════════════════════════════
+    // BUILD HIERARCHY
+    // ══════════════════════════════════════════════
+
+    const root = d3.hierarchy(treeData, d => d.children && d.children.length > 0 ? d.children : null);
+
+    // Collapse everything below Gen 1 on load
+    // Initial view: Founders → 4 Gen 1 children (all collapsed)
+    root.each(d => {
+      d._allChildren = d.children || null;
+      if (d.depth > 1) {
+        d.children = null;
+      }
+    });
+
+    const treeLayout = d3.tree()
+      .nodeSize([H_SPACING, V_SPACING])
+      .separation((a, b) => a.parent === b.parent ? 1 : 1.2);
+
+    // ══════════════════════════════════════════════
+    // SVG + ZOOM
+    // ══════════════════════════════════════════════
+
+    const svg = d3.select("#tree-svg");
+    const g = svg.append("g");
+
+    const zoomBehavior = d3.zoom()
+      .scaleExtent([0.15, 3])
+      .on("zoom", e => g.attr("transform", e.transform));
+
+    svg.call(zoomBehavior);
+
+    // ══════════════════════════════════════════════
+    // HELPERS
+    // ══════════════════════════════════════════════
+
+    function getSpouseText(d) {
+      if (d.spouse) return "m. " + d.spouse;
+      if (d.spouses && d.spouses.length > 0) return "m. " + d.spouses[0];
+      return "";
+    }
+
+    function getSecondSpouseText(d) {
+      if (d.spouses && d.spouses.length > 1) return "m. " + d.spouses.slice(1).join(", m. ");
+      return "";
+    }
+
+    function getDisplayName(d) {
+      if (d.nickname) {
+        const parts = d.name.split(" ");
+        return parts[0] + ' "' + d.nickname + '" ' + parts.slice(1).join(" ");
+      }
+      return d.name;
+    }
+
+    function truncate(s, max) {
+      return s && s.length > max ? s.substring(0, max - 2) + "..." : s;
+    }
+
+    function nodeHeight(d) {
+      if (d.isFounders) return FOUNDERS_H;
+      if (d.spouses && d.spouses.length > 1) return CARD_H + 16;
+      if (d.isPlaceholder) return CARD_H + 16;
+      return CARD_H;
+    }
+
+    // Elbow connector
+    function linkPath(d) {
+      const sh = nodeHeight(d.source.data);
+      const th = nodeHeight(d.target.data);
+      const sy = d.source.y + sh / 2;
+      const ty = d.target.y - th / 2;
+      const midY = (sy + ty) / 2;
+      return `M${d.source.x},${sy} L${d.source.x},${midY} L${d.target.x},${midY} L${d.target.x},${ty}`;
+    }
+
+    // ══════════════════════════════════════════════
+    // DRAW
+    // ══════════════════════════════════════════════
+
+    function draw() {
+      treeLayout(root);
+
+      const nodes = root.descendants();
+      const links = root.links();
+
+      // ── Links ──
+      g.selectAll(".link").remove();
+      g.selectAll(".link")
+        .data(links)
+        .enter().append("path")
+        .attr("class", "link")
+        .attr("d", linkPath)
+        .attr("fill", "none")
+        .attr("stroke", "#a3b8a0")
+        .attr("stroke-width", 1.5);
+
+      // ── Nodes ──
+      g.selectAll(".node-card").remove();
+
+      const node = g.selectAll(".node-card")
+        .data(nodes)
+        .enter().append("g")
+        .attr("class", "node-card")
+        .attr("transform", d => `translate(${d.x},${d.y})`)
+        .on("click", (event, d) => {
+          event.stopPropagation();
+          if (d.data.isFounders) return; // don't collapse founders
+          if (d.children) {
+            d._allChildren = d.children;
+            d.children = null;
+          } else if (d._allChildren) {
+            d.children = d._allChildren;
+          }
+          draw();
+        });
+
+      // ── Draw each node based on type ──
+      node.each(function(d) {
+        const el = d3.select(this);
+
+        if (d.data.isFounders) {
+          drawFoundersNode(el, d);
+        } else if (d.data.isPlaceholder) {
+          drawPlaceholderNode(el, d);
+        } else {
+          drawRegularNode(el, d);
+        }
+      });
+    }
+
+    // ── FOUNDERS NODE ──
+    function drawFoundersNode(el, d) {
+      // Pill shape
+      el.append("rect")
+        .attr("class", "founders-bg")
+        .attr("x", -FOUNDERS_W / 2)
+        .attr("y", -FOUNDERS_H / 2)
+        .attr("width", FOUNDERS_W)
+        .attr("height", FOUNDERS_H)
+        .attr("rx", FOUNDERS_H / 2)
+        .attr("fill", genColors[0])
+        .attr("stroke", genColorsSolid[0])
+        .attr("stroke-width", 2.5);
+
+      // Photo placeholder
+      el.append("circle")
+        .attr("cx", 0).attr("cy", -22).attr("r", 26)
+        .attr("fill", "white")
+        .attr("stroke", genColorsSolid[0])
+        .attr("stroke-width", 1.5);
+
+      el.append("text")
+        .attr("x", 0).attr("y", -17)
+        .attr("text-anchor", "middle")
+        .attr("font-size", 16).attr("fill", "#b0c4b8")
+        .text("\uD83D\uDCF7");
+
+      // Grammie name
+      el.append("text")
+        .attr("y", 14).attr("text-anchor", "middle")
+        .attr("font-family", "Playfair Display, serif")
+        .attr("font-size", 14).attr("font-weight", "bold")
+        .attr("fill", "#1a2e1e")
+        .text("Sarah Annis Withenbury");
+
+      // m.
+      el.append("text")
+        .attr("y", 28).attr("text-anchor", "middle")
+        .attr("font-family", "Playfair Display, serif")
+        .attr("font-size", 11).attr("font-style", "italic")
+        .attr("fill", "#3d5a42")
+        .text("m.");
+
+      // Husband
+      el.append("text")
+        .attr("y", 42).attr("text-anchor", "middle")
+        .attr("font-family", "Playfair Display, serif")
+        .attr("font-size", 14).attr("font-weight", "bold")
+        .attr("fill", "#1a2e1e")
+        .text("James Clement Richardson Jr.");
+    }
+
+    // ── PLACEHOLDER NODE ──
+    function drawPlaceholderNode(el, d) {
+      const hasMultiSpouse = d.data.spouses && d.data.spouses.length > 1;
+      const h = CARD_H + 16;
+
+      el.append("rect")
+        .attr("x", -CARD_W / 2).attr("y", -h / 2)
+        .attr("width", CARD_W).attr("height", h)
+        .attr("rx", 6)
+        .attr("fill", "#f8f6f0")
+        .attr("stroke", "#d4cfc4")
+        .attr("stroke-width", 1.5)
+        .attr("stroke-dasharray", "4 3");
+
+      // Gen dot
+      el.append("circle")
+        .attr("cx", -CARD_W / 2 + 12).attr("cy", -h / 2 + 12).attr("r", 5)
+        .attr("fill", genColors[1]).attr("stroke", genColorsSolid[1]).attr("stroke-width", 1);
+
+      // Name
+      el.append("text")
+        .attr("y", -10).attr("text-anchor", "middle")
+        .attr("font-family", "Playfair Display, serif")
+        .attr("font-size", 13).attr("font-weight", "bold")
+        .attr("fill", "#1a2e1e")
+        .text(truncate(d.data.name, 24));
+
+      // Spouse
+      el.append("text")
+        .attr("y", 5).attr("text-anchor", "middle")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-size", 11).attr("fill", "#3d5a42")
+        .text(truncate(getSpouseText(d.data), 28));
+
+      // Second spouse
+      if (hasMultiSpouse) {
+        el.append("text")
+          .attr("y", 18).attr("text-anchor", "middle")
+          .attr("font-family", "Lato, sans-serif")
+          .attr("font-size", 11).attr("fill", "#3d5a42")
+          .text(truncate(getSecondSpouseText(d.data), 28));
+      }
+
+      // "click to explore" hint
+      el.append("text")
+        .attr("y", h / 2 - 4).attr("text-anchor", "middle")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-size", 9).attr("font-style", "italic")
+        .attr("fill", "#a3b8a0")
+        .text(d.data.descendantCount + " descendants \u2014 coming soon");
+    }
+
+    // ── REGULAR NODE ──
+    function drawRegularNode(el, d) {
+      const hasMultiSpouse = d.data.spouses && d.data.spouses.length > 1;
+      const h = hasMultiSpouse ? CARD_H + 16 : CARD_H;
+      const hasChildren = d._allChildren && d._allChildren.length > 0;
+
+      el.append("rect")
+        .attr("x", -CARD_W / 2).attr("y", -h / 2)
+        .attr("width", CARD_W).attr("height", h)
+        .attr("rx", 6)
+        .attr("fill", "white")
+        .attr("stroke", "#c5d4c0")
+        .attr("stroke-width", 1.5);
+
+      // Gen dot
+      const gen = d.data.generation;
+      el.append("circle")
+        .attr("cx", -CARD_W / 2 + 12).attr("cy", -h / 2 + 12).attr("r", 5)
+        .attr("fill", genColors[gen] || genColors[5])
+        .attr("stroke", genColorsSolid[gen] || genColorsSolid[5])
+        .attr("stroke-width", 1);
+
+      // Expand/collapse indicator
+      if (hasChildren) {
+        el.append("text")
+          .attr("x", CARD_W / 2 - 14).attr("y", -h / 2 + 15)
+          .attr("text-anchor", "middle")
+          .attr("font-family", "Lato, sans-serif")
+          .attr("font-size", 12).attr("fill", "#a3b8a0")
+          .text(d.children ? "\u25B4" : "\u25BE");
+      }
+
+      // Name
+      const nameY = getSpouseText(d.data) ? (hasMultiSpouse ? -12 : -6) : 2;
+      el.append("text")
+        .attr("y", nameY).attr("text-anchor", "middle")
+        .attr("font-family", "Playfair Display, serif")
+        .attr("font-size", 13).attr("font-weight", "bold")
+        .attr("fill", "#1a2e1e")
+        .text(truncate(getDisplayName(d.data), 24));
+
+      // Spouse
+      const st = getSpouseText(d.data);
+      if (st) {
+        el.append("text")
+          .attr("y", hasMultiSpouse ? 2 : 10)
+          .attr("text-anchor", "middle")
+          .attr("font-family", "Lato, sans-serif")
+          .attr("font-size", 11).attr("fill", "#3d5a42")
+          .text(truncate(st, 28));
+      }
+
+      // Second spouse
+      if (hasMultiSpouse) {
+        el.append("text")
+          .attr("y", 16).attr("text-anchor", "middle")
+          .attr("font-family", "Lato, sans-serif")
+          .attr("font-size", 11).attr("fill", "#3d5a42")
+          .text(truncate(getSecondSpouseText(d.data), 28));
+      }
+    }
+
+    // ══════════════════════════════════════════════
+    // CONTROLS
+    // ══════════════════════════════════════════════
+
+    function fitToScreen() {
+      const bounds = g.node().getBBox();
+      const parent = svg.node().getBoundingClientRect();
+      if (bounds.width === 0 || parent.width === 0) return;
+
+      const padding = 80;
+      const scale = Math.min(
+        (parent.width - padding * 2) / bounds.width,
+        (parent.height - padding * 2) / bounds.height,
+        1.5
+      );
+      const cx = bounds.x + bounds.width / 2;
+      const cy = bounds.y + bounds.height / 2;
+
+      svg.transition().duration(500).call(
+        zoomBehavior.transform,
+        d3.zoomIdentity
+          .translate(parent.width / 2, parent.height / 2)
+          .scale(scale)
+          .translate(-cx, -cy)
+      );
+    }
+
+    function expandAll() {
+      root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+      draw();
+      setTimeout(fitToScreen, 100);
+    }
+
+    function collapseToGen1() {
+      // First pass: restore all children so the tree is fully connected
+      root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+      // Second pass: collapse everything below Gen 1
+      root.each(d => { if (d.depth >= 1) d.children = null; });
+      draw();
+      setTimeout(fitToScreen, 100);
+    }
+
+    // ══════════════════════════════════════════════
+    // SEARCH
+    // ══════════════════════════════════════════════
+
+    document.getElementById("search-input").addEventListener("input", function() {
+      const term = this.value.toLowerCase().trim();
+      const info = document.getElementById("search-info");
+
+      if (!term) {
+        g.selectAll(".node-card").style("opacity", 1);
+        info.textContent = "";
+        return;
+      }
+
+      // Expand all to search
+      root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+      draw();
+
+      const allNodes = root.descendants();
+      const matches = allNodes.filter(d => {
+        const data = d.data;
+        return data.name.toLowerCase().includes(term)
+          || (data.spouse && data.spouse.toLowerCase().includes(term))
+          || (data.spouses && data.spouses.some(s => s.toLowerCase().includes(term)))
+          || (data.nickname && data.nickname.toLowerCase().includes(term));
+      });
+
+      info.textContent = matches.length > 0 ? matches.length + " found" : "No matches";
+
+      g.selectAll(".node-card").style("opacity", d => matches.includes(d) ? 1 : 0.15);
+
+      if (matches.length > 0) {
+        const t = matches[0];
+        const parent = svg.node().getBoundingClientRect();
+        const cur = d3.zoomTransform(svg.node());
+        svg.transition().duration(400).call(
+          zoomBehavior.transform,
+          d3.zoomIdentity.translate(parent.width / 2, parent.height / 2).scale(cur.k).translate(-t.x, -t.y)
+        );
+      }
+    });
+
+    // ══════════════════════════════════════════════
+    // INIT
+    // ══════════════════════════════════════════════
+
+    draw();
+    setTimeout(fitToScreen, 50);
+  </script>
+
+</body>
+</html>
