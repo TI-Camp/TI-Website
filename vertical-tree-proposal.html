@@ -108,8 +108,7 @@
     #tree-container svg:active { cursor: grabbing; }
 
     .node-card { cursor: pointer; transition: filter 0.2s; }
-    .node-card:hover { filter: drop-shadow(0 2px 6px rgba(30, 77, 43, 0.25)); }
-    .node-card:hover rect, .node-card:hover .founders-bg { stroke: var(--amber) !important; stroke-width: 2.5 !important; }
+    .node-card:hover { filter: drop-shadow(0 3px 8px rgba(30, 77, 43, 0.3)); }
 
     .legend {
       position: fixed; bottom: 1rem; left: 1rem; background: white;
@@ -180,7 +179,7 @@
 
   <script>
     // ══════════════════════════════════════════════
-    // DATA — Full tree starting from Grammie
+    // DATA
     // ══════════════════════════════════════════════
 
     const treeData = {
@@ -211,27 +210,35 @@
                 },
                 {
                   name: "Betsy Boughton",
-                  spouses: ["Tim Horning", "James Michael Lohr"],
                   generation: 3,
-                  children: [
+                  marriages: [
                     {
-                      name: "Peter Horning",
-                      spouse: "Jacqueline Joos",
-                      generation: 4,
+                      spouse: "Tim Horning",
                       children: [
-                        { name: "Eila Horning", generation: 5 },
-                        { name: "Anderson Horning", generation: 5 },
-                        { name: "Frances Horning", generation: 5 }
+                        {
+                          name: "Peter Horning",
+                          spouse: "Jacqueline Joos",
+                          generation: 4,
+                          children: [
+                            { name: "Eila Horning", generation: 5 },
+                            { name: "Anderson Horning", generation: 5 },
+                            { name: "Frances Horning", generation: 5 }
+                          ]
+                        },
+                        {
+                          name: "Sarah Horning",
+                          spouse: "Noah Pollack",
+                          generation: 4,
+                          children: [
+                            { name: "Jesse Pollack", generation: 5 },
+                            { name: "Abigail Pollack", generation: 5 }
+                          ]
+                        }
                       ]
                     },
                     {
-                      name: "Sarah Horning",
-                      spouse: "Noah Pollack",
-                      generation: 4,
-                      children: [
-                        { name: "Jesse Pollack", generation: 5 },
-                        { name: "Abigail Pollack", generation: 5 }
-                      ]
+                      spouse: "James Michael Lohr",
+                      children: []
                     }
                   ]
                 },
@@ -262,26 +269,35 @@
               children: [
                 {
                   name: "Michael Richardson",
-                  spouses: ["Mary Sahm", "Cindy Stopper"],
                   generation: 3,
-                  children: [
+                  marriages: [
                     {
-                      name: "Michael Richardson",
-                      spouse: "Laura Curcio",
-                      generation: 4,
+                      spouse: "Mary Sahm",
                       children: [
-                        { name: "Madelyn Richardson", generation: 5 },
-                        { name: "Blake Richardson", generation: 5 },
-                        { name: "Hailey Richardson", generation: 5 }
+                        {
+                          name: "Michael Richardson",
+                          spouse: "Laura Curcio",
+                          generation: 4,
+                          children: [
+                            { name: "Madelyn Richardson", generation: 5 },
+                            { name: "Blake Richardson", generation: 5 },
+                            { name: "Hailey Richardson", generation: 5 }
+                          ]
+                        }
                       ]
                     },
                     {
-                      name: "Tyler Richardson",
-                      spouse: "Abigail Craig",
-                      generation: 4,
+                      spouse: "Cindy Stopper",
                       children: [
-                        { name: "Cash Richardson", generation: 5 },
-                        { name: "Colt Richardson", generation: 5 }
+                        {
+                          name: "Tyler Richardson",
+                          spouse: "Abigail Craig",
+                          generation: 4,
+                          children: [
+                            { name: "Cash Richardson", generation: 5 },
+                            { name: "Colt Richardson", generation: 5 }
+                          ]
+                        }
                       ]
                     }
                   ]
@@ -323,79 +339,95 @@
             {
               name: "Althea Richardson",
               nickname: "Fifi",
-              spouses: ["John Mathers McCaslin", "Jim Surface"],
               generation: 2,
-              children: [
+              marriages: [
                 {
-                  name: "John Mathers McCaslin",
-                  spouse: "Constance Plattenburg",
-                  generation: 3,
+                  spouse: "John Mathers McCaslin",
                   children: [
                     {
-                      name: "Henry Plattenburg McCaslin",
-                      spouse: "Sarah Anne Kipling",
-                      generation: 4,
+                      name: "John Mathers McCaslin",
+                      spouse: "Constance Plattenburg",
+                      generation: 3,
                       children: [
-                        { name: "Jesse Albert McKay", generation: 5 },
-                        { name: "Robin Ragone McKay", generation: 5 }
-                      ]
-                    },
-                    { name: "Will Roland McCaslin", generation: 4 },
-                    { name: "Jack Theodore McCaslin", generation: 4 }
-                  ]
-                },
-                {
-                  name: "Susan McCaslin",
-                  spouse: "Vic Henningsen",
-                  generation: 3,
-                  children: [
-                    { name: "Ned Henningsen", generation: 4 },
-                    { name: "Caitlin Henningsen", spouse: "Russell Ford Rennie", generation: 4 }
-                  ]
-                },
-                {
-                  name: "Bob McCaslin",
-                  spouse: "Francine Allee",
-                  generation: 3,
-                  children: [
-                    { name: "Caitlin McCaslin", generation: 4 },
-                    { name: "Jenny Eloise McCaslin", generation: 4 },
-                    { name: "Coombs McCaslin", generation: 4 }
-                  ]
-                },
-                {
-                  name: "Hugh McCaslin",
-                  spouses: ["Rebecca Heath", "Liz Merryman"],
-                  generation: 3,
-                  children: [
-                    {
-                      name: "Aaron McCaslin",
-                      spouse: "Erin Saunders",
-                      generation: 4,
-                      children: [
-                        { name: "Issabella Erin Elena McCaslin", generation: 5 }
-                      ]
-                    },
-                    { name: "Addason McCaslin", spouse: "Kimberly Iwaki", generation: 4 },
-                    {
-                      name: "Lara Heath",
-                      spouse: "William Allen",
-                      generation: 4,
-                      children: [
-                        { name: "Luke Henry Allen", generation: 5 },
-                        { name: "Noah Albert Allen", generation: 5 }
+                        {
+                          name: "Henry Plattenburg McCaslin",
+                          spouse: "Sarah Anne Kipling",
+                          generation: 4,
+                          children: [
+                            { name: "Jesse Albert McKay", generation: 5 },
+                            { name: "Robin Ragone McKay", generation: 5 }
+                          ]
+                        },
+                        { name: "Will Roland McCaslin", generation: 4 },
+                        { name: "Jack Theodore McCaslin", generation: 4 }
                       ]
                     },
                     {
-                      name: "Erik Heath",
-                      spouse: "Jaime Wilson",
-                      generation: 4,
+                      name: "Susan McCaslin",
+                      spouse: "Vic Henningsen",
+                      generation: 3,
                       children: [
-                        { name: "Adalee Heath", generation: 5 },
-                        { name: "Kellan Erik Heath", generation: 5 }
+                        { name: "Ned Henningsen", generation: 4 },
+                        { name: "Caitlin Henningsen", spouse: "Russell Ford Rennie", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Bob McCaslin",
+                      spouse: "Francine Allee",
+                      generation: 3,
+                      children: [
+                        { name: "Caitlin McCaslin", generation: 4 },
+                        { name: "Jenny Eloise McCaslin", generation: 4 },
+                        { name: "Coombs McCaslin", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Hugh McCaslin",
+                      generation: 3,
+                      marriages: [
+                        {
+                          spouse: "Rebecca Heath",
+                          children: [
+                            {
+                              name: "Aaron McCaslin",
+                              spouse: "Erin Saunders",
+                              generation: 4,
+                              children: [
+                                { name: "Issabella Erin Elena McCaslin", generation: 5 }
+                              ]
+                            },
+                            { name: "Addason McCaslin", spouse: "Kimberly Iwaki", generation: 4 },
+                            {
+                              name: "Lara Heath",
+                              spouse: "William Allen",
+                              generation: 4,
+                              children: [
+                                { name: "Luke Henry Allen", generation: 5 },
+                                { name: "Noah Albert Allen", generation: 5 }
+                              ]
+                            },
+                            {
+                              name: "Erik Heath",
+                              spouse: "Jaime Wilson",
+                              generation: 4,
+                              children: [
+                                { name: "Adalee Heath", generation: 5 },
+                                { name: "Kellan Erik Heath", generation: 5 }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          spouse: "Liz Merryman",
+                          children: []
+                        }
                       ]
                     }
                   ]
+                },
+                {
+                  spouse: "Jim Surface",
+                  children: []
                 }
               ]
             }
@@ -430,41 +462,63 @@
     // ══════════════════════════════════════════════
 
     const genColors = [
-      "rgba(86, 180, 233, 0.6)",   // Gen 0 - Sky blue
-      "rgba(230, 159, 0, 0.6)",    // Gen 1 - Orange
-      "rgba(204, 121, 167, 0.6)",  // Gen 2 - Reddish purple
-      "rgba(0, 158, 115, 0.6)",    // Gen 3 - Bluish green
-      "rgba(240, 228, 66, 0.6)",   // Gen 4 - Yellow
-      "rgba(0, 114, 178, 0.6)",    // Gen 5 - Blue
+      "rgba(86, 180, 233, 0.6)",   // Gen 0
+      "rgba(230, 159, 0, 0.6)",    // Gen 1
+      "rgba(204, 121, 167, 0.6)",  // Gen 2
+      "rgba(0, 158, 115, 0.6)",    // Gen 3
+      "rgba(240, 228, 66, 0.6)",   // Gen 4
+      "rgba(0, 114, 178, 0.6)",    // Gen 5
     ];
-
     const genColorsSolid = ["#56B4E9", "#E69F00", "#CC79A7", "#009E73", "#F0E442", "#0072B2"];
 
-    const CARD_W = 170;
-    const CARD_H = 60;
-    const FOUNDERS_W = 260;
-    const FOUNDERS_H = 130;
-    const H_SPACING = 210;
-    const V_SPACING = 150;
+    const CARD_W = 130;
+    const CARD_H = 140;
+    const PHOTO_R = 28;
+    const COUPLE_GAP = 16;  // gap between couple cards
+    const H_SPACING = 310;
+    const V_SPACING = 190;
 
     // ══════════════════════════════════════════════
-    // BUILD HIERARCHY
+    // HIERARCHY
     // ══════════════════════════════════════════════
+
+    // Preprocess: convert marriages[] into pseudo-node children
+    // A person with marriages gets marriage pseudo-nodes as children,
+    // each containing the spouse name and that marriage's children.
+    function preprocessMarriages(node) {
+      if (node.marriages) {
+        node.children = node.marriages.map(m => ({
+          name: m.spouse,
+          generation: node.generation,
+          isMarriageNode: true,
+          parentName: node.name,
+          children: (m.children || []).map(c => {
+            preprocessMarriages(c);
+            return c;
+          })
+        }));
+        delete node.marriages;
+      }
+      if (node.children) {
+        node.children.forEach(c => preprocessMarriages(c));
+      }
+    }
+    preprocessMarriages(treeData);
 
     const root = d3.hierarchy(treeData, d => d.children && d.children.length > 0 ? d.children : null);
 
-    // Collapse everything below Gen 1 on load
-    // Initial view: Founders → 4 Gen 1 children (all collapsed)
     root.each(d => {
       d._allChildren = d.children || null;
-      if (d.depth > 1) {
-        d.children = null;
-      }
+      if (d.depth > 1) d.children = null;
     });
 
     const treeLayout = d3.tree()
       .nodeSize([H_SPACING, V_SPACING])
-      .separation((a, b) => a.parent === b.parent ? 1 : 1.2);
+      .separation((a, b) => {
+        // Marriage nodes from same parent should be closer together
+        if (a.data.isMarriageNode && b.data.isMarriageNode && a.parent === b.parent) return 0.8;
+        return a.parent === b.parent ? 1 : 1.2;
+      });
 
     // ══════════════════════════════════════════════
     // SVG + ZOOM
@@ -474,7 +528,7 @@
     const g = svg.append("g");
 
     const zoomBehavior = d3.zoom()
-      .scaleExtent([0.15, 3])
+      .scaleExtent([0.1, 3])
       .on("zoom", e => g.attr("transform", e.transform));
 
     svg.call(zoomBehavior);
@@ -483,48 +537,124 @@
     // HELPERS
     // ══════════════════════════════════════════════
 
-    function getSpouseText(d) {
-      if (d.spouse) return "m. " + d.spouse;
-      if (d.spouses && d.spouses.length > 0) return "m. " + d.spouses[0];
-      return "";
-    }
-
-    function getSecondSpouseText(d) {
-      if (d.spouses && d.spouses.length > 1) return "m. " + d.spouses.slice(1).join(", m. ");
-      return "";
-    }
-
-    function getDisplayName(d) {
-      if (d.nickname) {
-        const parts = d.name.split(" ");
-        return parts[0] + ' "' + d.nickname + '" ' + parts.slice(1).join(" ");
-      }
-      return d.name;
+    function splitName(fullName) {
+      const parts = fullName.split(" ");
+      if (parts.length === 1) return { given: parts[0], surname: "" };
+      return { given: parts.slice(0, -1).join(" "), surname: parts[parts.length - 1] };
     }
 
     function truncate(s, max) {
-      return s && s.length > max ? s.substring(0, max - 2) + "..." : s;
+      return s && s.length > max ? s.substring(0, max - 1) + "\u2026" : s;
     }
 
-    function nodeHeight(d) {
-      if (d.isFounders) return FOUNDERS_H;
-      if (d.spouses && d.spouses.length > 1) return CARD_H + 16;
-      if (d.isPlaceholder) return CARD_H + 16;
-      return CARD_H;
+    function hasSpouse(d) {
+      return d.spouse || (d.spouses && d.spouses.length > 0);
     }
 
-    // Elbow connector
+    function getFirstSpouse(d) {
+      if (d.spouse) return d.spouse;
+      if (d.spouses && d.spouses.length > 0) return d.spouses[0];
+      return null;
+    }
+
+    // Couple width: if has spouse, two cards + gap; else single card
+    function coupleWidth(d) {
+      return hasSpouse(d) ? CARD_W * 2 + COUPLE_GAP : CARD_W;
+    }
+
+    // Link drops from center-bottom of the couple unit
     function linkPath(d) {
-      const sh = nodeHeight(d.source.data);
-      const th = nodeHeight(d.target.data);
-      const sy = d.source.y + sh / 2;
-      const ty = d.target.y - th / 2;
+      const srcW = coupleWidth(d.source.data);
+      const tgtW = coupleWidth(d.target.data);
+      // Source: drop from bottom-center
+      const sx = d.source.x;
+      const sy = d.source.y + CARD_H / 2;
+      // Target: arrive at top-center
+      const tx = d.target.x;
+      const ty = d.target.y - CARD_H / 2;
       const midY = (sy + ty) / 2;
-      return `M${d.source.x},${sy} L${d.source.x},${midY} L${d.target.x},${midY} L${d.target.x},${ty}`;
+      return `M${sx},${sy} L${sx},${midY} L${tx},${midY} L${tx},${ty}`;
     }
 
     // ══════════════════════════════════════════════
-    // DRAW
+    // DRAW A SINGLE PERSON CARD
+    // ══════════════════════════════════════════════
+
+    function drawPersonCard(parent, name, generation, offsetX, opts) {
+      opts = opts || {};
+      const cg = parent.append("g")
+        .attr("transform", `translate(${offsetX}, 0)`);
+
+      const isPlaceholder = opts.isPlaceholder;
+      const genColor = genColors[generation] || genColors[5];
+      const genSolid = genColorsSolid[generation] || genColorsSolid[5];
+
+      // Card background with colored top accent
+      cg.append("rect")
+        .attr("x", -CARD_W / 2).attr("y", -CARD_H / 2)
+        .attr("width", CARD_W).attr("height", CARD_H)
+        .attr("rx", 8)
+        .attr("fill", isPlaceholder ? "#f8f6f0" : "white")
+        .attr("stroke", isPlaceholder ? "#d4cfc4" : "#ddd")
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", isPlaceholder ? "4 3" : "none");
+
+      // Colored top accent bar
+      cg.append("rect")
+        .attr("x", -CARD_W / 2).attr("y", -CARD_H / 2)
+        .attr("width", CARD_W).attr("height", 4)
+        .attr("rx", 2)
+        .attr("fill", genSolid);
+
+      // Photo circle
+      const photoY = -CARD_H / 2 + 42;
+      cg.append("circle")
+        .attr("cx", 0).attr("cy", photoY).attr("r", PHOTO_R)
+        .attr("fill", isPlaceholder ? "#eae6dc" : "#f0ece4")
+        .attr("stroke", "#ddd")
+        .attr("stroke-width", 1);
+
+      // Silhouette placeholder (simple person icon)
+      cg.append("text")
+        .attr("x", 0).attr("y", photoY + 5)
+        .attr("text-anchor", "middle")
+        .attr("font-size", 22)
+        .attr("fill", isPlaceholder ? "#ccc5b8" : "#c5bfb2")
+        .text("\uD83D\uDC64");
+
+      // Name
+      const { given, surname } = splitName(name);
+      const nameY = photoY + PHOTO_R + 16;
+
+      cg.append("text")
+        .attr("y", nameY).attr("text-anchor", "middle")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-size", 12).attr("font-weight", "400")
+        .attr("fill", "#1a2e1e")
+        .text(truncate(given, 18));
+
+      cg.append("text")
+        .attr("y", nameY + 15).attr("text-anchor", "middle")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-size", 13).attr("font-weight", "700")
+        .attr("fill", "#1a2e1e")
+        .text(truncate(surname, 16));
+
+      // Birth-death years (if available)
+      if (opts.birthYear || opts.deathYear) {
+        const years = (opts.birthYear || "?") + "\u2013" + (opts.deathYear || "Living");
+        cg.append("text")
+          .attr("y", nameY + 30).attr("text-anchor", "middle")
+          .attr("font-family", "Lato, sans-serif")
+          .attr("font-size", 10).attr("fill", "#888")
+          .text(years);
+      }
+
+      return cg;
+    }
+
+    // ══════════════════════════════════════════════
+    // DRAW FUNCTIONS
     // ══════════════════════════════════════════════
 
     function draw() {
@@ -533,7 +663,6 @@
       const nodes = root.descendants();
       const links = root.links();
 
-      // ── Links ──
       g.selectAll(".link").remove();
       g.selectAll(".link")
         .data(links)
@@ -541,10 +670,9 @@
         .attr("class", "link")
         .attr("d", linkPath)
         .attr("fill", "none")
-        .attr("stroke", "#a3b8a0")
+        .attr("stroke", "#c5ccc3")
         .attr("stroke-width", 1.5);
 
-      // ── Nodes ──
       g.selectAll(".node-card").remove();
 
       const node = g.selectAll(".node-card")
@@ -554,7 +682,7 @@
         .attr("transform", d => `translate(${d.x},${d.y})`)
         .on("click", (event, d) => {
           event.stopPropagation();
-          if (d.data.isFounders) return; // don't collapse founders
+          if (d.data.isFounders) return;
           if (d.children) {
             d._allChildren = d.children;
             d.children = null;
@@ -564,183 +692,129 @@
           draw();
         });
 
-      // ── Draw each node based on type ──
       node.each(function(d) {
         const el = d3.select(this);
 
         if (d.data.isFounders) {
           drawFoundersNode(el, d);
+        } else if (d.data.isMarriageNode) {
+          drawMarriageNode(el, d);
         } else if (d.data.isPlaceholder) {
           drawPlaceholderNode(el, d);
         } else {
-          drawRegularNode(el, d);
+          drawCoupleNode(el, d);
         }
       });
     }
 
-    // ── FOUNDERS NODE ──
+    // ── FOUNDERS: two side-by-side Ancestry cards ──
     function drawFoundersNode(el, d) {
-      // Pill shape
-      el.append("rect")
-        .attr("class", "founders-bg")
-        .attr("x", -FOUNDERS_W / 2)
-        .attr("y", -FOUNDERS_H / 2)
-        .attr("width", FOUNDERS_W)
-        .attr("height", FOUNDERS_H)
-        .attr("rx", FOUNDERS_H / 2)
-        .attr("fill", genColors[0])
-        .attr("stroke", genColorsSolid[0])
-        .attr("stroke-width", 2.5);
+      const spouse = d.data.spouse;
+      const halfGap = COUPLE_GAP / 2;
+      const leftX = -(CARD_W / 2 + halfGap);
+      const rightX = CARD_W / 2 + halfGap;
 
-      // Photo placeholder
-      el.append("circle")
-        .attr("cx", 0).attr("cy", -22).attr("r", 26)
-        .attr("fill", "white")
-        .attr("stroke", genColorsSolid[0])
-        .attr("stroke-width", 1.5);
+      // Left card: Grammie
+      drawPersonCard(el, d.data.name, 0, leftX);
 
-      el.append("text")
-        .attr("x", 0).attr("y", -17)
-        .attr("text-anchor", "middle")
-        .attr("font-size", 16).attr("fill", "#b0c4b8")
-        .text("\uD83D\uDCF7");
+      // Horizontal connector
+      el.append("line")
+        .attr("x1", leftX + CARD_W / 2).attr("y1", 0)
+        .attr("x2", rightX - CARD_W / 2).attr("y2", 0)
+        .attr("stroke", "#c5ccc3").attr("stroke-width", 1.5);
 
-      // Grammie name
-      el.append("text")
-        .attr("y", 14).attr("text-anchor", "middle")
-        .attr("font-family", "Playfair Display, serif")
-        .attr("font-size", 14).attr("font-weight", "bold")
-        .attr("fill", "#1a2e1e")
-        .text("Sarah Annis Withenbury");
+      // Right card: James
+      if (spouse) {
+        drawPersonCard(el, spouse, 0, rightX);
+      }
+    }
 
-      // m.
-      el.append("text")
-        .attr("y", 28).attr("text-anchor", "middle")
-        .attr("font-family", "Playfair Display, serif")
-        .attr("font-size", 11).attr("font-style", "italic")
-        .attr("fill", "#3d5a42")
-        .text("m.");
+    // ── MARRIAGE NODE (pseudo-node: shows spouse card as intermediary) ──
+    function drawMarriageNode(el, d) {
+      const spouseName = d.data.name;
+      const gen = d.data.generation;
+      const hasChildren = d._allChildren && d._allChildren.length > 0;
 
-      // Husband
-      el.append("text")
-        .attr("y", 42).attr("text-anchor", "middle")
-        .attr("font-family", "Playfair Display, serif")
-        .attr("font-size", 14).attr("font-weight", "bold")
-        .attr("fill", "#1a2e1e")
-        .text("James Clement Richardson Jr.");
+      // Render a single spouse card (slightly smaller, with a subtle marriage indicator)
+      drawPersonCard(el, spouseName, gen, 0);
+
+      // Expand/collapse indicator
+      if (hasChildren) {
+        el.append("text")
+          .attr("x", 0).attr("y", CARD_H / 2 + 14)
+          .attr("text-anchor", "middle")
+          .attr("font-family", "Lato, sans-serif")
+          .attr("font-size", 11).attr("fill", "#a3b8a0")
+          .text(d.children ? "\u25B2" : "\u25BC");
+      }
     }
 
     // ── PLACEHOLDER NODE ──
     function drawPlaceholderNode(el, d) {
-      const hasMultiSpouse = d.data.spouses && d.data.spouses.length > 1;
-      const h = CARD_H + 16;
+      const spouse = getFirstSpouse(d.data);
+      const hasSp = !!spouse;
+      const halfGap = COUPLE_GAP / 2;
+      const leftX = hasSp ? -(CARD_W / 2 + halfGap) : 0;
+      const rightX = CARD_W / 2 + halfGap;
 
-      el.append("rect")
-        .attr("x", -CARD_W / 2).attr("y", -h / 2)
-        .attr("width", CARD_W).attr("height", h)
-        .attr("rx", 6)
-        .attr("fill", "#f8f6f0")
-        .attr("stroke", "#d4cfc4")
-        .attr("stroke-width", 1.5)
-        .attr("stroke-dasharray", "4 3");
+      // Blood relative card
+      drawPersonCard(el, d.data.name, d.data.generation, leftX, { isPlaceholder: true });
 
-      // Gen dot
-      el.append("circle")
-        .attr("cx", -CARD_W / 2 + 12).attr("cy", -h / 2 + 12).attr("r", 5)
-        .attr("fill", genColors[1]).attr("stroke", genColorsSolid[1]).attr("stroke-width", 1);
+      // Spouse card
+      if (hasSp) {
+        el.append("line")
+          .attr("x1", leftX + CARD_W / 2).attr("y1", 0)
+          .attr("x2", rightX - CARD_W / 2).attr("y2", 0)
+          .attr("stroke", "#d4cfc4").attr("stroke-width", 1.5)
+          .attr("stroke-dasharray", "4 3");
 
-      // Name
-      el.append("text")
-        .attr("y", -10).attr("text-anchor", "middle")
-        .attr("font-family", "Playfair Display, serif")
-        .attr("font-size", 13).attr("font-weight", "bold")
-        .attr("fill", "#1a2e1e")
-        .text(truncate(d.data.name, 24));
-
-      // Spouse
-      el.append("text")
-        .attr("y", 5).attr("text-anchor", "middle")
-        .attr("font-family", "Lato, sans-serif")
-        .attr("font-size", 11).attr("fill", "#3d5a42")
-        .text(truncate(getSpouseText(d.data), 28));
-
-      // Second spouse
-      if (hasMultiSpouse) {
-        el.append("text")
-          .attr("y", 18).attr("text-anchor", "middle")
-          .attr("font-family", "Lato, sans-serif")
-          .attr("font-size", 11).attr("fill", "#3d5a42")
-          .text(truncate(getSecondSpouseText(d.data), 28));
+        drawPersonCard(el, spouse, d.data.generation, rightX, { isPlaceholder: true });
       }
 
-      // "click to explore" hint
+      // "coming soon" label below
       el.append("text")
-        .attr("y", h / 2 - 4).attr("text-anchor", "middle")
+        .attr("y", CARD_H / 2 + 14).attr("text-anchor", "middle")
         .attr("font-family", "Lato, sans-serif")
         .attr("font-size", 9).attr("font-style", "italic")
         .attr("fill", "#a3b8a0")
         .text(d.data.descendantCount + " descendants \u2014 coming soon");
     }
 
-    // ── REGULAR NODE ──
-    function drawRegularNode(el, d) {
-      const hasMultiSpouse = d.data.spouses && d.data.spouses.length > 1;
-      const h = hasMultiSpouse ? CARD_H + 16 : CARD_H;
+    // ── REGULAR COUPLE NODE ──
+    function drawCoupleNode(el, d) {
+      const spouse = getFirstSpouse(d.data);
+      const hasSp = !!spouse;
       const hasChildren = d._allChildren && d._allChildren.length > 0;
+      const halfGap = COUPLE_GAP / 2;
 
-      el.append("rect")
-        .attr("x", -CARD_W / 2).attr("y", -h / 2)
-        .attr("width", CARD_W).attr("height", h)
-        .attr("rx", 6)
-        .attr("fill", "white")
-        .attr("stroke", "#c5d4c0")
-        .attr("stroke-width", 1.5);
+      // Position: blood relative on left, spouse on right (centered around node x)
+      const leftX = hasSp ? -(CARD_W / 2 + halfGap) : 0;
+      const rightX = CARD_W / 2 + halfGap;
 
-      // Gen dot
-      const gen = d.data.generation;
-      el.append("circle")
-        .attr("cx", -CARD_W / 2 + 12).attr("cy", -h / 2 + 12).attr("r", 5)
-        .attr("fill", genColors[gen] || genColors[5])
-        .attr("stroke", genColorsSolid[gen] || genColorsSolid[5])
-        .attr("stroke-width", 1);
+      // Blood relative card
+      drawPersonCard(el, d.data.name, d.data.generation, leftX, {
+        birthYear: d.data.birthYear,
+        deathYear: d.data.deathYear
+      });
+
+      // Spouse card + connector
+      if (hasSp) {
+        el.append("line")
+          .attr("x1", leftX + CARD_W / 2).attr("y1", 0)
+          .attr("x2", rightX - CARD_W / 2).attr("y2", 0)
+          .attr("stroke", "#c5ccc3").attr("stroke-width", 1.5);
+
+        drawPersonCard(el, spouse, d.data.generation, rightX);
+      }
 
       // Expand/collapse indicator
       if (hasChildren) {
         el.append("text")
-          .attr("x", CARD_W / 2 - 14).attr("y", -h / 2 + 15)
+          .attr("x", 0).attr("y", CARD_H / 2 + 14)
           .attr("text-anchor", "middle")
           .attr("font-family", "Lato, sans-serif")
-          .attr("font-size", 12).attr("fill", "#a3b8a0")
-          .text(d.children ? "\u25B4" : "\u25BE");
-      }
-
-      // Name
-      const nameY = getSpouseText(d.data) ? (hasMultiSpouse ? -12 : -6) : 2;
-      el.append("text")
-        .attr("y", nameY).attr("text-anchor", "middle")
-        .attr("font-family", "Playfair Display, serif")
-        .attr("font-size", 13).attr("font-weight", "bold")
-        .attr("fill", "#1a2e1e")
-        .text(truncate(getDisplayName(d.data), 24));
-
-      // Spouse
-      const st = getSpouseText(d.data);
-      if (st) {
-        el.append("text")
-          .attr("y", hasMultiSpouse ? 2 : 10)
-          .attr("text-anchor", "middle")
-          .attr("font-family", "Lato, sans-serif")
-          .attr("font-size", 11).attr("fill", "#3d5a42")
-          .text(truncate(st, 28));
-      }
-
-      // Second spouse
-      if (hasMultiSpouse) {
-        el.append("text")
-          .attr("y", 16).attr("text-anchor", "middle")
-          .attr("font-family", "Lato, sans-serif")
-          .attr("font-size", 11).attr("fill", "#3d5a42")
-          .text(truncate(getSecondSpouseText(d.data), 28));
+          .attr("font-size", 11).attr("fill", "#a3b8a0")
+          .text(d.children ? "\u25B2" : "\u25BC");
       }
     }
 
@@ -757,7 +831,7 @@
       const scale = Math.min(
         (parent.width - padding * 2) / bounds.width,
         (parent.height - padding * 2) / bounds.height,
-        1.5
+        1.2
       );
       const cx = bounds.x + bounds.width / 2;
       const cy = bounds.y + bounds.height / 2;
@@ -778,9 +852,7 @@
     }
 
     function collapseToGen1() {
-      // First pass: restore all children so the tree is fully connected
       root.each(d => { if (d._allChildren) d.children = d._allChildren; });
-      // Second pass: collapse everything below Gen 1
       root.each(d => { if (d.depth >= 1) d.children = null; });
       draw();
       setTimeout(fitToScreen, 100);
@@ -800,7 +872,6 @@
         return;
       }
 
-      // Expand all to search
       root.each(d => { if (d._allChildren) d.children = d._allChildren; });
       draw();
 
@@ -814,7 +885,6 @@
       });
 
       info.textContent = matches.length > 0 ? matches.length + " found" : "No matches";
-
       g.selectAll(".node-card").style("opacity", d => matches.includes(d) ? 1 : 0.15);
 
       if (matches.length > 0) {

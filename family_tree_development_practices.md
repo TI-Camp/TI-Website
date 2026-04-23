@@ -139,7 +139,7 @@ MIN_WEIGHT ensures even people with few descendants get readable wedges.
 
 ## Questions to Clarify
 
-1. **Divorcees/Remarriages:** How should we handle Coombs (divorced Henry LaBoiteaux, remarried)? Show both spouses? Show only current? Special notation?
+1. ~~**Divorcees/Remarriages:**~~ **DECIDED — Option A: Stacked couples.** The blood relative card appears once. Multiple spouse cards branch off side by side, each with a connector down to their shared children. No person is duplicated in the tree. Scales to 3+ marriages (e.g., James Garvin with three wives).
 
 2. **Deceased indicators:** Should we mark deceased family members differently? (e.g., italics, dates, cross symbol)
 
