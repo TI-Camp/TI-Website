@@ -103,7 +103,7 @@
     }
 
     /* ── TREE CANVAS ── */
-    #tree-container { position: fixed; top: 120px; left: 0; right: 0; bottom: 0; }
+    #tree-container { position: fixed; top: 160px; left: 0; right: 0; bottom: 0; }
     #tree-container svg { width: 100%; height: 100%; cursor: grab; }
     #tree-container svg:active { cursor: grabbing; }
 
@@ -127,6 +127,101 @@
     .search-input:focus { border-color: var(--green-dark); box-shadow: 0 0 0 3px rgba(46, 107, 62, 0.2); }
     .search-input::placeholder { color: var(--text-mid); }
     .search-result-info { font-size: 0.8rem; color: var(--text-mid); margin-left: 0.5rem; }
+
+    /* ── RELATIONSHIP FINDER ── */
+    .rel-finder {
+      position: fixed; top: 120px; left: 0; right: 0;
+      background: white; padding: 0.6rem 2rem; z-index: 99;
+      border-bottom: 1px solid rgba(30, 77, 43, 0.12);
+      display: flex; align-items: center; gap: 0.6rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      flex-wrap: wrap;
+    }
+    .rel-finder label {
+      font-family: 'Lato', sans-serif; font-size: 0.8rem;
+      font-weight: 700; color: var(--green-dark);
+    }
+    .rel-input-wrap {
+      position: relative;
+    }
+    .rel-input {
+      padding: 0.35rem 0.7rem; width: 200px;
+      font-family: 'Lato', sans-serif; font-size: 0.82rem;
+      border: 2px solid var(--green-mid); border-radius: 6px;
+      outline: none; transition: border-color 0.2s;
+    }
+    .rel-input:focus { border-color: var(--green-dark); box-shadow: 0 0 0 3px rgba(46, 107, 62, 0.15); }
+    .rel-input::placeholder { color: #aaa; }
+    .rel-autocomplete {
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: white; border: 1px solid #ddd; border-top: none;
+      border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto;
+      z-index: 200; display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .rel-autocomplete.open { display: block; }
+    .rel-option {
+      padding: 0.4rem 0.7rem; font-size: 0.82rem; cursor: pointer;
+      font-family: 'Lato', sans-serif;
+    }
+    .rel-option:hover, .rel-option.active { background: var(--cream); }
+    .rel-option .gen-tag {
+      font-size: 0.65rem; color: var(--text-mid); margin-left: 0.3rem;
+    }
+    .rel-swap {
+      background: none; border: none; font-size: 1.1rem; cursor: pointer;
+      color: var(--green-mid); padding: 0.2rem 0.4rem; border-radius: 4px;
+    }
+    .rel-swap:hover { background: var(--cream); }
+    .rel-find-btn {
+      background: var(--amber); color: white; border: none;
+      padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.82rem; font-weight: 700;
+      transition: background 0.2s;
+    }
+    .rel-find-btn:hover { background: #b07808; }
+    .rel-result {
+      font-family: 'Playfair Display', serif; font-size: 1rem;
+      color: var(--green-dark); font-weight: 700; margin-left: 0.5rem;
+    }
+    .rel-clear {
+      background: none; border: 1px solid #ccc; color: var(--text-mid);
+      padding: 0.3rem 0.7rem; border-radius: 4px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.75rem;
+    }
+    /* ── JOURNEY CONTROLS ── */
+    .journey-controls {
+      position: fixed; top: 170px; right: 1rem;
+      background: white; border: 1px solid rgba(30, 77, 43, 0.15);
+      border-radius: 8px; padding: 0.5rem 0.8rem;
+      display: none; align-items: center; gap: 0.5rem;
+      z-index: 200; box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    }
+    .journey-controls.visible { display: flex; }
+    .journey-status {
+      font-family: 'Lato', sans-serif; font-size: 0.8rem;
+      color: var(--green-dark); font-weight: 400;
+    }
+    .journey-btn {
+      background: var(--green-dark); color: var(--cream); border: none;
+      padding: 0.3rem 0.7rem; border-radius: 4px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.75rem;
+      transition: background 0.2s;
+    }
+    .journey-btn:hover { background: var(--green-mid); }
+    .journey-stop { background: #8b3a3a; }
+    .journey-stop:hover { background: #a34545; }
+
+    .rel-lca {
+      font-family: 'Lato', sans-serif; font-size: 0.78rem;
+      color: var(--text-mid); font-style: italic;
+    }
+    .rel-clear:hover { background: var(--cream-dark); }
+
+    @media (max-width: 768px) {
+      .rel-finder { padding: 0.5rem 1rem; gap: 0.4rem; }
+      .rel-input { width: 140px; }
+    }
   </style>
 </head>
 <body>
@@ -160,12 +255,36 @@
       <span class="search-result-info" id="search-info"></span>
       <button class="btn" onclick="fitToScreen()">Fit to Screen</button>
       <button class="btn" onclick="expandAll()">Expand All</button>
-      <button class="btn" onclick="collapseToGen1()">Collapse</button>
+      <button class="btn" style="background:#8b3a3a" onclick="resetTree()">Reset</button>
     </div>
   </header>
 
+  <div class="rel-finder">
+    <label>Find Relationship:</label>
+    <div class="rel-input-wrap">
+      <input type="text" class="rel-input" id="rel-person-a" placeholder="Person 1..." autocomplete="off" />
+      <div class="rel-autocomplete" id="rel-ac-a"></div>
+    </div>
+    <button class="rel-swap" onclick="swapPersons()" title="Swap">&hArr;</button>
+    <div class="rel-input-wrap">
+      <input type="text" class="rel-input" id="rel-person-b" placeholder="Person 2..." autocomplete="off" />
+      <div class="rel-autocomplete" id="rel-ac-b"></div>
+    </div>
+    <button class="rel-find-btn" onclick="calculateRelationship()">Find</button>
+    <span class="rel-result" id="rel-result"></span>
+    <span class="rel-lca" id="rel-lca"></span>
+    <button class="rel-find-btn" id="rel-show-btn" onclick="showOnTree()" style="display:none">Take the Journey</button>
+  </div>
+
   <div id="tree-container">
     <svg id="tree-svg"></svg>
+  </div>
+
+  <!-- Journey controls — fixed top-right, only visible during animation -->
+  <div class="journey-controls" id="journey-controls">
+    <span class="journey-status" id="journey-status">Following path...</span>
+    <button class="journey-btn" id="journey-pause-btn" onclick="toggleJourneyPause()">⏸ Pause</button>
+    <button class="journey-btn journey-stop" id="journey-stop-btn" onclick="stopJourney()">⏹ Stop</button>
   </div>
 
   <div class="legend">
@@ -196,6 +315,7 @@
           children: [
             {
               name: "Emily Richardson",
+              nickname: "Grambie",
               spouse: "Joe Boughton",
               generation: 2,
               children: [
@@ -435,24 +555,566 @@
         },
         {
           name: "Emily Richardson",
-          spouses: ["Clarence Burton", "Jim Carruthers"],
           generation: 1,
-          isPlaceholder: true,
-          descendantCount: 19
+          marriages: [
+            {
+              spouse: "Clarence Burton",
+              children: [
+                {
+                  name: "Mary Tylor Burton",
+                  generation: 2,
+                  marriages: [
+                    {
+                      spouse: "R.D. Garrison",
+                      children: [
+                        {
+                          name: "Robert Garrison",
+                          spouse: "Lucinda Baker",
+                          generation: 3,
+                          children: [
+                            { name: "Amber Garrison", generation: 4 },
+                            { name: "Henna Garrison", generation: 4 }
+                          ]
+                        },
+                        {
+                          name: "Emily Garrison",
+                          spouse: "Peter Toll",
+                          generation: 3,
+                          children: [
+                            { name: "Tylor Toll", generation: 4 }
+                          ]
+                        },
+                        {
+                          name: "Priscilla Stewart",
+                          spouse: "Manley Morgan",
+                          generation: 3
+                        },
+                        {
+                          name: "Mary Tylor Stewart",
+                          spouse: "Will Compton",
+                          generation: 3,
+                          children: [
+                            { name: "Emily Compton", generation: 4 },
+                            { name: "Jami Compton", spouse: "Reuben Pressman", generation: 4 }
+                          ]
+                        },
+                        {
+                          name: "Jim Garrison",
+                          generation: 3,
+                          marriages: [
+                            {
+                              spouse: "Lisa Thieken",
+                              children: [
+                                {
+                                  name: "Austin Garrison",
+                                  spouse: "Katelyn Steinkoenig",
+                                  generation: 4,
+                                  children: [
+                                    { name: "Chloe Garrison", generation: 5 },
+                                    { name: "Arlo Garrison", generation: 5 },
+                                    { name: "Elliott Garrison", generation: 5 }
+                                  ]
+                                },
+                                {
+                                  name: "Aubrey Garrison",
+                                  generation: 4,
+                                  children: [
+                                    { name: "Lila Campton", generation: 5 },
+                                    { name: "Finnegan McAvoy", generation: 5 }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              spouse: "Kimberly Leeson",
+                              children: [
+                                { name: "Paige Garrison", generation: 4 },
+                                { name: "Olivia Garrison", generation: 4 }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      spouse: "Richard P. Stewart",
+                      children: []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              spouse: "Jim Carruthers",
+              children: [
+                { name: "Jimsy Carruthers", generation: 2 }
+              ]
+            }
+          ]
         },
         {
           name: "Coombs Richardson",
-          spouses: ["Henry LaBoiteaux", "Robert Fillmore Lovett"],
           generation: 1,
-          isPlaceholder: true,
-          descendantCount: 51
+          marriages: [
+            {
+              spouse: "Henry LaBoiteaux",
+              children: [
+                {
+                  name: "Emily LaBoiteaux",
+                  spouse: "Larry Mannion",
+                  generation: 2,
+                  children: [
+                    { name: "John Mannion", generation: 3 },
+                    {
+                      name: "Margaret Mannion",
+                      spouse: "Brian Smart",
+                      generation: 3,
+                      children: [
+                        { name: "Jarrett Ryan Smart", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Mary Elizabeth Mannion",
+                      spouse: "Robin Rowe",
+                      generation: 3,
+                      children: [
+                        { name: "Davin Rowe", generation: 4 },
+                        { name: "Elizabeth Rowe", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Lawrence Mannion",
+                      spouse: "Ariadne Fellows",
+                      generation: 3
+                    }
+                  ]
+                },
+                {
+                  name: "Edith LaBoiteaux",
+                  spouse: "Thomas Bogardus",
+                  generation: 2,
+                  children: [
+                    {
+                      name: "Nancy Bogardus",
+                      spouse: "Mike Polisson",
+                      generation: 3,
+                      children: [
+                        { name: "Lindsay Polisson", generation: 4 },
+                        { name: "George Polisson", spouse: "Kelly Grace", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "William Bogardus",
+                      spouse: "Michelle Neal",
+                      generation: 3,
+                      children: [
+                        { name: "Billy Neal", generation: 4 },
+                        { name: "John Neal", generation: 4 },
+                        { name: "Addison Bogardus", generation: 4 },
+                        { name: "Skylar Bogardus", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Kristina Bogardus",
+                      generation: 3,
+                      marriages: [
+                        {
+                          spouse: "Tom Puckett",
+                          children: [
+                            {
+                              name: "Nathaniel Puckett",
+                              spouse: "Lynn Malone",
+                              generation: 4,
+                              children: [
+                                { name: "Vivian Puckett", generation: 5 }
+                              ]
+                            },
+                            { name: "Alison Puckett", generation: 4 },
+                            { name: "Kathryn Puckett", generation: 4 }
+                          ]
+                        },
+                        {
+                          spouse: "Bob Scott",
+                          children: [
+                            { name: "Alex Scott", generation: 4 }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      name: "Ellen Coombs Bogardus",
+                      spouse: "Gerald Edward Szymaniak",
+                      generation: 3,
+                      children: [
+                        { name: "Sarah Annis Szymaniak", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Thomas L. Bogardus",
+                      spouse: "Robert de Haan",
+                      generation: 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              spouse: "Robert Fillmore Lovett",
+              children: [
+                {
+                  name: "Linda Coombs Lovett",
+                  spouse: "James Crawford",
+                  generation: 2,
+                  children: [
+                    {
+                      name: "Henry Richardson Crawford",
+                      spouse: "Siobhan Louise Murphy",
+                      generation: 3,
+                      children: [
+                        { name: "Barbara Lovett Crawford", generation: 4 },
+                        { name: "Martin Keenholtz Crawford", generation: 4 },
+                        { name: "Linda Colleen Crawford", generation: 4 },
+                        { name: "Helen Winfield Crawford", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Elizabeth Coombs Crawford",
+                      spouse: "William A. Ragan",
+                      generation: 3,
+                      children: [
+                        { name: "James Crawford Ragan", generation: 4 },
+                        { name: "Sarah Elizabeth Ragan", generation: 4 },
+                        { name: "Joseph Richardson Ragan", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Robert Lovett Crawford",
+                      spouse: "Margaret Harding",
+                      generation: 3,
+                      children: [
+                        { name: "Robert Lovett Crawford", generation: 4 },
+                        { name: "Benjamin Harding Crawford", generation: 4 },
+                        { name: "Elizabeth Margaret Crawford", generation: 4 },
+                        { name: "Charlotte Grace Crawford", generation: 4 },
+                        { name: "Katherine Emily Crawford", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Benjamin Crawford",
+                      spouse: "Stephanie Luongo",
+                      generation: 3,
+                      children: [
+                        { name: "Ava Cohen Crawford", generation: 4 },
+                        { name: "Harrison Baker Crawford", generation: 4 },
+                        { name: "Macy Coombs Crawford", generation: 4 }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "Robert Fillmore Lovett",
+                  spouse: "Sara C. Newcomb",
+                  generation: 2,
+                  children: [
+                    {
+                      name: "Robert Fillmore Lovett",
+                      spouse: "Amy M. Sibert",
+                      generation: 3,
+                      children: [
+                        { name: "Sophia Myers Lovett", generation: 4 },
+                        { name: "Robert Fillmore Lovett", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Andrew Jerrel Lovett",
+                      spouse: "Li Miao",
+                      generation: 3,
+                      children: [
+                        { name: "Alexander Weida Lovett", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Edward Richardson Lovett",
+                      spouse: "Erin Sinesky",
+                      generation: 3,
+                      children: [
+                        { name: "Maxine Cecilia Lovett", generation: 4 },
+                        { name: "Audrey Lorraine Lovett", generation: 4 }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           name: "Adelaide Richardson",
           spouse: "Hugh Garvin",
           generation: 1,
-          isPlaceholder: true,
-          descendantCount: 57
+          children: [
+            {
+              name: "James Garvin",
+              generation: 2,
+              marriages: [
+                {
+                  spouse: "Frances Harrison",
+                  children: [
+                    {
+                      name: "Nancy Garvin",
+                      generation: 3,
+                      children: [
+                        {
+                          name: "Mary Elizabeth Garvin",
+                          spouse: "Philipe Rivaldi",
+                          generation: 4,
+                          children: [
+                            { name: "Taylor Rivaldi", generation: 5 }
+                          ]
+                        },
+                        { name: "Christinia Garvin", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Frances Garvin",
+                      spouse: "Keith Puccinelli",
+                      generation: 3
+                    },
+                    {
+                      name: "Louise Garvin",
+                      spouse: "Paul Rosel",
+                      generation: 3,
+                      children: [
+                        {
+                          name: "Frances Rosel",
+                          spouse: "Kevin O'Donnell",
+                          generation: 4,
+                          children: [
+                            { name: "Madelyn O'Donnell", generation: 5 },
+                            { name: "Riley O'Donnell", generation: 5 }
+                          ]
+                        },
+                        { name: "Christian Rosel", generation: 4 }
+                      ]
+                    },
+                    {
+                      name: "Harrison Garvin",
+                      generation: 3,
+                      marriages: [
+                        {
+                          spouse: "Karry Usher",
+                          children: [
+                            { name: "James Bodhi Garvin", generation: 4 }
+                          ]
+                        },
+                        {
+                          spouse: "Penny Harding",
+                          children: [
+                            { name: "Alexandria Lucy Garvin", generation: 4 }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  spouse: "Jean Strang",
+                  children: []
+                },
+                {
+                  spouse: "Gladys Sutravafa Randall",
+                  children: []
+                }
+              ]
+            },
+            {
+              name: "Hugh Garvin",
+              spouse: "Jane Hamilton",
+              generation: 2,
+              children: [
+                { name: "Ann Garvin", generation: 3 },
+                {
+                  name: "Sarah Garvin",
+                  spouse: "Michael Callahan",
+                  generation: 3,
+                  children: [
+                    { name: "Grace Callahan", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Hugh Garvin",
+                  spouse: "Dana Cress",
+                  generation: 3,
+                  children: [
+                    { name: "Taylor Garvin", spouse: "Taylor Lukas", generation: 4 },
+                    {
+                      name: "Alexander Garvin",
+                      spouse: "Kerry Rockwood",
+                      generation: 4,
+                      children: [
+                        { name: "Lilly Garvin", generation: 5 },
+                        { name: "Brayden Garvin", generation: 5 },
+                        { name: "Lilah Garvin", generation: 5 },
+                        { name: "Ari Garvin", generation: 5 }
+                      ]
+                    },
+                    { name: "Andrew Garvin", spouse: "Brittany Hock", generation: 4 }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "Annis Garvin",
+              spouse: "Bob Welch",
+              generation: 2,
+              children: [
+                { name: "Sarah Welch", generation: 3 },
+                {
+                  name: "Robert Welch",
+                  spouse: "Pattie Packer",
+                  generation: 3,
+                  children: [
+                    { name: "Olivia Welch", generation: 4 },
+                    { name: "Gillian Welch", generation: 4 }
+                  ]
+                },
+                {
+                  name: "William Welch",
+                  spouse: "Linda Wilson",
+                  generation: 3,
+                  children: [
+                    { name: "Kelly Welch", spouse: "Brian Bowman", generation: 4 },
+                    { name: "Ryan Welch", spouse: "Panda Stackhouse", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Betsy Welch",
+                  spouse: "Bruce Bensen",
+                  generation: 3,
+                  children: [
+                    { name: "Caelen Bensen", spouse: "Andre Janusz", generation: 4 },
+                    {
+                      name: "Taylor Bensen",
+                      spouse: "Cody Parsley",
+                      generation: 4,
+                      children: [
+                        { name: "Charlotte Parsley", generation: 5 }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "Adelaide Garvin",
+              spouse: "Bob Cohan",
+              generation: 2,
+              children: [
+                {
+                  name: "James Cohan",
+                  spouse: "Susan Sekel",
+                  generation: 3,
+                  children: [
+                    { name: "James Cohan Cohan", generation: 4 },
+                    { name: "Daniel Cohan", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Robert Cohan",
+                  spouse: "Pamela Philips",
+                  generation: 3,
+                  children: [
+                    { name: "Evan Cohan", generation: 4 },
+                    { name: "Marlie Lee Cohan", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Betsy Cohan",
+                  spouse: "Robert Dawson",
+                  generation: 3,
+                  children: [
+                    { name: "Danille Dawson", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Kathleen Cohan",
+                  spouse: "Richard Ellis",
+                  generation: 3,
+                  children: [
+                    { name: "Dylan Ellis", generation: 4 }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "Frances Garvin",
+              spouse: "William Byrne",
+              generation: 2,
+              children: [
+                {
+                  name: "Larry Byrne",
+                  spouse: "Sarah Jones",
+                  generation: 3,
+                  children: [
+                    { name: "Marcie Byrne", generation: 4 },
+                    { name: "Anne Byrne", generation: 4 }
+                  ]
+                },
+                {
+                  name: "Mary Byrne",
+                  generation: 3,
+                  marriages: [
+                    {
+                      spouse: "Tim Taylor",
+                      children: [
+                        { name: "Tim Taylor", generation: 4 },
+                        { name: "Tracy Taylor", generation: 4 }
+                      ]
+                    },
+                    {
+                      spouse: "Guy Wayne Cox",
+                      children: []
+                    }
+                  ]
+                },
+                {
+                  name: "Joe Byrne",
+                  generation: 3,
+                  marriages: [
+                    {
+                      spouse: "Denise Fawcett",
+                      children: [
+                        { name: "Aaron Byrne", generation: 4 }
+                      ]
+                    },
+                    {
+                      spouse: "Patricia Mock",
+                      children: []
+                    }
+                  ]
+                },
+                {
+                  name: "Ann Byrne",
+                  generation: 3,
+                  marriages: [
+                    {
+                      spouse: "Guy Winchester",
+                      children: [
+                        { name: "Sean Winchester", generation: 4 },
+                        { name: "Travis Winchester", generation: 4 }
+                      ]
+                    },
+                    {
+                      spouse: "Cameron Sauder",
+                      children: [
+                        { name: "Emma Sauder Byrne", generation: 4 }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     };
@@ -471,9 +1133,9 @@
     ];
     const genColorsSolid = ["#56B4E9", "#E69F00", "#CC79A7", "#009E73", "#F0E442", "#0072B2"];
 
-    const CARD_W = 130;
-    const CARD_H = 140;
-    const PHOTO_R = 28;
+    const CARD_W = 145;
+    const CARD_H = 155;
+    const PHOTO_R = 32;
     const COUPLE_GAP = 16;  // gap between couple cards
     const H_SPACING = 310;
     const V_SPACING = 190;
@@ -509,7 +1171,7 @@
 
     root.each(d => {
       d._allChildren = d.children || null;
-      if (d.depth > 1) d.children = null;
+      if (d.depth >= 1) d.children = null;
     });
 
     const treeLayout = d3.tree()
@@ -564,8 +1226,6 @@
 
     // Link drops from center-bottom of the couple unit
     function linkPath(d) {
-      const srcW = coupleWidth(d.source.data);
-      const tgtW = coupleWidth(d.target.data);
       // Source: drop from bottom-center
       const sx = d.source.x;
       const sy = d.source.y + CARD_H / 2;
@@ -858,6 +1518,27 @@
       setTimeout(fitToScreen, 100);
     }
 
+    function resetTree() {
+      // Clear search
+      document.getElementById("search-input").value = "";
+      document.getElementById("search-info").textContent = "";
+      // Clear relationship finder
+      relInputA.value = "";
+      relInputB.value = "";
+      selectedA = null;
+      selectedB = null;
+      lastPathResult = null;
+      relResult.textContent = "";
+      relLca.textContent = "";
+      relShowBtn.style.display = "none";
+      stopJourney();
+      // Reset tree to default collapsed state
+      g.selectAll(".node-card").style("opacity", 1);
+      g.selectAll(".link").attr("stroke", "#c5ccc3").attr("stroke-width", 1.5);
+      g.selectAll(".journey-label").remove();
+      collapseToGen1();
+    }
+
     // ══════════════════════════════════════════════
     // SEARCH
     // ══════════════════════════════════════════════
@@ -867,33 +1548,78 @@
       const info = document.getElementById("search-info");
 
       if (!term) {
+        // Collapse back to default and reset
+        root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+        root.each(d => { if (d.depth >= 1) d.children = null; });
+        draw();
         g.selectAll(".node-card").style("opacity", 1);
         info.textContent = "";
+        setTimeout(fitToScreen, 100);
         return;
       }
 
-      root.each(d => { if (d._allChildren) d.children = d._allChildren; });
-      draw();
-
-      const allNodes = root.descendants();
-      const matches = allNodes.filter(d => {
-        const data = d.data;
-        return data.name.toLowerCase().includes(term)
-          || (data.spouse && data.spouse.toLowerCase().includes(term))
-          || (data.spouses && data.spouses.some(s => s.toLowerCase().includes(term)))
-          || (data.nickname && data.nickname.toLowerCase().includes(term));
+      // Find matches in the full data (allPeopleFlat), not D3 nodes
+      const matches = allPeopleFlat.filter(p => {
+        return p.name.toLowerCase().includes(term)
+          || (p.nickname && p.nickname.toLowerCase().includes(term));
       });
 
       info.textContent = matches.length > 0 ? matches.length + " found" : "No matches";
-      g.selectAll(".node-card").style("opacity", d => matches.includes(d) ? 1 : 0.15);
 
-      if (matches.length > 0) {
-        const t = matches[0];
-        const parent = svg.node().getBoundingClientRect();
-        const cur = d3.zoomTransform(svg.node());
+      if (matches.length === 0) return;
+
+      // Only expand ancestors of matched nodes — not the whole tree
+      // First collapse everything
+      root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+      root.each(d => { if (d.depth >= 1) d.children = null; });
+
+      // Then expand only the paths to matches
+      const matchDataNodes = new Set(matches.map(m => m.isSpouse ? m.partnerNode : m.node));
+
+      function expandToNode(targetData) {
+        // Walk the D3 hierarchy to find and expand ancestors
+        // We need to repeatedly expand until we can see the target
+        let found = false;
+        for (let attempt = 0; attempt < 10 && !found; attempt++) {
+          root.each(d => {
+            if (matchDataNodes.has(d.data)) found = true;
+            // If this node's hidden children contain a match, expand it
+            if (!d.children && d._allChildren) {
+              const hasMatch = d._allChildren.some(function check(child) {
+                if (matchDataNodes.has(child.data)) return true;
+                if (child.data.isMarriageNode && child.children) {
+                  return child.children.some(check);
+                }
+                if (child._allChildren) return child._allChildren.some(check);
+                if (child.children) return child.children.some(check);
+                return false;
+              });
+              if (hasMatch) d.children = d._allChildren;
+            }
+          });
+        }
+      }
+
+      expandToNode();
+      draw();
+
+      // Dim non-matches
+      const matchD3Set = new Set();
+      root.descendants().forEach(d => {
+        if (matchDataNodes.has(d.data)) matchD3Set.add(d);
+      });
+      g.selectAll(".node-card").style("opacity", d => matchD3Set.has(d) ? 1 : 0.15);
+
+      // Zoom in tight to the first match
+      const firstMatch = root.descendants().find(d => matchDataNodes.has(d.data));
+      if (firstMatch) {
+        const parentRect = svg.node().getBoundingClientRect();
         svg.transition().duration(400).call(
           zoomBehavior.transform,
-          d3.zoomIdentity.translate(parent.width / 2, parent.height / 2).scale(cur.k).translate(-t.x, -t.y)
+          d3.zoomIdentity
+            .translate(parentRect.width / 2, parentRect.height / 2)
+            .scale(0.85)
+            .translate(-firstMatch.x, -firstMatch.y)
         );
       }
     });
@@ -901,6 +1627,640 @@
     // ══════════════════════════════════════════════
     // INIT
     // ══════════════════════════════════════════════
+
+    // ══════════════════════════════════════════════
+    // RELATIONSHIP CALCULATOR — Step 1: LCA Algorithm
+    // Works on raw treeData, independent of D3/collapse state
+    // ══════════════════════════════════════════════
+
+    // Build a flat lookup of all people (blood relatives only, not marriage pseudo-nodes)
+    // Each entry: { name, generation, node, parent }
+    const allPeopleFlat = [];
+
+    function buildPeopleLookup(node, parent) {
+      if (node.isMarriageNode) {
+        // Marriage node itself is a spouse — add them linked to the blood parent
+        allPeopleFlat.push({
+          name: node.name, generation: node.generation, node: node,
+          parent: parent, isSpouse: true, partnerNode: parent
+        });
+        if (node.children) {
+          node.children.forEach(c => buildPeopleLookup(c, parent));
+        }
+        return;
+      }
+      allPeopleFlat.push({ name: node.name, nickname: node.nickname || null, generation: node.generation, node: node, parent: parent });
+      // Add single spouse if present
+      if (node.spouse) {
+        allPeopleFlat.push({
+          name: node.spouse, generation: node.generation, node: node,
+          parent: parent, isSpouse: true, partnerNode: node
+        });
+      }
+      if (node.children) {
+        node.children.forEach(c => buildPeopleLookup(c, node));
+      }
+    }
+    // Run AFTER preprocessMarriages has converted marriages to pseudo-nodes
+    buildPeopleLookup(treeData, null);
+
+    // Build parent map: node → parent node (skipping marriage pseudo-nodes)
+    const parentMap = new Map();
+    function buildParentMap(node, bloodParent) {
+      if (node.isMarriageNode) {
+        // Marriage node's children belong to the blood parent above
+        if (node.children) {
+          node.children.forEach(c => buildParentMap(c, bloodParent));
+        }
+        return;
+      }
+      parentMap.set(node, bloodParent);
+      if (node.children) {
+        node.children.forEach(c => {
+          if (c.isMarriageNode) {
+            // Children of marriage nodes belong to this blood parent
+            buildParentMap(c, node);
+          } else {
+            buildParentMap(c, node);
+          }
+        });
+      }
+    }
+    buildParentMap(treeData, null);
+
+    // Get ancestors chain: [self, parent, grandparent, ..., root]
+    function getAncestors(node) {
+      const chain = [];
+      let current = node;
+      while (current) {
+        chain.push(current);
+        current = parentMap.get(current) || null;
+      }
+      return chain;
+    }
+
+    // Find Lowest Common Ancestor and return path
+    function findLCA(nodeA, nodeB) {
+      const ancestorsA = getAncestors(nodeA);
+      const ancestorsB = getAncestors(nodeB);
+
+      // Convert B's ancestors to a Set for fast lookup
+      const setB = new Set(ancestorsB);
+
+      // Walk up A's ancestors until we find one in B's chain
+      let lca = null;
+      for (const ancestor of ancestorsA) {
+        if (setB.has(ancestor)) {
+          lca = ancestor;
+          break;
+        }
+      }
+
+      if (!lca) return null;
+
+      // Build path: A → ... → LCA → ... → B
+      const pathUp = []; // A up to LCA (inclusive)
+      for (const a of ancestorsA) {
+        pathUp.push(a);
+        if (a === lca) break;
+      }
+
+      const pathDown = []; // LCA down to B (exclusive of LCA)
+      for (const b of ancestorsB) {
+        if (b === lca) break;
+        pathDown.push(b);
+      }
+      pathDown.reverse();
+
+      const fullPath = [...pathUp, ...pathDown];
+
+      // Generation distances from LCA
+      const stepsA = pathUp.length - 1;  // A to LCA
+      const stepsB = pathDown.length;     // LCA to B
+
+      return { lca, path: fullPath, stepsA, stepsB, personA: nodeA, personB: nodeB };
+    }
+
+    // Find a person entry by name or nickname
+    function findPersonByName(name) {
+      const lower = name.toLowerCase();
+      return allPeopleFlat.find(p =>
+        p.name.toLowerCase() === lower ||
+        (p.nickname && p.nickname.toLowerCase() === lower)
+      ) || null;
+    }
+
+    // Get the blood-relative node for LCA calculation (spouse → their partner)
+    function getBloodNode(entry) {
+      if (!entry) return null;
+      return entry.isSpouse ? entry.partnerNode : entry.node;
+    }
+
+    // ══════════════════════════════════════════════
+    // Step 2: Relationship Labeler
+    // ══════════════════════════════════════════════
+
+    function getRelationshipLabel(stepsA, stepsB) {
+      // Same person
+      if (stepsA === 0 && stepsB === 0) return "same person";
+
+      // Direct ancestor/descendant
+      if (stepsA === 0 || stepsB === 0) {
+        const steps = Math.max(stepsA, stepsB);
+        const isAncestor = stepsA === 0; // A is ancestor of B
+        if (steps === 1) return isAncestor ? "parent / child" : "child / parent";
+        if (steps === 2) return isAncestor ? "grandparent / grandchild" : "grandchild / grandparent";
+        const greats = steps - 2;
+        const prefix = greats === 1 ? "great-" : greats + "x great-";
+        return isAncestor
+          ? prefix + "grandparent / " + prefix + "grandchild"
+          : prefix + "grandchild / " + prefix + "grandparent";
+      }
+
+      // Siblings
+      if (stepsA === 1 && stepsB === 1) return "siblings";
+
+      // Uncle/aunt / niece/nephew
+      if (stepsA === 1 || stepsB === 1) {
+        const otherSteps = Math.max(stepsA, stepsB);
+        if (otherSteps === 2) return "uncle·aunt / niece·nephew";
+        const greats = otherSteps - 2;
+        const prefix = greats === 1 ? "great-" : greats + "x great-";
+        return prefix + "uncle·aunt / " + prefix + "niece·nephew";
+      }
+
+      // Cousins
+      const cousinDegree = Math.min(stepsA, stepsB) - 1;
+      const removed = Math.abs(stepsA - stepsB);
+
+      const ordinal = cousinDegree === 1 ? "1st" : cousinDegree === 2 ? "2nd" : cousinDegree === 3 ? "3rd" : cousinDegree + "th";
+
+      let label = ordinal + " cousins";
+      if (removed > 0) {
+        const removedText = removed === 1 ? "once" : removed === 2 ? "twice" : removed + "x";
+        label += ", " + removedText + " removed";
+      }
+      return label;
+    }
+
+    // ══════════════════════════════════════════════
+    // Step 3: UI — Autocomplete + Calculate
+    // ══════════════════════════════════════════════
+
+    const relInputA = document.getElementById("rel-person-a");
+    const relInputB = document.getElementById("rel-person-b");
+    const relAcA = document.getElementById("rel-ac-a");
+    const relAcB = document.getElementById("rel-ac-b");
+    const relResult = document.getElementById("rel-result");
+    const relLca = document.getElementById("rel-lca");
+    const relShowBtn = document.getElementById("rel-show-btn");
+    const journeyControls = document.getElementById("journey-controls");
+    const journeyStatus = document.getElementById("journey-status");
+    const journeyPauseBtn = document.getElementById("journey-pause-btn");
+
+    let lastPathResult = null;
+    let journeyPaused = false;
+    let journeyStopped = false;
+    let journeyResolve = null;  // resolve function for pause/resume
+
+    let selectedA = null;  // stored entry reference { name, node, isSpouse, partnerNode }
+    let selectedB = null;
+
+    // Sort people alphabetically for autocomplete
+    const sortedPeople = allPeopleFlat
+      .filter(p => !p.node.isFounders)
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    function setupAutocomplete(input, dropdown, onSelect) {
+      input.addEventListener("input", () => {
+        const term = input.value.toLowerCase().trim();
+        if (term.length < 1) { dropdown.classList.remove("open"); return; }
+
+        const matches = sortedPeople.filter(p =>
+          p.name.toLowerCase().includes(term) ||
+          (p.nickname && p.nickname.toLowerCase().includes(term))
+        ).slice(0, 10);
+        if (matches.length === 0) { dropdown.classList.remove("open"); return; }
+
+        dropdown.innerHTML = matches.map((p, i) => {
+          const nick = p.nickname ? ' "' + p.nickname + '"' : '';
+          const tag = p.isSpouse ? ' <span class="gen-tag">(spouse, Gen ' + p.generation + ')</span>' : ' <span class="gen-tag">Gen ' + p.generation + '</span>';
+          return `<div class="rel-option" data-idx="${i}">${p.name}${nick}${tag}</div>`;
+        }).join("");
+
+        dropdown.classList.add("open");
+
+        dropdown.querySelectorAll(".rel-option").forEach((el, i) => {
+          el.addEventListener("click", () => {
+            input.value = matches[i].name;
+            onSelect(matches[i]);  // store full entry, not just node
+            dropdown.classList.remove("open");
+          });
+        });
+      });
+
+      // Close on blur (slight delay so click registers)
+      input.addEventListener("blur", () => setTimeout(() => dropdown.classList.remove("open"), 150));
+
+      // Keyboard nav
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const first = dropdown.querySelector(".rel-option");
+          if (first) first.click();
+        }
+      });
+    }
+
+    setupAutocomplete(relInputA, relAcA, (entry) => { selectedA = entry; });
+    setupAutocomplete(relInputB, relAcB, (entry) => { selectedB = entry; });
+
+    // Auto-clear highlights when inputs change
+    relInputA.addEventListener("input", () => { selectedA = null; clearHighlights(); });
+    relInputB.addEventListener("input", () => { selectedB = null; clearHighlights(); });
+
+    function clearHighlights() {
+      relResult.textContent = "";
+      relLca.textContent = "";
+      relShowBtn.style.display = "none";
+      lastPathResult = null;
+      stopJourney();
+      g.selectAll(".node-card").style("opacity", 1);
+      g.selectAll(".link").attr("stroke", "#c5ccc3").attr("stroke-width", 1.5);
+      g.selectAll(".journey-label").remove();
+    }
+
+    function swapPersons() {
+      const tmpName = relInputA.value;
+      const tmpNode = selectedA;
+      relInputA.value = relInputB.value;
+      selectedA = selectedB;
+      relInputB.value = tmpName;
+      selectedB = tmpNode;
+    }
+
+    function calculateRelationship() {
+      // Try to resolve by name if user typed but didn't click autocomplete
+      if (!selectedA && relInputA.value) selectedA = findPersonByName(relInputA.value);
+      if (!selectedB && relInputB.value) selectedB = findPersonByName(relInputB.value);
+
+      if (!selectedA || !selectedB) {
+        relResult.textContent = "Please select two people";
+        relResult.style.color = "#a33";
+        return;
+      }
+
+      // Get blood-relative nodes (spouses map to their partner)
+      const bloodA = getBloodNode(selectedA);
+      const bloodB = getBloodNode(selectedB);
+
+      if (bloodA === bloodB) {
+        if (selectedA.name === selectedB.name) {
+          relResult.textContent = "Same person!";
+        } else {
+          relResult.textContent = "Spouses";
+        }
+        relResult.style.color = "var(--green-dark)";
+        relLca.textContent = "";
+        relShowBtn.style.display = "none";
+        relClearBtn.style.display = "inline";
+        lastPathResult = null;
+        return;
+      }
+
+      const result = findLCA(bloodA, bloodB);
+      if (!result) {
+        relResult.textContent = "No relation found";
+        relResult.style.color = "#a33";
+        return;
+      }
+
+      let label = getRelationshipLabel(result.stepsA, result.stepsB);
+
+      // Add "by marriage" qualifier if one or both are spouses
+      const aIsSpouse = selectedA.isSpouse;
+      const bIsSpouse = selectedB.isSpouse;
+      if (aIsSpouse || bIsSpouse) {
+        label += " (by marriage)";
+      }
+
+      relResult.textContent = label;
+      relResult.style.color = "var(--green-dark)";
+      relLca.textContent = "via " + result.lca.name;
+      relShowBtn.style.display = "inline";
+      lastPathResult = result;
+
+      // Highlight path immediately (no zoom/navigation)
+      highlightPath(result.path);
+
+      console.log("Relationship:", label,
+        aIsSpouse ? `(${selectedA.name} → spouse of ${bloodA.name})` : "",
+        bIsSpouse ? `(${selectedB.name} → spouse of ${bloodB.name})` : "",
+        "| Path:", result.path.map(n => n.name).join(" → "));
+    }
+
+    function showOnTree() {
+      if (!lastPathResult) return;
+      // Path is already highlighted from "Find" — just start the journey
+      journeyStopped = false;
+      journeyPaused = false;
+      journeyPauseBtn.textContent = "⏸ Pause";
+      journeyStatus.textContent = "Following path...";
+      journeyControls.classList.add("visible");
+      animateJourney(lastPathResult);
+    }
+
+    // ══════════════════════════════════════════════
+    // Step 5: Animated Camera Journey
+    // ══════════════════════════════════════════════
+
+    function animateJourney(result) {
+      const pathNodes = result.path;
+      const lcaNode = result.lca;
+      const stepsA = result.stepsA;
+
+      // Find D3 nodes for each path node
+      const allD3 = root.descendants();
+      const d3Path = pathNodes.map(rawNode => {
+        let d3n = allD3.find(d => d.data === rawNode);
+        if (!d3n) {
+          d3n = allD3.find(d => d.data.name === rawNode.name && d.data.generation === rawNode.generation);
+        }
+        return d3n;
+      }).filter(Boolean);
+
+      if (d3Path.length === 0) return;
+
+      g.selectAll(".journey-label").remove();
+
+      const parent = svg.node().getBoundingClientRect();
+      const zoomScale = 0.9;
+      const pauseMs = 1200;
+      const transMs = 600;
+
+      function waitForResume() {
+        return new Promise(resolve => { journeyResolve = resolve; });
+      }
+
+      function panToNode(d3node) {
+        return new Promise(resolve => {
+          const transform = d3.zoomIdentity
+            .translate(parent.width / 2, parent.height / 2)
+            .scale(zoomScale)
+            .translate(-d3node.x, -d3node.y);
+
+          svg.transition().duration(transMs).call(zoomBehavior.transform, transform)
+            .on("end", resolve);
+        });
+      }
+
+      function wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      async function runJourney() {
+        for (let i = 0; i < d3Path.length; i++) {
+          if (journeyStopped) break;
+          if (journeyPaused) await waitForResume();
+          if (journeyStopped) break;
+
+          const d3node = d3Path[i];
+          const rawNode = pathNodes[i];
+
+          // Determine label
+          let label = "";
+          let statusText = "";
+          if (i === 0) {
+            label = "▶ " + rawNode.name;
+            statusText = "Starting at " + rawNode.name;
+          } else if (rawNode === lcaNode) {
+            label = "★ " + rawNode.name;
+            statusText = "Common Ancestor: " + rawNode.name;
+          } else if (i < stepsA) {
+            label = "↑ " + rawNode.name;
+            statusText = "Going up...";
+          } else if (i === d3Path.length - 1) {
+            label = "▶ " + rawNode.name;
+            statusText = "Arriving at " + rawNode.name;
+          } else {
+            label = "↓ " + rawNode.name;
+            statusText = "Going down...";
+          }
+
+          journeyStatus.textContent = statusText;
+
+          g.selectAll(".journey-label").remove();
+          g.append("text")
+            .attr("class", "journey-label")
+            .attr("x", d3node.x)
+            .attr("y", d3node.y - CARD_H / 2 - 14)
+            .attr("text-anchor", "middle")
+            .attr("font-family", "Lato, sans-serif")
+            .attr("font-size", 13)
+            .attr("font-weight", "700")
+            .attr("fill", rawNode === lcaNode ? "#c8860a" : "#1e4d2b")
+            .text(label);
+
+          await panToNode(d3node);
+          if (i < d3Path.length - 1) await wait(pauseMs);
+        }
+
+        // Journey complete — zoom out to full path
+        if (!journeyStopped) {
+          journeyStatus.textContent = relResult.textContent;
+          g.selectAll(".journey-label").remove();
+
+          const midIdx = Math.floor(d3Path.length / 2);
+          const midNode = d3Path[midIdx];
+          if (midNode) {
+            g.append("text")
+              .attr("class", "journey-label")
+              .attr("x", midNode.x)
+              .attr("y", midNode.y - CARD_H / 2 - 14)
+              .attr("text-anchor", "middle")
+              .attr("font-family", "Playfair Display, serif")
+              .attr("font-size", 15)
+              .attr("font-weight", "700")
+              .attr("fill", "#c8860a")
+              .text(relResult.textContent);
+          }
+
+          await wait(800);
+          fitToPath(new Set(d3Path));
+
+          // Hide controls after a delay
+          setTimeout(() => journeyControls.classList.remove("visible"), 2000);
+        }
+      }
+
+      runJourney();
+    }
+
+    // ══════════════════════════════════════════════
+    // Step 4: Expand path + Highlight
+    // ══════════════════════════════════════════════
+
+    function highlightPath(pathNodes) {
+      // Build a set of raw data nodes in the path
+      const pathSet = new Set(pathNodes);
+
+      // Step 4a: Expand all ancestors of path nodes so they're visible
+      // We need to walk the D3 hierarchy and uncollapse nodes along the path
+      root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+      draw();
+
+      // Step 4b: Find the D3 nodes that correspond to our path
+      // Path nodes are raw treeData nodes. D3 nodes have .data pointing to them.
+      // But marriage pseudo-nodes sit between blood parents and children in D3.
+      // We need to match by reference.
+      const allD3Nodes = root.descendants();
+
+      // Build set of D3 nodes whose .data is in the path OR whose .data is a
+      // marriage node that connects two path nodes (parent and child both in path)
+      const pathD3Set = new Set();
+      allD3Nodes.forEach(d3node => {
+        if (pathSet.has(d3node.data)) {
+          pathD3Set.add(d3node);
+        }
+        // Include marriage nodes that bridge two path members
+        if (d3node.data.isMarriageNode) {
+          const parent = d3node.parent;
+          const children = d3node.children || d3node._allChildren || [];
+          const parentInPath = parent && pathSet.has(parent.data);
+          const childInPath = children.some(c => pathSet.has(c.data));
+          if (parentInPath && childInPath) {
+            pathD3Set.add(d3node);
+          }
+        }
+      });
+
+      // Step 4c: Build set of link pairs that are on the path
+      const pathLinkSet = new Set();
+      const allLinks = root.links();
+      allLinks.forEach(link => {
+        if (pathD3Set.has(link.source) && pathD3Set.has(link.target)) {
+          pathLinkSet.add(link);
+        }
+      });
+
+      // Step 4d: Dim non-path nodes, highlight path nodes
+      g.selectAll(".node-card")
+        .style("opacity", d => pathD3Set.has(d) ? 1 : 0.12);
+
+      // Highlight path links in amber, dim others
+      g.selectAll(".link")
+        .attr("stroke", (d, i, nodes) => {
+          // D3 binds data to links — check if this link is in our path
+          const linkData = d3.select(nodes[i]).datum();
+          if (!linkData) return "#e8e4dc";
+          return (pathD3Set.has(linkData.source) && pathD3Set.has(linkData.target)) ? "#c8860a" : "#e8e4dc";
+        })
+        .attr("stroke-width", (d, i, nodes) => {
+          const linkData = d3.select(nodes[i]).datum();
+          if (!linkData) return 1;
+          return (pathD3Set.has(linkData.source) && pathD3Set.has(linkData.target)) ? 3 : 1;
+        });
+
+    }
+
+    function fitToPath(pathD3Set) {
+      const pathNodes = Array.from(pathD3Set);
+      if (pathNodes.length === 0) return;
+
+      // Calculate bounding box of just the path nodes
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      pathNodes.forEach(d => {
+        minX = Math.min(minX, d.x - CARD_W);
+        maxX = Math.max(maxX, d.x + CARD_W);
+        minY = Math.min(minY, d.y - CARD_H);
+        maxY = Math.max(maxY, d.y + CARD_H);
+      });
+
+      const parent = svg.node().getBoundingClientRect();
+      if (parent.width === 0) return;
+
+      const padding = 60;
+      const bw = maxX - minX;
+      const bh = maxY - minY;
+      const scale = Math.min(
+        (parent.width - padding * 2) / bw,
+        (parent.height - padding * 2) / bh,
+        1.2
+      );
+      const cx = (minX + maxX) / 2;
+      const cy = (minY + maxY) / 2;
+
+      svg.transition().duration(600).call(
+        zoomBehavior.transform,
+        d3.zoomIdentity
+          .translate(parent.width / 2, parent.height / 2)
+          .scale(scale)
+          .translate(-cx, -cy)
+      );
+    }
+
+    // Journey pause/stop/resume controls
+    function toggleJourneyPause() {
+      journeyPaused = !journeyPaused;
+      journeyPauseBtn.textContent = journeyPaused ? "▶ Resume" : "⏸ Pause";
+      journeyStatus.textContent = journeyPaused ? "Paused" : "Following path...";
+      if (!journeyPaused && journeyResolve) {
+        journeyResolve();
+        journeyResolve = null;
+      }
+    }
+
+    function stopJourney() {
+      journeyStopped = true;
+      journeyPaused = false;
+      journeyResolve = null;
+      journeyControls.classList.remove("visible");
+      g.selectAll(".journey-label").remove();
+    }
+
+    // ══════════════════════════════════════════════
+    // Step 1+2 TEST — open browser console to verify
+    // ══════════════════════════════════════════════
+
+    console.log("People found:", allPeopleFlat.length);
+    console.log("Parent map size:", parentMap.size);
+
+    function testLCA(nameA, nameB) {
+      const entryA = findPersonByName(nameA);
+      const entryB = findPersonByName(nameB);
+      if (!entryA) { console.warn("Not found:", nameA); return; }
+      if (!entryB) { console.warn("Not found:", nameB); return; }
+      const bloodA = getBloodNode(entryA);
+      const bloodB = getBloodNode(entryB);
+      if (bloodA === bloodB) {
+        console.log(`${nameA} ↔ ${nameB}  →  SPOUSES or SAME PERSON`);
+        return;
+      }
+      const result = findLCA(bloodA, bloodB);
+      if (!result) { console.warn("No common ancestor found"); return; }
+      let label = getRelationshipLabel(result.stepsA, result.stepsB);
+      if (entryA.isSpouse || entryB.isSpouse) label += " (by marriage)";
+      console.log(
+        `${nameA} ↔ ${nameB}  →  ${label.toUpperCase()}`,
+        `\n  LCA: ${result.lca.name} (gen ${result.lca.generation})`,
+        `\n  Steps: ${result.stepsA} up, ${result.stepsB} down`,
+        `\n  Path: ${result.path.map(n => n.name).join(" → ")}`
+      );
+    }
+
+    // Test cases — check browser console (Cmd+Option+J)
+    console.log("═══ RELATIONSHIP CALCULATOR TESTS ═══");
+    testLCA("Benjamin Boughton", "Jennifer Boughton");     // Siblings
+    testLCA("Benjamin Boughton", "Bill Boughton");         // Parent/child
+    testLCA("Benjamin Boughton", "Peter Horning");         // 1st cousins
+    testLCA("Benjamin Boughton", "Chloe Boughton");        // 1st cousins
+    testLCA("Benjamin Boughton", "Eila Horning");          // 1st cousins once removed
+    testLCA("Eila Horning", "Chloe Boughton");             // 2nd cousins
+    testLCA("Roland Richardson", "Adelaide Richardson");    // Siblings (Gen 1)
+    testLCA("Benjamin Boughton", "Nancy Kurlin");          // 1st cousins once removed
+    testLCA("Chloe Boughton", "Charlotte Parsley");        // 3rd cousins (across Roland → Adelaide)
+    testLCA("Benjamin Boughton", "Alex Scott");            // 2nd cousins once removed (across Roland → Coombs)
+    testLCA("Benjamin Boughton", "Joe Boughton");          // Grandfather (by marriage)
+    testLCA("Joe Boughton", "Althea Ford");                // Spouses' in-laws (by marriage)
 
     draw();
     setTimeout(fitToScreen, 50);

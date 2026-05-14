@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <!-- Preload the pinned first photo so it's ready before JS runs -->
+  <link rel="preload" as="image" href="https://res.cloudinary.com/dqni1tcfn/image/upload/ti-camp-photos/Grammie_-_90th_bday_-_1962_-_Happy" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -636,6 +638,8 @@
     </div>
     <div class="slideshow-container" id="slideshow">
       <div class="slideshow-counter" id="counter"></div>
+      <!-- Hardcoded first image for instant display — replaced when API loads -->
+      <img src="https://res.cloudinary.com/dqni1tcfn/image/upload/ti-camp-photos/Grammie_-_90th_bday_-_1962_-_Happy" alt="Grammie - 90th birthday - 1962" class="active" id="preloaded-grammie" />
     </div>
     <p class="slideshow-photo-caption" id="photoCaption"></p>
     <div class="slideshow-controls">
@@ -737,18 +741,24 @@
             if (pinned) photos.unshift(pinned);
             initSlideshow();
           } else {
-            container.innerHTML = '<p style="color: var(--cream); padding: 2rem;">No photos yet. Be the first to upload!</p>';
-            counter.textContent = "0 / 0";
+            // No photos from API — keep the preloaded Grammie if it's there
+            if (!document.getElementById('preloaded-grammie')) {
+              container.innerHTML = '<p style="color: var(--cream); padding: 2rem;">No photos yet. Be the first to upload!</p>';
+            }
+            counter.textContent = "";
           }
         })
         .catch(err => {
+          // API failed (e.g. localhost) — keep the preloaded Grammie showing
           console.error("Failed to load photos:", err);
-          container.innerHTML = '<p style="color: var(--cream); padding: 2rem;">Unable to load photos. Please try again later.</p>';
+          if (!document.getElementById('preloaded-grammie')) {
+            container.innerHTML = '<p style="color: var(--cream); padding: 2rem;">Unable to load photos. Please try again later.</p>';
+          }
         });
     }
 
     function initSlideshow() {
-      // Clear existing content except counter
+      // Remove the preloaded placeholder and any existing images
       const existingImages = container.querySelectorAll("img");
       existingImages.forEach(img => img.remove());
 

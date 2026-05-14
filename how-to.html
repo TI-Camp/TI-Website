@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How-to - Treasure Island Camp</title>
+  <title>How-to Guide - Treasure Island Camp</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
@@ -30,121 +30,207 @@
 
     /* ── NAVIGATION ── */
     .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: var(--green-dark);
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 60px;
-      z-index: 1000;
+      position: fixed; top: 0; left: 0; right: 0;
+      background: var(--green-dark); padding: 0 2rem;
+      display: flex; align-items: center; justify-content: center;
+      height: 60px; z-index: 1000;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
-
     .nav-logo {
-      position: absolute;
-      left: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 40px;
-      width: auto;
+      position: absolute; left: 2rem; top: 50%;
+      transform: translateY(-50%); height: 40px; width: auto;
     }
-
-    .nav-links {
-      display: flex;
-      gap: 0.5rem;
-      list-style: none;
-    }
-
+    .nav-links { display: flex; gap: 0.5rem; list-style: none; }
     .nav-links a {
-      color: var(--cream);
-      text-decoration: none;
-      font-family: 'Lato', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 400;
-      letter-spacing: 0.05em;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
+      color: var(--cream); text-decoration: none;
+      font-family: 'Lato', sans-serif; font-size: 0.9rem; font-weight: 400;
+      letter-spacing: 0.05em; padding: 0.5rem 1rem; border-radius: 4px;
       transition: background 0.2s ease, color 0.2s ease;
     }
-
-    .nav-links a:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .nav-links a.active {
-      background: var(--amber);
-      color: var(--green-dark);
-      font-weight: 700;
-    }
-
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--cream);
-      margin: 5px 0;
-      transition: 0.3s;
-    }
+    .nav-links a:hover { background: rgba(255, 255, 255, 0.1); }
+    .nav-links a.active { background: var(--amber); color: var(--green-dark); font-weight: 700; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--cream); margin: 5px 0; transition: 0.3s; }
 
     @media (max-width: 768px) {
       .nav { padding: 0 1rem; }
       .nav-logo { left: 1rem; }
       .nav-toggle { display: block; }
       .nav-links {
-        position: absolute;
-        top: 60px;
-        left: 0;
-        right: 0;
-        background: var(--green-dark);
-        flex-direction: column;
-        padding: 1rem;
-        gap: 0;
-        display: none;
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: var(--green-dark); flex-direction: column;
+        padding: 1rem; gap: 0; display: none;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       }
       .nav-links.open { display: flex; }
-      .nav-links a {
-        padding: 0.75rem 1rem;
-        border-radius: 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
+      .nav-links a { padding: 0.75rem 1rem; border-radius: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
       .nav-links li:last-child a { border-bottom: none; }
     }
 
-    /* ── COMING SOON ── */
-    .coming-soon {
-      min-height: calc(100vh - 60px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    /* ── PAGE HEADER ── */
+    .page-header {
       text-align: center;
-      padding: 3rem 1.5rem;
+      padding: 2.5rem 1.5rem 1.5rem;
+      border-bottom: 1px solid rgba(30, 77, 43, 0.12);
     }
 
-    .coming-soon h1 {
+    .page-header h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3rem);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
       color: var(--green-dark);
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
-    .coming-soon p {
-      font-size: 1.1rem;
+    .page-header p {
+      font-size: 1rem;
       color: var(--text-mid);
       font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .draft-badge {
+      display: inline-block;
+      background: var(--amber);
+      color: var(--green-dark);
+      padding: 0.25rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    /* ── SECTIONS (collapsible) ── */
+    details {
+      margin-bottom: 1rem;
+      border: 1px solid rgba(30, 77, 43, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+    }
+
+    summary {
+      padding: 1rem 1.25rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: background 0.2s;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+
+    summary::before {
+      content: "\25B6";
+      font-size: 0.7rem;
+      color: var(--green-mid);
+      transition: transform 0.2s;
+    }
+
+    details[open] > summary::before {
+      transform: rotate(90deg);
+    }
+
+    summary:hover {
+      background: var(--cream-dark);
+    }
+
+    .section-count {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--text-mid);
+      margin-left: auto;
+    }
+
+    .section-body {
+      padding: 0.5rem 1.25rem 1.25rem;
+    }
+
+    /* ── VIDEO CARD ── */
+    .video-card {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(30, 77, 43, 0.06);
+      align-items: flex-start;
+    }
+
+    .video-card:last-child {
+      border-bottom: none;
+    }
+
+    .video-thumb {
+      flex-shrink: 0;
+      width: 180px;
+      height: 101px;
+      background: var(--cream-dark);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-mid);
+      font-size: 0.75rem;
+      border: 1px dashed #ccc;
+    }
+
+    .video-thumb .play-icon {
+      font-size: 2rem;
+      color: #bbb;
+    }
+
+    .video-info {
+      flex: 1;
+    }
+
+    .video-info h3 {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 0.25rem;
+    }
+
+    .video-info p {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      font-weight: 300;
+      line-height: 1.4;
+    }
+
+    .video-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      margin-top: 0.4rem;
+    }
+
+    .tag-treasure { background: rgba(230, 159, 0, 0.15); color: #b37800; }
+    .tag-pijiki { background: rgba(0, 158, 115, 0.15); color: #007a59; }
+    .tag-kyoyshk { background: rgba(0, 114, 178, 0.15); color: #005a8c; }
+    .tag-mainland { background: rgba(204, 121, 167, 0.15); color: #993d6e; }
+    .tag-all { background: rgba(30, 77, 43, 0.1); color: var(--green-dark); }
+    .tag-water { background: rgba(86, 180, 233, 0.15); color: #2a7eaa; }
+
+    @media (max-width: 600px) {
+      .video-card { flex-direction: column; }
+      .video-thumb { width: 100%; height: 160px; }
     }
 
     /* ── FOOTER ── */
@@ -164,9 +250,7 @@
   <nav class="nav">
     <a href="index.html"><img src="logo.png" alt="Treasure Island" class="nav-logo" /></a>
     <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
@@ -177,10 +261,469 @@
     </ul>
   </nav>
 
-  <section class="coming-soon">
-    <h1>How-to</h1>
-    <p>Coming Soon!</p>
-  </section>
+  <header class="page-header">
+    <div class="draft-badge">DRAFT — NOT YET PUBLIC</div>
+    <h1>Island How-To Guide</h1>
+    <p>Video guides for everything you need to know — whether it's your first visit or you haven't been up in a while.</p>
+  </header>
+
+  <main class="content">
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- GETTING THERE -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Getting There <span class="section-count">4 videos</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Dan Beautineau Parking</h3>
+            <p>The cheaper place to park when heading up. Where to go and what to expect.</p>
+            <span class="video-tag tag-mainland">MAINLAND</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Marina Tour</h3>
+            <p>What's at the marina and what's in the store.</p>
+            <span class="video-tag tag-mainland">MAINLAND</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Home Hardware Store Tour</h3>
+            <p>What you can expect to find — hardware, food, drinks, and supplies.</p>
+            <span class="video-tag tag-mainland">MAINLAND</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Community Center</h3>
+            <p>Pickleball, playground, and other amenities at the community center.</p>
+            <span class="video-tag tag-mainland">MAINLAND</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- NAVIGATING THE WATER -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Navigating the Water <span class="section-count">6 videos</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Station to Treasure Island</h3>
+            <p>Time-lapse of the route with slowdowns at key navigation markers.</p>
+            <span class="video-tag tag-water">WATER ROUTE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Treasure to Sunset</h3>
+            <p>Watch for the weird switched marker on this route.</p>
+            <span class="video-tag tag-water">WATER ROUTE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Treasure to Pijiki</h3>
+            <p>Route guide with key landmarks.</p>
+            <span class="video-tag tag-water">WATER ROUTE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Kyoyshk to Pijiki</h3>
+            <p>Route guide between the outer islands.</p>
+            <span class="video-tag tag-water">WATER ROUTE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Getting to the Picnic Islands</h3>
+            <p>Routes to Penicillin, Friends, and McCormick islands.</p>
+            <span class="video-tag tag-water">WATER ROUTE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Boats — Starting, Safety & Life Preservers</h3>
+            <p>How to start a boat, life preserver policies, and what's needed on board.</p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- ISLAND TOURS -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Island Tours <span class="section-count">4 videos</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Station Tour</h3>
+            <p>Essentials at the station — where to put trash, what's where.</p>
+            <span class="video-tag tag-mainland">STATION</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Cabin Walkthroughs</h3>
+            <p>Tour of the cabins on each island.</p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Tour of Pijiki</h3>
+            <p>Start at the dock, tie up boats, fishing hut, walk up to cabin, screen porch, chairs out.</p>
+            <span class="video-tag tag-pijiki">PIJIKI</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Tour of Kyoyshk</h3>
+            <p>Same format — dock to cabin walkthrough.</p>
+            <span class="video-tag tag-kyoyshk">KYOYSHK</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- SYSTEMS & UTILITIES -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Systems & Utilities <span class="section-count">5 videos</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Firepump Setup & Operation</h3>
+            <p>How to set up and operate the firepump.</p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Generators — Treasure Island</h3>
+            <p>Setting up and operating the generators on Treasure (different setup from the other islands).</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Generators — Pijiki & Kyoyshk</h3>
+            <p>Setting up and operating generators on the outer islands.</p>
+            <span class="video-tag tag-pijiki">PIJIKI</span>
+            <span class="video-tag tag-kyoyshk">KYOYSHK</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Water Filtration</h3>
+            <p>How the water filtration system works on Treasure.</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Holding Tanks Walkthrough</h3>
+            <p>Walkthrough of the holding tanks on Treasure.</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- KITCHEN & APPLIANCES -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Kitchen & Appliances <span class="section-count">5 videos</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Kitchen Tours</h3>
+            <p>Where things are, how food storage works on each island.</p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Operating the New Stove</h3>
+            <p>How to use the new stove on Treasure.</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Using the Breville Oven</h3>
+            <p>How to use the Breville oven on Treasure.</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Operating the Grill</h3>
+            <p>How to start it, how to clean it.</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Washer & Dryer</h3>
+            <p>Operating the washer and dryer on Treasure.</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- BATHROOMS & PLUMBING -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Bathrooms & Plumbing <span class="section-count">2 videos</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Back Bedroom Bathroom Instructions</h3>
+            <p>Toilet instructions — don't use too much TP.</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Holding Tanks Walkthrough</h3>
+            <p>Understanding the holding tank system on Treasure.</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- SAFETY -->
+    <!-- ══════════════════════════════════════ -->
+    <details open>
+      <summary>🔥 Safety <span class="section-count">2 videos</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>How to Set Up a Fire</h3>
+            <p>Pat's version and Bill B's version (lean on Pat's). Focus on safety — never go to bed without it going out first.</p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Fire Emergency & Safety Sequence</h3>
+            <p>Fire emergency code system, what to do in case of a fire, who to contact, general safety procedures.</p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- OPENING & CLOSING -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Opening & Closing <span class="section-count">3 videos</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Closing Cabins</h3>
+            <p>End-of-season closing procedures.</p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Nightly Dock Walk — Closing Up</h3>
+            <p>Last person up routine: lights off, fireplace put to rest, appliances off. What to do if rain is coming (chairs from screened porch).</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Raising & Taking Down Island Flags</h3>
+            <p>How to properly raise and lower the island flags.</p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- OUTDOOR & TOOLS -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Outdoor & Tools <span class="section-count">3 videos</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>"Where Things Are"</h3>
+            <p>Where to find lumber, specific tools in the toolshed, and other essentials.</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Chainsaw Usage</h3>
+            <p>How to safely operate a chainsaw.</p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Kyoyshk Fireplace Insert</h3>
+            <p>How to use the fire insert — not supposed to use pine.</p>
+            <span class="video-tag tag-kyoyshk">KYOYSHK</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- RECYCLING & WASTE -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Recycling & Waste <span class="section-count">1 video</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Recycling & Trash</h3>
+            <p>What goes in each bin, what can be taken to the station. <strong>Note: beer bottles can no longer be returned to the station (new policy).</strong></p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- DOCUMENTS & ADMIN -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Documents & Admin <span class="section-count">1 video</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Using Google Drive</h3>
+            <p>Where camp documents live and how to navigate the shared drive. Can be watched from anywhere — not island-specific.</p>
+            <span class="video-tag tag-all">REMOTE</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- STORIES & MEMORIES -->
+    <!-- ══════════════════════════════════════ -->
+    <details>
+      <summary>Stories & Memories <span class="section-count">1 video</span></summary>
+      <div class="section-body">
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>"I Remember When..."</h3>
+            <p>Interview-style storytelling with family members. Open-ended Treasure Island memories and oral history.</p>
+            <span class="video-tag tag-all">ALL ISLANDS</span>
+          </div>
+        </div>
+
+      </div>
+    </details>
+
+  </main>
 
   <footer>
     <p>Treasure Island Camp &middot; Pointe au Baril, Ontario &middot; Est. 1926</p>
