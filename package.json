@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "cloudinary": "^2.9.0"
+    "cloudinary": "^2.9.0",
+    "docx": "^9.6.1"
   },
   "devDependencies": {
     "dotenv": "^17.3.1"

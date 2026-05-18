@@ -6,7 +6,7 @@
   <title>Family - Treasure Island Camp</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,189 +27,208 @@
       background-color: var(--cream);
       color: var(--text-dark);
       padding-top: 60px;
+      overflow: hidden;
+      height: 100vh;
     }
 
     /* ── NAVIGATION ── */
     .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      position: fixed; top: 0; left: 0; right: 0;
       background: var(--green-dark);
       padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 60px;
-      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      height: 60px; z-index: 1000;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
-
     .nav-logo {
-      position: absolute;
-      left: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 40px;
-      width: auto;
+      position: absolute; left: 2rem; top: 50%;
+      transform: translateY(-50%); height: 40px; width: auto;
     }
-
-    .nav-links {
-      display: flex;
-      gap: 0.5rem;
-      list-style: none;
-    }
-
+    .nav-links { display: flex; gap: 0.5rem; list-style: none; }
     .nav-links a {
-      color: var(--cream);
-      text-decoration: none;
-      font-family: 'Lato', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 400;
-      letter-spacing: 0.05em;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
+      color: var(--cream); text-decoration: none;
+      font-family: 'Lato', sans-serif; font-size: 0.9rem; font-weight: 400;
+      letter-spacing: 0.05em; padding: 0.5rem 1rem; border-radius: 4px;
       transition: background 0.2s ease, color 0.2s ease;
     }
-
-    .nav-links a:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .nav-links a.active {
-      background: var(--amber);
-      color: var(--green-dark);
-      font-weight: 700;
-    }
-
-    .nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-    }
-
-    .nav-toggle span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--cream);
-      margin: 5px 0;
-      transition: 0.3s;
-    }
+    .nav-links a:hover { background: rgba(255, 255, 255, 0.1); }
+    .nav-links a.active { background: var(--amber); color: var(--green-dark); font-weight: 700; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--cream); margin: 5px 0; transition: 0.3s; }
 
     @media (max-width: 768px) {
       .nav { padding: 0 1rem; }
       .nav-logo { left: 1rem; }
       .nav-toggle { display: block; }
       .nav-links {
-        position: absolute;
-        top: 60px;
-        left: 0;
-        right: 0;
-        background: var(--green-dark);
-        flex-direction: column;
-        padding: 1rem;
-        gap: 0;
-        display: none;
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: var(--green-dark); flex-direction: column;
+        padding: 1rem; gap: 0; display: none;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       }
       .nav-links.open { display: flex; }
-      .nav-links a {
-        padding: 0.75rem 1rem;
-        border-radius: 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
+      .nav-links a { padding: 0.75rem 1rem; border-radius: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
       .nav-links li:last-child a { border-bottom: none; }
     }
 
-    /* ── FAMILY WHEEL ── */
-    .family-header {
-      position: fixed;
-      top: 60px;
-      left: 0;
-      right: 0;
-      background: var(--cream);
-      padding: 1rem 2rem;
-      text-align: center;
-      z-index: 100;
+    /* ── HEADER ── */
+    .branch-header {
+      position: fixed; top: 60px; left: 0; right: 0;
+      background: var(--cream); padding: 0.75rem 2rem; z-index: 100;
       border-bottom: 1px solid rgba(30, 77, 43, 0.12);
+      display: flex; align-items: center; justify-content: space-between;
     }
+    .branch-header-left { display: flex; align-items: center; gap: 1rem; }
+    .back-link {
+      color: var(--green-mid); text-decoration: none; font-size: 0.85rem;
+      display: flex; align-items: center; gap: 0.3rem; transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--green-dark); }
+    .branch-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--green-dark); }
+    .branch-subtitle { font-size: 0.85rem; color: var(--text-mid); font-weight: 300; }
+    .branch-controls { display: flex; gap: 0.5rem; align-items: center; }
+    .btn {
+      background: var(--green-dark); color: var(--cream); border: none;
+      padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.8rem; transition: background 0.2s;
+    }
+    .btn:hover { background: var(--green-mid); }
 
-    .family-header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      color: var(--green-dark);
-      margin-bottom: 0.25rem;
-    }
 
-    .family-header .subtitle {
-      font-size: 0.9rem;
-      color: var(--text-mid);
-      font-weight: 300;
-    }
+    /* ── TREE CANVAS ── */
+    #tree-container { position: fixed; top: 160px; left: 0; right: 0; bottom: 0; }
+    #tree-container svg { width: 100%; height: 100%; cursor: grab; }
+    #tree-container svg:active { cursor: grabbing; }
 
-    .wip-badge {
-      position: fixed;
-      top: 80px;
-      right: 20px;
-      background: var(--amber);
-      color: var(--green-dark);
-      padding: 0.5rem 1.2rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      z-index: 101;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-      border: 2px solid var(--green-dark);
-    }
+    .node-card { cursor: pointer; transition: filter 0.2s; }
+    .node-card:hover { filter: drop-shadow(0 3px 8px rgba(30, 77, 43, 0.3)); }
 
-    /* ── SEARCH ── */
-    .search-container {
-      margin-top: 0.75rem;
+    .legend {
+      position: fixed; bottom: 1rem; left: 1rem; background: white;
+      border: 1px solid rgba(30, 77, 43, 0.15); border-radius: 8px;
+      padding: 0.6rem 1rem; font-size: 0.75rem; display: flex; gap: 1rem; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
+    .legend-item { display: flex; align-items: center; gap: 0.3rem; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); }
+
+    /* ── ZOOM CONTROLS ── */
+    .zoom-controls {
+      position: fixed; right: 1rem; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 4px; z-index: 150;
+    }
+    .zoom-btn {
+      width: 36px; height: 36px; border: 1px solid rgba(30, 77, 43, 0.2);
+      background: white; border-radius: 6px; cursor: pointer;
+      font-size: 1.2rem; font-weight: 700; color: var(--green-dark);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: background 0.2s;
+    }
+    .zoom-btn:hover { background: var(--cream-dark); }
+    .zoom-fit { font-size: 0.9rem; }
 
     .search-input {
-      padding: 0.5rem 1rem;
-      width: 280px;
+      padding: 0.4rem 0.8rem; width: 200px; font-family: 'Lato', sans-serif;
+      font-size: 0.85rem; border: 2px solid var(--green-mid); border-radius: 20px;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-input:focus { border-color: var(--green-dark); box-shadow: 0 0 0 3px rgba(46, 107, 62, 0.2); }
+    .search-input::placeholder { color: var(--text-mid); }
+    .search-result-info { font-size: 0.8rem; color: var(--text-mid); margin-left: 0.5rem; }
+
+    /* ── RELATIONSHIP FINDER ── */
+    .rel-finder {
+      position: fixed; top: 120px; left: 0; right: 0;
+      background: white; padding: 0.6rem 2rem; z-index: 99;
+      border-bottom: 1px solid rgba(30, 77, 43, 0.12);
+      display: flex; align-items: center; gap: 0.6rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      flex-wrap: wrap;
+    }
+    .rel-finder label {
+      font-family: 'Lato', sans-serif; font-size: 0.8rem;
+      font-weight: 700; color: var(--green-dark);
+    }
+    .rel-input-wrap {
+      position: relative;
+    }
+    .rel-input {
+      padding: 0.35rem 0.7rem; width: 200px;
+      font-family: 'Lato', sans-serif; font-size: 0.82rem;
+      border: 2px solid var(--green-mid); border-radius: 6px;
+      outline: none; transition: border-color 0.2s;
+    }
+    .rel-input:focus { border-color: var(--green-dark); box-shadow: 0 0 0 3px rgba(46, 107, 62, 0.15); }
+    .rel-input::placeholder { color: #aaa; }
+    .rel-autocomplete {
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: white; border: 1px solid #ddd; border-top: none;
+      border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto;
+      z-index: 200; display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .rel-autocomplete.open { display: block; }
+    .rel-option {
+      padding: 0.4rem 0.7rem; font-size: 0.82rem; cursor: pointer;
       font-family: 'Lato', sans-serif;
-      font-size: 0.9rem;
-      border: 2px solid var(--green-mid);
-      border-radius: 20px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
     }
-
-    .search-input:focus {
-      border-color: var(--green-dark);
-      box-shadow: 0 0 0 3px rgba(46, 107, 62, 0.2);
+    .rel-option:hover, .rel-option.active { background: var(--cream); }
+    .rel-option .gen-tag {
+      font-size: 0.65rem; color: var(--text-mid); margin-left: 0.3rem;
     }
-
-    .search-input::placeholder {
-      color: var(--text-mid);
+    .rel-swap {
+      background: none; border: none; font-size: 1.1rem; cursor: pointer;
+      color: var(--green-mid); padding: 0.2rem 0.4rem; border-radius: 4px;
     }
-
-    .wheel-canvas {
-      padding-top: 120px;
-      overflow: visible;
+    .rel-swap:hover { background: var(--cream); }
+    .rel-find-btn {
+      background: var(--amber); color: white; border: none;
+      padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.82rem; font-weight: 700;
+      transition: background 0.2s;
     }
-
-    #family-wheel {
-      display: block;
-      background: white;
+    .rel-find-btn:hover { background: #b07808; }
+    .rel-result {
+      font-family: 'Playfair Display', serif; font-size: 1rem;
+      color: var(--green-dark); font-weight: 700; margin-left: 0.5rem;
     }
+    .rel-clear {
+      background: none; border: 1px solid #ccc; color: var(--text-mid);
+      padding: 0.3rem 0.7rem; border-radius: 4px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.75rem;
+    }
+    /* ── JOURNEY CONTROLS ── */
+    .journey-controls {
+      position: fixed; top: 170px; right: 1rem;
+      background: white; border: 1px solid rgba(30, 77, 43, 0.15);
+      border-radius: 8px; padding: 0.5rem 0.8rem;
+      display: none; align-items: center; gap: 0.5rem;
+      z-index: 200; box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    }
+    .journey-controls.visible { display: flex; }
+    .journey-status {
+      font-family: 'Lato', sans-serif; font-size: 0.8rem;
+      color: var(--green-dark); font-weight: 400;
+    }
+    .journey-btn {
+      background: var(--green-dark); color: var(--cream); border: none;
+      padding: 0.3rem 0.7rem; border-radius: 4px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.75rem;
+      transition: background 0.2s;
+    }
+    .journey-btn:hover { background: var(--green-mid); }
+    .journey-stop { background: #8b3a3a; }
+    .journey-stop:hover { background: #a34545; }
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--cream-dark);
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.82rem;
-      color: var(--text-mid);
-      letter-spacing: 0.05em;
-      border-top: 1px solid rgba(30, 77, 43, 0.12);
+    .rel-lca {
+      font-family: 'Lato', sans-serif; font-size: 0.78rem;
+      color: var(--text-mid); font-style: italic;
+    }
+    .rel-clear:hover { background: var(--cream-dark); }
+
+    @media (max-width: 768px) {
+      .rel-finder { padding: 0.5rem 1rem; gap: 0.4rem; }
+      .rel-input { width: 140px; }
     }
   </style>
 </head>
@@ -218,493 +237,2116 @@
   <nav class="nav">
     <a href="index.html"><img src="logo.png" alt="Treasure Island" class="nav-logo" /></a>
     <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="how-to.html">How-to</a></li>
       <li><a href="family.html" class="active">Family</a></li>
       <li><a href="schedule.html">Schedule</a></li>
-      <li><a href="archive.html">Archive</a></li>
+      <li><a href="documents.html">Documents</a></li>
     </ul>
   </nav>
 
-  <div class="wip-badge">WORK IN PROGRESS</div>
 
-  <header class="family-header">
-    <h1>The Richardson Family Circle</h1>
-    <p class="subtitle">204 descendants across 6 generations · Scroll to explore</p>
-    <div class="search-container">
-      <input type="text" class="search-input" id="search-input" placeholder="Search for a family member..." />
+  <header class="branch-header">
+    <div class="branch-header-left">
+      <a href="family.html" class="back-link">&larr; Family Circle</a>
+      <div>
+        <div class="branch-title">The Richardson Family Circle</div>
+        <div class="branch-subtitle">204 descendants across 6 generations</div>
+      </div>
+    </div>
+    <div class="branch-controls">
+      <div class="rel-input-wrap">
+        <input type="text" class="search-input" id="search-input" placeholder="Search for a family member..." autocomplete="off" />
+        <div class="rel-autocomplete" id="search-ac"></div>
+      </div>
+      <span class="search-result-info" id="search-info"></span>
+      <button class="btn" onclick="fitToScreen()">Fit to Screen</button>
+      <button class="btn" onclick="expandAll()">Expand All</button>
+      <button class="btn" style="background:#8b3a3a" onclick="resetTree()">Reset</button>
     </div>
   </header>
 
-  <div class="wheel-canvas">
-    <svg id="family-wheel"></svg>
+  <div class="rel-finder">
+    <label>Find Relationship:</label>
+    <div class="rel-input-wrap">
+      <input type="text" class="rel-input" id="rel-person-a" placeholder="Person 1..." autocomplete="off" />
+      <div class="rel-autocomplete" id="rel-ac-a"></div>
+    </div>
+    <button class="rel-swap" onclick="swapPersons()" title="Swap">&hArr;</button>
+    <div class="rel-input-wrap">
+      <input type="text" class="rel-input" id="rel-person-b" placeholder="Person 2..." autocomplete="off" />
+      <div class="rel-autocomplete" id="rel-ac-b"></div>
+    </div>
+    <button class="rel-find-btn" onclick="calculateRelationship()">Find</button>
+    <span class="rel-result" id="rel-result"></span>
+    <span class="rel-lca" id="rel-lca"></span>
+    <button class="rel-find-btn" id="rel-show-btn" onclick="showOnTree()" style="display:none">Take the Journey</button>
+  </div>
+
+  <div id="tree-container">
+    <svg id="tree-svg"></svg>
+  </div>
+
+  <!-- Zoom controls — fixed right side -->
+  <div class="zoom-controls">
+    <button class="zoom-btn" onclick="zoomIn()" title="Zoom in">+</button>
+    <button class="zoom-btn" onclick="zoomOut()" title="Zoom out">−</button>
+    <button class="zoom-btn zoom-fit" onclick="fitToScreen()" title="Fit to screen">⊡</button>
+  </div>
+
+  <!-- Journey controls — fixed top-right, only visible during animation -->
+  <div class="journey-controls" id="journey-controls">
+    <span class="journey-status" id="journey-status">Following path...</span>
+    <button class="journey-btn" id="journey-pause-btn" onclick="toggleJourneyPause()">⏸ Pause</button>
+    <button class="journey-btn journey-stop" id="journey-stop-btn" onclick="stopJourney()">⏹ Stop</button>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(86, 180, 233, 0.6)"></div> Gen 1</div>
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(230, 159, 0, 0.6)"></div> Gen 2</div>
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(204, 121, 167, 0.6)"></div> Gen 3</div>
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(0, 158, 115, 0.6)"></div> Gen 4</div>
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(240, 228, 66, 0.6)"></div> Gen 5</div>
+    <div class="legend-item"><div class="legend-dot" style="background: rgba(0, 114, 178, 0.6)"></div> Gen 6</div>
   </div>
 
   <script>
-    // Configuration
-    const config = {
-      width: 2000,
-      height: 2000,
-      centerX: 1000,
-      centerY: 1000,
-      centerRadius: 160,
-      ringWidth: 140,
-      fontSize: 14,
-      centerFontSize: 16
+    // ══════════════════════════════════════════════
+    // DATA
+    // ══════════════════════════════════════════════
+
+    const treeData = {
+      name: "Sarah Annis Withenbury",
+      spouse: "James Clement Richardson Jr.",
+      generation: 1,
+      isFounders: true,
+      children: [
+        {
+          name: "Roland Richardson",
+          nickname: "Bobo",
+          spouse: "Althea Ford",
+          generation: 2,
+          children: [
+            {
+              name: "Emily Richardson",
+              nickname: "Grambie",
+              spouse: "Joe Boughton",
+              generation: 3,
+              children: [
+                {
+                  name: "David Boughton",
+                  spouse: "Lori Urenovitch",
+                  generation: 4,
+                  children: [
+                    { name: "Chloe Boughton", generation: 5 },
+                    { name: "Cassidy Boughton", generation: 5 }
+                  ]
+                },
+                {
+                  name: "Betsy Boughton",
+                  generation: 4,
+                  marriages: [
+                    {
+                      spouse: "Tim Horning",
+                      children: [
+                        {
+                          name: "Peter Horning",
+                          spouse: "Jacqueline Joos",
+                          generation: 5,
+                          children: [
+                            { name: "Eila Horning", generation: 6 },
+                            { name: "Anderson Horning", generation: 6 },
+                            { name: "Frances Horning", generation: 6 }
+                          ]
+                        },
+                        {
+                          name: "Sarah Horning",
+                          spouse: "Noah Pollack",
+                          generation: 5,
+                          children: [
+                            { name: "Jesse Pollack", generation: 6 },
+                            { name: "Abigail Pollack", generation: 6 }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      spouse: "James Michael Lohr",
+                      children: []
+                    }
+                  ]
+                },
+                {
+                  name: "Bill Boughton",
+                  spouse: "Jill Courts",
+                  generation: 4,
+                  children: [
+                    { name: "Benjamin Boughton", generation: 5 },
+                    { name: "Jennifer Boughton", generation: 5 }
+                  ]
+                },
+                {
+                  name: "Sarah Boughton",
+                  spouse: "Max Holt",
+                  generation: 4,
+                  children: [
+                    { name: "Charles Holt", generation: 5 },
+                    { name: "McAlester Holt", generation: 5 }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "Ted Richardson",
+              spouse: "Priscilla Grandin",
+              generation: 3,
+              children: [
+                {
+                  name: "Michael Richardson",
+                  generation: 4,
+                  marriages: [
+                    {
+                      spouse: "Mary Sahm",
+                      children: [
+                        {
+                          name: "Michael Richardson",
+                          spouse: "Laura Curcio",
+                          generation: 5,
+                          children: [
+                            { name: "Madelyn Richardson", generation: 6 },
+                            { name: "Blake Richardson", generation: 6 },
+                            { name: "Hailey Richardson", generation: 6 }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      spouse: "Cindy Stopper",
+                      children: [
+                        {
+                          name: "Tyler Richardson",
+                          spouse: "Abigail Craig",
+                          generation: 5,
+                          children: [
+                            { name: "Cash Richardson", generation: 6 },
+                            { name: "Colt Richardson", generation: 6 }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "Andrew Richardson",
+                  spouse: "Janie Wentz",
+                  generation: 4,
+                  children: [
+                    { name: "Jared Richardson", generation: 5 },
+                    {
+                      name: "Brian Richardson",
+                      generation: 5,
+                      children: [
+                        { name: "Tessa Richardson", generation: 6 }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "Polly Richardson",
+                  spouse: "Greg Rentfro",
+                  generation: 4,
+                  children: [
+                    { name: "Heather Rentfro", generation: 5 },
+                    { name: "Theodore Rentfro", generation: 5 }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "Betsy Richardson",
+              spouse: "George Kurlin",
+              generation: 3,
+              children: [
+                { name: "Nancy Kurlin", generation: 4 }
+              ]
+            },
+            {
+              name: "Althea Richardson",
+              nickname: "Fifi",
+              generation: 3,
+              marriages: [
+                {
+                  spouse: "John Mathers McCaslin",
+                  children: [
+                    {
+                      name: "John Mathers McCaslin",
+                      spouse: "Constance Plattenburg",
+                      generation: 4,
+                      children: [
+                        {
+                          name: "Henry Plattenburg McCaslin",
+                          spouse: "Sarah Anne Kipling",
+                          generation: 5,
+                          children: [
+                            { name: "Jesse Albert McKay", generation: 6 },
+                            { name: "Robin Ragone McKay", generation: 6 }
+                          ]
+                        },
+                        { name: "Will Roland McCaslin", generation: 5 },
+                        { name: "Jack Theodore McCaslin", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Susan McCaslin",
+                      spouse: "Vic Henningsen",
+                      generation: 4,
+                      children: [
+                        { name: "Ned Henningsen", generation: 5 },
+                        { name: "Caitlin Henningsen", spouse: "Russell Ford Rennie", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Bob McCaslin",
+                      spouse: "Francine Allee",
+                      generation: 4,
+                      children: [
+                        { name: "Caitlin McCaslin", generation: 5 },
+                        { name: "Jenny Eloise McCaslin", generation: 5 },
+                        { name: "Coombs McCaslin", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Hugh McCaslin",
+                      generation: 4,
+                      marriages: [
+                        {
+                          spouse: "Rebecca Heath",
+                          children: [
+                            {
+                              name: "Aaron McCaslin",
+                              spouse: "Erin Saunders",
+                              generation: 5,
+                              children: [
+                                { name: "Issabella Erin Elena McCaslin", generation: 6 }
+                              ]
+                            },
+                            { name: "Addason McCaslin", spouse: "Kimberly Iwaki", generation: 5 },
+                            {
+                              name: "Lara Heath",
+                              spouse: "William Allen",
+                              generation: 5,
+                              children: [
+                                { name: "Luke Henry Allen", generation: 6 },
+                                { name: "Noah Albert Allen", generation: 6 }
+                              ]
+                            },
+                            {
+                              name: "Erik Heath",
+                              spouse: "Jaime Wilson",
+                              generation: 5,
+                              children: [
+                                { name: "Adalee Heath", generation: 6 },
+                                { name: "Kellan Erik Heath", generation: 6 }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          spouse: "Liz Merryman",
+                          children: []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  spouse: "Jim Surface",
+                  children: []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Emily Richardson",
+          generation: 2,
+          marriages: [
+            {
+              spouse: "Clarence Burton",
+              children: [
+                {
+                  name: "Mary Tylor Burton",
+                  generation: 3,
+                  marriages: [
+                    {
+                      spouse: "R.D. Garrison",
+                      children: [
+                        {
+                          name: "Robert Garrison",
+                          spouse: "Lucinda Baker",
+                          generation: 4,
+                          children: [
+                            { name: "Amber Garrison", generation: 5 },
+                            { name: "Henna Garrison", generation: 5 }
+                          ]
+                        },
+                        {
+                          name: "Emily Garrison",
+                          spouse: "Peter Toll",
+                          generation: 4,
+                          children: [
+                            { name: "Tylor Toll", generation: 5 }
+                          ]
+                        },
+                        {
+                          name: "Priscilla Stewart",
+                          spouse: "Manley Morgan",
+                          generation: 3
+                        },
+                        {
+                          name: "Mary Tylor Stewart",
+                          spouse: "Will Compton",
+                          generation: 4,
+                          children: [
+                            { name: "Emily Compton", generation: 5 },
+                            { name: "Jami Compton", spouse: "Reuben Pressman", generation: 5 }
+                          ]
+                        },
+                        {
+                          name: "Jim Garrison",
+                          generation: 4,
+                          marriages: [
+                            {
+                              spouse: "Lisa Thieken",
+                              children: [
+                                {
+                                  name: "Austin Garrison",
+                                  spouse: "Katelyn Steinkoenig",
+                                  generation: 5,
+                                  children: [
+                                    { name: "Chloe Garrison", generation: 6 },
+                                    { name: "Arlo Garrison", generation: 6 },
+                                    { name: "Elliott Garrison", generation: 6 }
+                                  ]
+                                },
+                                {
+                                  name: "Aubrey Garrison",
+                                  generation: 5,
+                                  children: [
+                                    { name: "Lila Campton", generation: 6 },
+                                    { name: "Finnegan McAvoy", generation: 6 }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              spouse: "Kimberly Leeson",
+                              children: [
+                                { name: "Paige Garrison", generation: 5 },
+                                { name: "Olivia Garrison", generation: 5 }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      spouse: "Richard P. Stewart",
+                      children: []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              spouse: "Jim Carruthers",
+              children: [
+                { name: "Jimsy Carruthers", generation: 3 }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Coombs Richardson",
+          generation: 2,
+          marriages: [
+            {
+              spouse: "Henry LaBoiteaux",
+              children: [
+                {
+                  name: "Emily LaBoiteaux",
+                  spouse: "Larry Mannion",
+                  generation: 3,
+                  children: [
+                    { name: "John Mannion", generation: 4 },
+                    {
+                      name: "Margaret Mannion",
+                      spouse: "Brian Smart",
+                      generation: 4,
+                      children: [
+                        { name: "Jarrett Ryan Smart", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Mary Elizabeth Mannion",
+                      spouse: "Robin Rowe",
+                      generation: 4,
+                      children: [
+                        { name: "Davin Rowe", generation: 5 },
+                        { name: "Elizabeth Rowe", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Lawrence Mannion",
+                      spouse: "Ariadne Fellows",
+                      generation: 3
+                    }
+                  ]
+                },
+                {
+                  name: "Edith LaBoiteaux",
+                  spouse: "Thomas Bogardus",
+                  generation: 3,
+                  children: [
+                    {
+                      name: "Nancy Bogardus",
+                      spouse: "Mike Polisson",
+                      generation: 4,
+                      children: [
+                        { name: "Lindsay Polisson", generation: 5 },
+                        { name: "George Polisson", spouse: "Kelly Grace", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "William Bogardus",
+                      spouse: "Michelle Neal",
+                      generation: 4,
+                      children: [
+                        { name: "Billy Neal", generation: 5 },
+                        { name: "John Neal", generation: 5 },
+                        { name: "Addison Bogardus", generation: 5 },
+                        { name: "Skylar Bogardus", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Kristina Bogardus",
+                      generation: 4,
+                      marriages: [
+                        {
+                          spouse: "Tom Puckett",
+                          children: [
+                            {
+                              name: "Nathaniel Puckett",
+                              spouse: "Lynn Malone",
+                              generation: 5,
+                              children: [
+                                { name: "Vivian Puckett", generation: 6 }
+                              ]
+                            },
+                            { name: "Alison Puckett", generation: 5 },
+                            { name: "Kathryn Puckett", generation: 5 }
+                          ]
+                        },
+                        {
+                          spouse: "Bob Scott",
+                          children: [
+                            { name: "Alex Scott", generation: 5 }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      name: "Ellen Coombs Bogardus",
+                      spouse: "Gerald Edward Szymaniak",
+                      generation: 4,
+                      children: [
+                        { name: "Sarah Annis Szymaniak", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Thomas L. Bogardus",
+                      spouse: "Robert de Haan",
+                      generation: 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              spouse: "Robert Fillmore Lovett",
+              children: [
+                {
+                  name: "Linda Coombs Lovett",
+                  spouse: "James Crawford",
+                  generation: 3,
+                  children: [
+                    {
+                      name: "Henry Richardson Crawford",
+                      spouse: "Siobhan Louise Murphy",
+                      generation: 4,
+                      children: [
+                        { name: "Barbara Lovett Crawford", generation: 5 },
+                        { name: "Martin Keenholtz Crawford", generation: 5 },
+                        { name: "Linda Colleen Crawford", generation: 5 },
+                        { name: "Helen Winfield Crawford", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Elizabeth Coombs Crawford",
+                      spouse: "William A. Ragan",
+                      generation: 4,
+                      children: [
+                        { name: "James Crawford Ragan", generation: 5 },
+                        { name: "Sarah Elizabeth Ragan", generation: 5 },
+                        { name: "Joseph Richardson Ragan", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Robert Lovett Crawford",
+                      spouse: "Margaret Harding",
+                      generation: 4,
+                      children: [
+                        { name: "Robert Lovett Crawford", generation: 5 },
+                        { name: "Benjamin Harding Crawford", generation: 5 },
+                        { name: "Elizabeth Margaret Crawford", generation: 5 },
+                        { name: "Charlotte Grace Crawford", generation: 5 },
+                        { name: "Katherine Emily Crawford", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Benjamin Crawford",
+                      spouse: "Stephanie Luongo",
+                      generation: 4,
+                      children: [
+                        { name: "Ava Cohen Crawford", generation: 5 },
+                        { name: "Harrison Baker Crawford", generation: 5 },
+                        { name: "Macy Coombs Crawford", generation: 5 }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  name: "Robert Fillmore Lovett",
+                  spouse: "Sara C. Newcomb",
+                  generation: 3,
+                  children: [
+                    {
+                      name: "Robert Fillmore Lovett",
+                      spouse: "Amy M. Sibert",
+                      generation: 4,
+                      children: [
+                        { name: "Sophia Myers Lovett", generation: 5 },
+                        { name: "Robert Fillmore Lovett", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Andrew Jerrel Lovett",
+                      spouse: "Li Miao",
+                      generation: 4,
+                      children: [
+                        { name: "Alexander Weida Lovett", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Edward Richardson Lovett",
+                      spouse: "Erin Sinesky",
+                      generation: 4,
+                      children: [
+                        { name: "Maxine Cecilia Lovett", generation: 5 },
+                        { name: "Audrey Lorraine Lovett", generation: 5 }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Adelaide Richardson",
+          spouse: "Hugh Garvin",
+          generation: 2,
+          children: [
+            {
+              name: "James Garvin",
+              generation: 3,
+              marriages: [
+                {
+                  spouse: "Frances Harrison",
+                  children: [
+                    {
+                      name: "Nancy Garvin",
+                      generation: 4,
+                      children: [
+                        {
+                          name: "Mary Elizabeth Garvin",
+                          spouse: "Philipe Rivaldi",
+                          generation: 5,
+                          children: [
+                            { name: "Taylor Rivaldi", generation: 6 }
+                          ]
+                        },
+                        { name: "Christinia Garvin", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Frances Garvin",
+                      spouse: "Keith Puccinelli",
+                      generation: 3
+                    },
+                    {
+                      name: "Louise Garvin",
+                      spouse: "Paul Rosel",
+                      generation: 4,
+                      children: [
+                        {
+                          name: "Frances Rosel",
+                          spouse: "Kevin O'Donnell",
+                          generation: 5,
+                          children: [
+                            { name: "Madelyn O'Donnell", generation: 6 },
+                            { name: "Riley O'Donnell", generation: 6 }
+                          ]
+                        },
+                        { name: "Christian Rosel", generation: 5 }
+                      ]
+                    },
+                    {
+                      name: "Harrison Garvin",
+                      generation: 4,
+                      marriages: [
+                        {
+                          spouse: "Karry Usher",
+                          children: [
+                            { name: "James Bodhi Garvin", generation: 5 }
+                          ]
+                        },
+                        {
+                          spouse: "Penny Harding",
+                          children: [
+                            { name: "Alexandria Lucy Garvin", generation: 5 }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  spouse: "Jean Strang",
+                  children: []
+                },
+                {
+                  spouse: "Gladys Sutravafa Randall",
+                  children: []
+                }
+              ]
+            },
+            {
+              name: "Hugh Garvin",
+              spouse: "Jane Hamilton",
+              generation: 3,
+              children: [
+                { name: "Ann Garvin", generation: 4 },
+                {
+                  name: "Sarah Garvin",
+                  spouse: "Michael Callahan",
+                  generation: 4,
+                  children: [
+                    { name: "Grace Callahan", generation: 5 }
+                  ]
+                },
+                {
+                  name: "Hugh Garvin",
+                  spouse: "Dana Cress",
+                  generation: 4,
+                  children: [
+                    { name: "Taylor Garvin", spouse: "Taylor Lukas", generation: 5 },
+                    {
+                      name: "Alexander Garvin",
+                      spouse: "Kerry Rockwood",
+                      generation: 5,
+                      children: [
+                        { name: "Lilly Garvin", generation: 6 },
+                        { name: "Brayden Garvin", generation: 6 },
+                        { name: "Lilah Garvin", generation: 6 },
+                        { name: "Ari Garvin", generation: 6 }
+                      ]
+                    },
+                    { name: "Andrew Garvin", spouse: "Brittany Hock", generation: 5 }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "Annis Garvin",
+              spouse: "Bob Welch",
+              generation: 3,
+              children: [
+                { name: "Sarah Welch", generation: 4 },
+                {
+                  name: "Robert Welch",
+                  spouse: "Pattie Packer",
+                  generation: 4,
+                  children: [
+                    { name: "Olivia Welch", generation: 5 },
+                    { name: "Gillian Welch", generation: 5 }
+                  ]
+                },
+                {
+                  name: "William Welch",
+                  spouse: "Linda Wilson",
+                  generation: 4,
+                  children: [
+                    { name: "Kelly Welch", spouse: "Brian Bowman", generation: 5 },
+                    { name: "Ryan Welch", spouse: "Panda Stackhouse", generation: 5 }
+                  ]
+                },
+                {
+                  name: "Betsy Welch",
+                  spouse: "Bruce Bensen",
+                  generation: 4,
+                  children: [
+                    { name: "Caelen Bensen", spouse: "Andre Janusz", generation: 5 },
+                    {
+                      name: "Taylor Bensen",
+                      spouse: "Cody Parsley",
+                      generation: 5,
+                      children: [
+                        { name: "Charlotte Parsley", generation: 6 }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "Adelaide Garvin",
+              spouse: "Bob Cohan",
+              generation: 3,
+              children: [
+                {
+                  name: "James Cohan",
+                  spouse: "Susan Sekel",
+                  generation: 4,
+                  children: [
+                    { name: "James Cohan Cohan", generation: 5 },
+                    { name: "Daniel Cohan", generation: 5 }
+                  ]
+                },
+                {
+                  name: "Robert Cohan",
+                  spouse: "Pamela Philips",
+                  generation: 4,
+                  children: [
+                    { name: "Evan Cohan", generation: 5 },
+                    { name: "Marlie Lee Cohan", generation: 5 }
+                  ]
+                },
+                {
+                  name: "Betsy Cohan",
+                  spouse: "Robert Dawson",
+                  generation: 4,
+                  children: [
+                    { name: "Danille Dawson", generation: 5 }
+                  ]
+                },
+                {
+                  name: "Kathleen Cohan",
+                  spouse: "Richard Ellis",
+                  generation: 4,
+                  children: [
+                    { name: "Dylan Ellis", generation: 5 }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "Frances Garvin",
+              spouse: "William Byrne",
+              generation: 3,
+              children: [
+                {
+                  name: "Larry Byrne",
+                  spouse: "Sarah Jones",
+                  generation: 4,
+                  children: [
+                    { name: "Marcie Byrne", generation: 5 },
+                    { name: "Anne Byrne", generation: 5 }
+                  ]
+                },
+                {
+                  name: "Mary Byrne",
+                  generation: 4,
+                  marriages: [
+                    {
+                      spouse: "Tim Taylor",
+                      children: [
+                        { name: "Tim Taylor", generation: 5 },
+                        { name: "Tracy Taylor", generation: 5 }
+                      ]
+                    },
+                    {
+                      spouse: "Guy Wayne Cox",
+                      children: []
+                    }
+                  ]
+                },
+                {
+                  name: "Joe Byrne",
+                  generation: 4,
+                  marriages: [
+                    {
+                      spouse: "Denise Fawcett",
+                      children: [
+                        { name: "Aaron Byrne", generation: 5 }
+                      ]
+                    },
+                    {
+                      spouse: "Patricia Mock",
+                      children: []
+                    }
+                  ]
+                },
+                {
+                  name: "Ann Byrne",
+                  generation: 4,
+                  marriages: [
+                    {
+                      spouse: "Guy Winchester",
+                      children: [
+                        { name: "Sean Winchester", generation: 5 },
+                        { name: "Travis Winchester", generation: 5 }
+                      ]
+                    },
+                    {
+                      spouse: "Cameron Sauder",
+                      children: [
+                        { name: "Emma Sauder Byrne", generation: 5 }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     };
 
-    // Colorblind-safe palette (Okabe-Ito inspired) at 60% opacity
+    // ══════════════════════════════════════════════
+    // CONFIGURATION
+    // ══════════════════════════════════════════════
+
     const genColors = [
-      "rgba(86, 180, 233, 0.6)",   // Gen 0 (center) - Sky blue
-      "rgba(230, 159, 0, 0.6)",    // Gen 1 - Orange
-      "rgba(204, 121, 167, 0.6)",  // Gen 2 - Reddish purple
-      "rgba(0, 158, 115, 0.6)",    // Gen 3 - Bluish green
-      "rgba(240, 228, 66, 0.6)",   // Gen 4 - Yellow
-      "rgba(0, 114, 178, 0.6)",    // Gen 5 - Blue
-      "rgba(213, 94, 0, 0.6)",     // Gen 6 - Vermillion
-      "rgba(170, 170, 68, 0.6)"    // Gen 7+ - Olive
+      null,                              // index 0 unused (no Gen 0)
+      "rgba(86, 180, 233, 0.6)",         // Gen 1 - Sky blue
+      "rgba(230, 159, 0, 0.6)",          // Gen 2 - Orange
+      "rgba(204, 121, 167, 0.6)",        // Gen 3 - Reddish purple
+      "rgba(0, 158, 115, 0.6)",          // Gen 4 - Bluish green
+      "rgba(240, 228, 66, 0.6)",         // Gen 5 - Yellow
+      "rgba(0, 114, 178, 0.6)",          // Gen 6 - Blue
     ];
+    const genColorsSolid = [null, "#56B4E9", "#E69F00", "#CC79A7", "#009E73", "#F0E442", "#0072B2"];
 
-    // Generation 1 children in clockwise order from top-right
-    // spouses array: order matters (first marriage first)
-    const gen1Children = [
-      { id: "2", name: "Roland Richardson", spouses: [
-        { name: "Althea Ford", order: 1 }
-      ], startAngle: 0, endAngle: 90 },
-      { id: "5", name: "Emily Richardson", spouses: [
-        { name: "Clarence Burton", order: 1 },
-        { name: "Jim Carruthers", order: 2 }
-      ], startAngle: 90, endAngle: 180 },
-      { id: "4", name: "Coombs Richardson", spouses: [
-        { name: "Henry LaBoiteaux", order: 1 },
-        { name: "Robert Fillmore Lovett", order: 2 }
-      ], startAngle: 180, endAngle: 270 },
-      { id: "3", name: "Adelaide Richardson", spouses: [
-        { name: "Hugh Garvin", order: 1 }
-      ], startAngle: 270, endAngle: 360 }
-    ];
-
-    // Set up SVG
-    const svg = d3.select("#family-wheel")
-      .attr("width", config.width)
-      .attr("height", config.height)
-      .attr("viewBox", `0 0 ${config.width} ${config.height}`);
-
-    // Create main group centered
-    const g = svg.append("g")
-      .attr("transform", `translate(${config.centerX}, ${config.centerY})`);
+    const CARD_W = 145;
+    const CARD_H = 155;
+    const PHOTO_R = 32;
+    const COUPLE_GAP = 16;  // gap between couple cards
+    const H_SPACING = 310;
+    const V_SPACING = 190;
 
     // ══════════════════════════════════════════════
-    // SEARCHABLE PEOPLE ARRAY
+    // HIERARCHY
     // ══════════════════════════════════════════════
-    const allPeople = [
-      { id: "1", name: "James Clement Richardson Jr.", generation: 0 },
-      { id: "1", name: "Sarah Annis Withenbury", generation: 0 }
-    ];
 
-    // Add Gen 1 people and their spouses to searchable array
-    gen1Children.forEach(child => {
-      allPeople.push({ id: child.id, name: child.name, generation: 1 });
-      child.spouses.forEach(spouse => {
-        allPeople.push({ id: child.id, name: spouse.name, generation: 1 });
-      });
+    // Preprocess: convert marriages[] into pseudo-node children
+    // A person with marriages gets marriage pseudo-nodes as children,
+    // each containing the spouse name and that marriage's children.
+    function preprocessMarriages(node) {
+      if (node.marriages) {
+        node.children = node.marriages.map(m => ({
+          name: m.spouse,
+          generation: node.generation,
+          isMarriageNode: true,
+          parentName: node.name,
+          children: (m.children || []).map(c => {
+            preprocessMarriages(c);
+            return c;
+          })
+        }));
+        delete node.marriages;
+      }
+      if (node.children) {
+        node.children.forEach(c => preprocessMarriages(c));
+      }
+    }
+    preprocessMarriages(treeData);
+
+    const root = d3.hierarchy(treeData, d => d.children && d.children.length > 0 ? d.children : null);
+
+    root.each(d => {
+      d._allChildren = d.children || null;
+      if (d.depth >= 1) d.children = null;
     });
 
-    // Note: Gen 2 people will be added after gen2Children is defined
+    const treeLayout = d3.tree()
+      .nodeSize([H_SPACING, V_SPACING])
+      .separation((a, b) => {
+        // Marriage nodes from same parent should be closer together
+        if (a.data.isMarriageNode && b.data.isMarriageNode && a.parent === b.parent) return 0.8;
+        return a.parent === b.parent ? 1 : 1.2;
+      });
 
     // ══════════════════════════════════════════════
-    // CENTER CIRCLE
+    // SVG + ZOOM
     // ══════════════════════════════════════════════
-    const centerGroup = g.append("g")
-      .attr("class", "person-group")
-      .attr("data-person-id", "1")
-      .attr("data-generation", "0");
 
-    centerGroup.append("circle")
-      .attr("r", config.centerRadius)
-      .attr("fill", genColors[0])
-      .attr("stroke", "#1a2e1e")
-      .attr("stroke-width", 2);
+    const svg = d3.select("#tree-svg");
+    const g = svg.append("g");
 
-    // Center text - Cinzel font for founding ancestors
-    centerGroup.append("text")
-      .attr("y", -12)
-      .attr("text-anchor", "middle")
-      .attr("font-family", "Cinzel, serif")
-      .attr("font-size", config.centerFontSize)
-      .attr("font-weight", "bold")
-      .attr("fill", "#1a2e1e")
-      .text("James Clement Richardson Jr.");
+    const zoomBehavior = d3.zoom()
+      .scaleExtent([0.1, 3])
+      .on("zoom", e => g.attr("transform", e.transform));
 
-    centerGroup.append("text")
-      .attr("y", 6)
-      .attr("text-anchor", "middle")
-      .attr("font-family", "Playfair Display, serif")
-      .attr("font-size", 12)
-      .attr("font-style", "italic")
-      .attr("fill", "#1a2e1e")
-      .text("m.");
-
-    centerGroup.append("text")
-      .attr("y", 24)
-      .attr("text-anchor", "middle")
-      .attr("font-family", "Cinzel, serif")
-      .attr("font-size", config.centerFontSize)
-      .attr("font-weight", "bold")
-      .attr("fill", "#1a2e1e")
-      .text("Sarah Annis Withenbury");
+    svg.call(zoomBehavior);
 
     // ══════════════════════════════════════════════
-    // GENERATION 1 RING
+    // HELPERS
     // ══════════════════════════════════════════════
-    const gen1Inner = config.centerRadius;
-    const gen1Outer = config.centerRadius + config.ringWidth;
 
-    // Arc generator for wedges
-    const arc = d3.arc()
-      .innerRadius(gen1Inner)
-      .outerRadius(gen1Outer);
+    function splitName(fullName) {
+      const parts = fullName.split(" ");
+      if (parts.length === 1) return { given: parts[0], surname: "" };
+      return { given: parts.slice(0, -1).join(" "), surname: parts[parts.length - 1] };
+    }
 
-    // Draw filled ring for Gen 1
-    g.append("path")
-      .attr("d", arc({ startAngle: 0, endAngle: 2 * Math.PI }))
-      .attr("fill", genColors[1])
-      .attr("stroke", "#1a2e1e")
-      .attr("stroke-width", 2);
+    function truncate(s, max) {
+      return s && s.length > max ? s.substring(0, max - 1) + "\u2026" : s;
+    }
 
-    // Draw wedges and labels for Gen 1
-    gen1Children.forEach(child => {
-      // Create a group for this person
-      const personGroup = g.append("g")
-        .attr("class", "person-group")
-        .attr("data-person-id", child.id)
-        .attr("data-generation", "1")
-        .attr("data-name", child.name);
+    function hasSpouse(d) {
+      return d.spouse || (d.spouses && d.spouses.length > 0);
+    }
 
-      // Convert degrees to radians (D3 uses radians, 0 = top)
-      // Subtract 90 degrees because D3's 0 is at 3 o'clock, we want 12 o'clock
-      const startRad = (child.startAngle - 90) * Math.PI / 180;
-      const endRad = (child.endAngle - 90) * Math.PI / 180;
+    function getFirstSpouse(d) {
+      if (d.spouse) return d.spouse;
+      if (d.spouses && d.spouses.length > 0) return d.spouses[0];
+      return null;
+    }
 
-      // Draw divider line at start of wedge (full height)
-      const lineAngle = startRad;
-      const x1 = Math.cos(lineAngle) * gen1Inner;
-      const y1 = Math.sin(lineAngle) * gen1Inner;
-      const x2 = Math.cos(lineAngle) * gen1Outer;
-      const y2 = Math.sin(lineAngle) * gen1Outer;
+    // Couple width: if has spouse, two cards + gap; else single card
+    function coupleWidth(d) {
+      return hasSpouse(d) ? CARD_W * 2 + COUPLE_GAP : CARD_W;
+    }
 
-      personGroup.append("line")
-        .attr("x1", x1)
-        .attr("y1", y1)
-        .attr("x2", x2)
-        .attr("y2", y2)
-        .attr("stroke", "#1a2e1e")
+    // Link drops from center-bottom of the couple unit
+    function linkPath(d) {
+      // Source: drop from bottom-center
+      const sx = d.source.x;
+      const sy = d.source.y + CARD_H / 2;
+      // Target: arrive at top-center
+      const tx = d.target.x;
+      const ty = d.target.y - CARD_H / 2;
+      const midY = (sy + ty) / 2;
+      return `M${sx},${sy} L${sx},${midY} L${tx},${midY} L${tx},${ty}`;
+    }
+
+    // ══════════════════════════════════════════════
+    // DRAW A SINGLE PERSON CARD
+    // ══════════════════════════════════════════════
+
+    function drawPersonCard(parent, name, generation, offsetX, opts) {
+      opts = opts || {};
+      const cg = parent.append("g")
+        .attr("transform", `translate(${offsetX}, 0)`);
+
+      const isPlaceholder = opts.isPlaceholder;
+      const genColor = genColors[generation] || genColors[6];
+      const genSolid = genColorsSolid[generation] || genColorsSolid[6];
+
+      // Card background with colored top accent
+      cg.append("rect")
+        .attr("x", -CARD_W / 2).attr("y", -CARD_H / 2)
+        .attr("width", CARD_W).attr("height", CARD_H)
+        .attr("rx", 8)
+        .attr("fill", isPlaceholder ? "#f8f6f0" : "white")
+        .attr("stroke", isPlaceholder ? "#d4cfc4" : "#ddd")
+        .attr("stroke-width", 1)
+        .attr("stroke-dasharray", isPlaceholder ? "4 3" : "none");
+
+      // Colored top accent bar
+      cg.append("rect")
+        .attr("x", -CARD_W / 2).attr("y", -CARD_H / 2)
+        .attr("width", CARD_W).attr("height", 4)
+        .attr("rx", 2)
+        .attr("fill", genSolid);
+
+      // Photo circle
+      const photoY = -CARD_H / 2 + 42;
+      cg.append("circle")
+        .attr("cx", 0).attr("cy", photoY).attr("r", PHOTO_R)
+        .attr("fill", isPlaceholder ? "#eae6dc" : "#f0ece4")
+        .attr("stroke", "#ddd")
         .attr("stroke-width", 1);
 
-      // Calculate center angle for blood relative text (full wedge width)
-      const midAngle = (startRad + endRad) / 2;
-      const textRadius = (gen1Inner + gen1Outer) / 2;
+      // Silhouette placeholder (simple person icon)
+      cg.append("text")
+        .attr("x", 0).attr("y", photoY + 5)
+        .attr("text-anchor", "middle")
+        .attr("font-size", 22)
+        .attr("fill", isPlaceholder ? "#ccc5b8" : "#c5bfb2")
+        .text("\uD83D\uDC64");
 
-      // Calculate rotation for radial text
-      let rotation = (midAngle * 180 / Math.PI) + 90;
-      const isFlipped = midAngle > 0 && midAngle < Math.PI;
-      if (isFlipped) {
-        rotation += 180;
+      // Name
+      const { given, surname } = splitName(name);
+      const nameY = photoY + PHOTO_R + 16;
+
+      cg.append("text")
+        .attr("y", nameY).attr("text-anchor", "middle")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-size", 12).attr("font-weight", "400")
+        .attr("fill", "#1a2e1e")
+        .text(truncate(given, 18));
+
+      cg.append("text")
+        .attr("y", nameY + 15).attr("text-anchor", "middle")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-size", 13).attr("font-weight", "700")
+        .attr("fill", "#1a2e1e")
+        .text(truncate(surname, 16));
+
+      // Birth-death years (if available)
+      if (opts.birthYear || opts.deathYear) {
+        const years = (opts.birthYear || "?") + "\u2013" + (opts.deathYear || "Living");
+        cg.append("text")
+          .attr("y", nameY + 30).attr("text-anchor", "middle")
+          .attr("font-family", "Lato, sans-serif")
+          .attr("font-size", 10).attr("fill", "#888")
+          .text(years);
       }
 
-      // Blood relative ALWAYS closest to center
-      const bloodRelativeOffset = -40;
-      const spouseOffset = 18;
+      return cg;
+    }
 
-      // Richardson child name (closest to center/previous generation) - full wedge width
-      const nameX = Math.cos(midAngle) * (textRadius + bloodRelativeOffset);
-      const nameY = Math.sin(midAngle) * (textRadius + bloodRelativeOffset);
+    // ══════════════════════════════════════════════
+    // DRAW FUNCTIONS
+    // ══════════════════════════════════════════════
 
-      personGroup.append("text")
-        .attr("x", nameX)
-        .attr("y", nameY)
-        .attr("text-anchor", "middle")
-        .attr("dominant-baseline", "middle")
-        .attr("font-family", "Playfair Display, serif")
-        .attr("font-size", config.fontSize)
-        .attr("font-weight", "bold")
-        .attr("fill", "#1a2e1e")
-        .attr("transform", `rotate(${rotation}, ${nameX}, ${nameY})`)
-        .text(child.name);
+    function draw() {
+      treeLayout(root);
 
-      // Handle spouse(s) - subdivide wedge if multiple marriages
-      const numSpouses = child.spouses.length;
-      const wedgeSpan = endRad - startRad;
-      const subWedgeSpan = wedgeSpan / numSpouses;
+      const nodes = root.descendants();
+      const links = root.links();
 
-      child.spouses.forEach((spouse, index) => {
-        // Calculate this spouse's sub-wedge angles
-        // When text is flipped (bottom half), reverse order so first spouse is visually on left
-        const adjustedIndex = isFlipped ? (numSpouses - 1 - index) : index;
-        const subStart = startRad + (adjustedIndex * subWedgeSpan);
-        const subEnd = subStart + subWedgeSpan;
-        const subMidAngle = (subStart + subEnd) / 2;
+      g.selectAll(".link").remove();
+      g.selectAll(".link")
+        .data(links)
+        .enter().append("path")
+        .attr("class", "link")
+        .attr("d", linkPath)
+        .attr("fill", "none")
+        .attr("stroke", "#c5ccc3")
+        .attr("stroke-width", 1.5);
 
-        // Draw vertical divider line(s) between sub-wedges (only once, on first iteration)
-        if (index === 0 && numSpouses > 1) {
-          for (let i = 1; i < numSpouses; i++) {
-            const dividerAngle = startRad + (i * subWedgeSpan);
-            // Divider starts at the "m." level and goes to outer edge
-            const dividerInner = textRadius - 5;
-            const dx1 = Math.cos(dividerAngle) * dividerInner;
-            const dy1 = Math.sin(dividerAngle) * dividerInner;
-            const dx2 = Math.cos(dividerAngle) * gen1Outer;
-            const dy2 = Math.sin(dividerAngle) * gen1Outer;
+      g.selectAll(".node-card").remove();
 
-            personGroup.append("line")
-              .attr("x1", dx1)
-              .attr("y1", dy1)
-              .attr("x2", dx2)
-              .attr("y2", dy2)
-              .attr("stroke", "#1a2e1e")
-              .attr("stroke-width", 1);
+      const node = g.selectAll(".node-card")
+        .data(nodes)
+        .enter().append("g")
+        .attr("class", "node-card")
+        .attr("transform", d => `translate(${d.x},${d.y})`)
+        .on("click", (event, d) => {
+          event.stopPropagation();
+          if (d.data.isFounders) return;
+          if (d.children) {
+            d._allChildren = d.children;
+            d.children = null;
+          } else if (d._allChildren) {
+            d.children = d._allChildren;
           }
+          draw();
+        });
+
+      node.each(function(d) {
+        const el = d3.select(this);
+
+        if (d.data.isFounders) {
+          drawFoundersNode(el, d);
+        } else if (d.data.isMarriageNode) {
+          drawMarriageNode(el, d);
+        } else if (d.data.isPlaceholder) {
+          drawPlaceholderNode(el, d);
+        } else {
+          drawCoupleNode(el, d);
         }
-
-        // Calculate rotation for this sub-wedge's text
-        let subRotation = (subMidAngle * 180 / Math.PI) + 90;
-        const subIsFlipped = subMidAngle > 0 && subMidAngle < Math.PI;
-        if (subIsFlipped) {
-          subRotation += 180;
-        }
-
-        // "m." in italics (middle of sub-wedge)
-        const mX = Math.cos(subMidAngle) * textRadius;
-        const mY = Math.sin(subMidAngle) * textRadius;
-
-        personGroup.append("text")
-          .attr("x", mX)
-          .attr("y", mY)
-          .attr("text-anchor", "middle")
-          .attr("dominant-baseline", "middle")
-          .attr("font-family", "Playfair Display, serif")
-          .attr("font-size", config.fontSize - 2)
-          .attr("font-style", "italic")
-          .attr("fill", "#1a2e1e")
-          .attr("transform", `rotate(${subRotation}, ${mX}, ${mY})`)
-          .text("m.");
-
-        // Spouse name (furthest from center, in sub-wedge)
-        const spouseX = Math.cos(subMidAngle) * (textRadius + spouseOffset);
-        const spouseY = Math.sin(subMidAngle) * (textRadius + spouseOffset);
-
-        personGroup.append("text")
-          .attr("x", spouseX)
-          .attr("y", spouseY)
-          .attr("text-anchor", "middle")
-          .attr("dominant-baseline", "middle")
-          .attr("font-family", "Playfair Display, serif")
-          .attr("font-size", config.fontSize)
-          .attr("font-weight", "bold")
-          .attr("fill", "#1a2e1e")
-          .attr("transform", `rotate(${subRotation}, ${spouseX}, ${spouseY})`)
-          .text(spouse.name);
-      });
-    });
-
-    // ══════════════════════════════════════════════
-    // GENERATION 2 RING
-    // ══════════════════════════════════════════════
-    const gen2Inner = gen1Outer;
-    const gen2RingWidth = 200; // wider than gen1 to fit tangential text
-    const gen2Outer = gen2Inner + gen2RingWidth;
-
-    // Gen 2 data with descendant counts (from family_tree.json)
-    // Angles will be calculated based on weight = descendantCount + 1
-    const gen2Data = [
-      // === ROLAND (0°-90°) - familyId 2 ===
-      { id: "13", name: "Ted Richardson", parentFamilyId: 2, descendantCount: 15,
-        spouses: [{ name: "Priscilla Grandin", order: 1 }] },
-      { id: "14", name: "Betsy Richardson", parentFamilyId: 2, descendantCount: 1,
-        spouses: [{ name: "George Kurlin", order: 1 }] },
-      { id: "15", name: "Althea Richardson", parentFamilyId: 2, descendantCount: 23,
-        spouses: [{ name: "John Mathers McCaslin", order: 1 }, { name: "Jim Surface", order: 2 }] },
-      { id: "16", name: "Emily Richardson", parentFamilyId: 2, descendantCount: 17,
-        spouses: [{ name: "Joe Boughton", order: 1 }] },
-
-      // === EMILY RICHARDSON - Burton (90°-135°) - familyId 5 ===
-      { id: "26", name: "Mary Tylor Burton", parentFamilyId: 5, descendantCount: 19,
-        spouses: [{ name: "R.D. Garrison", order: 1 }, { name: "Richard P. Stewart", order: 2 }] },
-      // === EMILY RICHARDSON - Carruthers (135°-180°) - familyId 7 ===
-      { id: "27", name: "Jimsy Carruthers", parentFamilyId: 7, descendantCount: 0,
-        spouses: [] },
-
-      // === COOMBS - LaBoiteaux (180°-225°) - familyId 4 ===
-      { id: "22", name: "Emily LaBoiteaux", parentFamilyId: 4, descendantCount: 7,
-        spouses: [{ name: "Larry Mannion", order: 1 }] },
-      { id: "23", name: "Edith LaBoiteaux", parentFamilyId: 4, descendantCount: 17,
-        spouses: [{ name: "Thomas Bogardus", order: 1 }] },
-      // === COOMBS - Lovett (225°-270°) - familyId 6 ===
-      { id: "83", name: "Robert Fillmore Lovett", parentFamilyId: 6, descendantCount: 8,
-        spouses: [{ name: "Sara C. Newcomb", order: 1 }] },
-      { id: "25", name: "Linda Coombs Lovett", parentFamilyId: 6, descendantCount: 19,
-        spouses: [{ name: "James Crawford", order: 1 }] },
-
-      // === ADELAIDE (270°-360°) - familyId 3 ===
-      { id: "17", name: "James Garvin", parentFamilyId: 3, descendantCount: 13,
-        spouses: [{ name: "Frances Harrison", order: 1 }, { name: "Jean Strang", order: 2 }, { name: "Gladys Sutravafa Randall", order: 3 }] },
-      { id: "18", name: "Hugh Garvin", parentFamilyId: 3, descendantCount: 11,
-        spouses: [{ name: "Jane Hamilton", order: 1 }] },
-      { id: "19", name: "Annis Garvin", parentFamilyId: 3, descendantCount: 11,
-        spouses: [{ name: "Bob Welch", order: 1 }] },
-      { id: "20", name: "Adelaide Garvin", parentFamilyId: 3, descendantCount: 10,
-        spouses: [{ name: "Bob Cohan", order: 1 }] },
-      { id: "21", name: "Frances Garvin", parentFamilyId: 3, descendantCount: 12,
-        spouses: [{ name: "William Byrne", order: 1 }] }
-    ];
-
-    // Parent family angular spans (from Gen 1 sub-wedges)
-    const familySpans = {
-      2: { start: 0, end: 90 },      // Roland & Althea Ford
-      5: { start: 90, end: 135 },    // Emily & Clarence Burton
-      7: { start: 135, end: 180 },   // Emily & Jim Carruthers
-      4: { start: 180, end: 225 },   // Coombs & Henry LaBoiteaux
-      6: { start: 225, end: 270 },   // Coombs & Robert Lovett
-      3: { start: 270, end: 360 }    // Adelaide & Hugh Garvin
-    };
-
-    // Calculate weighted angles for each family group
-    // Minimum weight ensures even people with few descendants get readable wedges
-    const MIN_WEIGHT = 8;
-
-    function calculateWeightedAngles(children, familySpan) {
-      const totalWeight = children.reduce((sum, c) => sum + Math.max(c.descendantCount + 1, MIN_WEIGHT), 0);
-      const spanDegrees = familySpan.end - familySpan.start;
-
-      let currentAngle = familySpan.start;
-      return children.map(child => {
-        const weight = Math.max(child.descendantCount + 1, MIN_WEIGHT);
-        const angleDegrees = (weight / totalWeight) * spanDegrees;
-        const result = {
-          ...child,
-          startAngle: currentAngle,
-          endAngle: currentAngle + angleDegrees
-        };
-        currentAngle += angleDegrees;
-        return result;
       });
     }
 
-    // Group by parentFamilyId and calculate angles
-    const familyGroups = {};
-    gen2Data.forEach(child => {
-      if (!familyGroups[child.parentFamilyId]) {
-        familyGroups[child.parentFamilyId] = [];
+    // ── FOUNDERS: two side-by-side Ancestry cards ──
+    function drawFoundersNode(el, d) {
+      const spouse = d.data.spouse;
+      const halfGap = COUPLE_GAP / 2;
+      const leftX = -(CARD_W / 2 + halfGap);
+      const rightX = CARD_W / 2 + halfGap;
+
+      // Left card: Grammie
+      drawPersonCard(el, d.data.name, 0, leftX);
+
+      // Horizontal connector
+      el.append("line")
+        .attr("x1", leftX + CARD_W / 2).attr("y1", 0)
+        .attr("x2", rightX - CARD_W / 2).attr("y2", 0)
+        .attr("stroke", "#c5ccc3").attr("stroke-width", 1.5);
+
+      // Right card: James
+      if (spouse) {
+        drawPersonCard(el, spouse, 0, rightX);
       }
-      familyGroups[child.parentFamilyId].push(child);
-    });
+    }
 
-    // Build final gen2Children array with calculated angles
-    const gen2Children = [];
-    Object.keys(familyGroups).forEach(familyId => {
-      const span = familySpans[familyId];
-      const childrenWithAngles = calculateWeightedAngles(familyGroups[familyId], span);
-      gen2Children.push(...childrenWithAngles);
-    });
+    // ── MARRIAGE NODE (pseudo-node: shows spouse card as intermediary) ──
+    function drawMarriageNode(el, d) {
+      const spouseName = d.data.name;
+      const gen = d.data.generation;
+      const hasChildren = d._allChildren && d._allChildren.length > 0;
 
-    // Add Gen 2 people and their spouses to searchable array
-    gen2Children.forEach(child => {
-      allPeople.push({ id: child.id, name: child.name, generation: 2 });
-      child.spouses.forEach(spouse => {
-        allPeople.push({ id: child.id, name: spouse.name, generation: 2 });
+      // Render a single spouse card (slightly smaller, with a subtle marriage indicator)
+      drawPersonCard(el, spouseName, gen, 0);
+
+      drawExpandBadge(el, d);
+    }
+
+    // ── PLACEHOLDER NODE ──
+    function drawPlaceholderNode(el, d) {
+      const spouse = getFirstSpouse(d.data);
+      const hasSp = !!spouse;
+      const halfGap = COUPLE_GAP / 2;
+      const leftX = hasSp ? -(CARD_W / 2 + halfGap) : 0;
+      const rightX = CARD_W / 2 + halfGap;
+
+      // Blood relative card
+      drawPersonCard(el, d.data.name, d.data.generation, leftX, { isPlaceholder: true });
+
+      // Spouse card
+      if (hasSp) {
+        el.append("line")
+          .attr("x1", leftX + CARD_W / 2).attr("y1", 0)
+          .attr("x2", rightX - CARD_W / 2).attr("y2", 0)
+          .attr("stroke", "#d4cfc4").attr("stroke-width", 1.5)
+          .attr("stroke-dasharray", "4 3");
+
+        drawPersonCard(el, spouse, d.data.generation, rightX, { isPlaceholder: true });
+      }
+
+      // "coming soon" label below
+      el.append("text")
+        .attr("y", CARD_H / 2 + 14).attr("text-anchor", "middle")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-size", 9).attr("font-style", "italic")
+        .attr("fill", "#a3b8a0")
+        .text(d.data.descendantCount + " descendants \u2014 coming soon");
+    }
+
+    // Helper: draw expand/collapse badge below a card
+    function drawExpandBadge(el, d) {
+      const hasChildren = d._allChildren && d._allChildren.length > 0;
+      if (!hasChildren) return;
+      const isExpanded = !!d.children;
+      const badgeY = CARD_H / 2 + 12;
+
+      // Circle background
+      el.append("circle")
+        .attr("cx", 0).attr("cy", badgeY).attr("r", 10)
+        .attr("fill", isExpanded ? "var(--green-dark)" : "white")
+        .attr("stroke", "var(--green-dark)")
+        .attr("stroke-width", 1.5);
+
+      // +/- symbol
+      el.append("text")
+        .attr("x", 0).attr("y", badgeY + 1)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-size", 14).attr("font-weight", "700")
+        .attr("fill", isExpanded ? "white" : "var(--green-dark)")
+        .text(isExpanded ? "−" : "+");
+    }
+
+    // ── REGULAR COUPLE NODE ──
+    function drawCoupleNode(el, d) {
+      const spouse = getFirstSpouse(d.data);
+      const hasSp = !!spouse;
+      const hasChildren = d._allChildren && d._allChildren.length > 0;
+      const halfGap = COUPLE_GAP / 2;
+
+      // Position: blood relative on left, spouse on right (centered around node x)
+      const leftX = hasSp ? -(CARD_W / 2 + halfGap) : 0;
+      const rightX = CARD_W / 2 + halfGap;
+
+      // Blood relative card
+      drawPersonCard(el, d.data.name, d.data.generation, leftX, {
+        birthYear: d.data.birthYear,
+        deathYear: d.data.deathYear
       });
-    });
 
-    // Draw filled ring for Gen 2
-    const gen2Arc = d3.arc()
-      .innerRadius(gen2Inner)
-      .outerRadius(gen2Outer);
+      // Spouse card + connector
+      if (hasSp) {
+        el.append("line")
+          .attr("x1", leftX + CARD_W / 2).attr("y1", 0)
+          .attr("x2", rightX - CARD_W / 2).attr("y2", 0)
+          .attr("stroke", "#c5ccc3").attr("stroke-width", 1.5);
 
-    g.append("path")
-      .attr("d", gen2Arc({ startAngle: 0, endAngle: 2 * Math.PI }))
-      .attr("fill", genColors[2])
-      .attr("stroke", "#1a2e1e")
-      .attr("stroke-width", 2);
+        drawPersonCard(el, spouse, d.data.generation, rightX);
+      }
 
-    // Draw wedge dividers for Gen 2
-    gen2Children.forEach(child => {
-      const startRad = (child.startAngle - 90) * Math.PI / 180;
-
-      // Draw divider line at start of each wedge
-      const x1 = Math.cos(startRad) * gen2Inner;
-      const y1 = Math.sin(startRad) * gen2Inner;
-      const x2 = Math.cos(startRad) * gen2Outer;
-      const y2 = Math.sin(startRad) * gen2Outer;
-
-      g.append("line")
-        .attr("x1", x1)
-        .attr("y1", y1)
-        .attr("x2", x2)
-        .attr("y2", y2)
-        .attr("stroke", "#1a2e1e")
-        .attr("stroke-width", 1);
-    });
-
-    // ── GEN 2 NAMES ──
-    // TODO: Implement tangential stacked text for narrow wedges
-    // Challenge: Need to figure out how to stack multiple lines of tangential text
-
-    // Scroll to center on load
-    window.addEventListener('load', () => {
-      const centerX = config.centerX - window.innerWidth / 2;
-      const centerY = config.centerY - window.innerHeight / 2 + 60;
-      window.scrollTo(centerX, centerY);
-    });
+      drawExpandBadge(el, d);
+    }
 
     // ══════════════════════════════════════════════
-    // SEARCH FUNCTIONALITY
+    // CONTROLS
     // ══════════════════════════════════════════════
-    const searchInput = document.getElementById('search-input');
 
-    function highlightMatches(searchTerm) {
-      const term = searchTerm.toLowerCase().trim();
-      const personGroups = document.querySelectorAll('.person-group');
+    function zoomIn() {
+      const cur = d3.zoomTransform(svg.node());
+      svg.transition().duration(300).call(zoomBehavior.scaleTo, cur.k * 1.4);
+    }
+
+    function zoomOut() {
+      const cur = d3.zoomTransform(svg.node());
+      svg.transition().duration(300).call(zoomBehavior.scaleTo, cur.k / 1.4);
+    }
+
+    function fitToScreen() {
+      const bounds = g.node().getBBox();
+      const parent = svg.node().getBoundingClientRect();
+      if (bounds.width === 0 || parent.width === 0) return;
+
+      const padding = 80;
+      const scale = Math.min(
+        (parent.width - padding * 2) / bounds.width,
+        (parent.height - padding * 2) / bounds.height,
+        1.2
+      );
+      const cx = bounds.x + bounds.width / 2;
+      const cy = bounds.y + bounds.height / 2;
+
+      svg.transition().duration(500).call(
+        zoomBehavior.transform,
+        d3.zoomIdentity
+          .translate(parent.width / 2, parent.height / 2)
+          .scale(scale)
+          .translate(-cx, -cy)
+      );
+    }
+
+    function expandAll() {
+      root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+      draw();
+      setTimeout(fitToScreen, 100);
+    }
+
+    function collapseToGen1() {
+      root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+      root.each(d => { if (d.depth >= 1) d.children = null; });
+      draw();
+      setTimeout(fitToScreen, 100);
+    }
+
+    function resetTree() {
+      // Clear search
+      document.getElementById("search-input").value = "";
+      document.getElementById("search-info").textContent = "";
+      // Clear relationship finder
+      relInputA.value = "";
+      relInputB.value = "";
+      selectedA = null;
+      selectedB = null;
+      lastPathResult = null;
+      relResult.textContent = "";
+      relLca.textContent = "";
+      relShowBtn.style.display = "none";
+      stopJourney();
+      // Reset tree to default collapsed state
+      g.selectAll(".node-card").style("opacity", 1);
+      g.selectAll(".link").attr("stroke", "#c5ccc3").attr("stroke-width", 1.5);
+      g.selectAll(".journey-label").remove();
+      collapseToGen1();
+    }
+
+    // ══════════════════════════════════════════════
+    // SEARCH
+    // ══════════════════════════════════════════════
+
+    const searchAc = document.getElementById("search-ac");
+    const searchInput = document.getElementById("search-input");
+
+    // Show autocomplete dropdown as user types
+    searchInput.addEventListener("input", function() {
+      const term = this.value.toLowerCase().trim();
+      if (term.length >= 1) {
+        const acMatches = sortedPeople.filter(p =>
+          p.name.toLowerCase().includes(term) ||
+          (p.nickname && p.nickname.toLowerCase().includes(term))
+        ).slice(0, 8);
+        if (acMatches.length > 0) {
+          searchAc.innerHTML = acMatches.map((p, i) => {
+            const nick = p.nickname ? ' "' + p.nickname + '"' : '';
+            const tag = p.isSpouse ? ' <span class="gen-tag">(spouse, Gen ' + p.generation + ')</span>' : ' <span class="gen-tag">(Gen ' + p.generation + ')</span>';
+            return `<div class="rel-option" data-idx="${i}">${p.name}${nick}${tag}</div>`;
+          }).join("");
+          searchAc.classList.add("open");
+          searchAc.querySelectorAll(".rel-option").forEach((el, i) => {
+            el.addEventListener("click", () => {
+              searchInput.value = acMatches[i].name;
+              searchAc.classList.remove("open");
+              doSearch(acMatches[i].name.toLowerCase());
+            });
+          });
+        } else {
+          searchAc.classList.remove("open");
+        }
+      } else {
+        searchAc.classList.remove("open");
+      }
+      doSearch(term);
+    });
+    searchInput.addEventListener("blur", () => setTimeout(() => searchAc.classList.remove("open"), 150));
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const first = searchAc.querySelector(".rel-option");
+        if (first) first.click();
+        searchAc.classList.remove("open");
+      }
+    });
+
+    function doSearch(term) {
+      const info = document.getElementById("search-info");
 
       if (!term) {
-        // No search - restore all to full opacity
-        personGroups.forEach(group => {
-          group.style.opacity = '1';
-        });
+        // Collapse back to default and reset
+        root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+        root.each(d => { if (d.depth >= 1) d.children = null; });
+        draw();
+        g.selectAll(".node-card").style("opacity", 1);
+        info.textContent = "";
+        setTimeout(fitToScreen, 100);
         return;
       }
 
-      // Find matching person IDs
-      const matchingIds = new Set();
-      allPeople.forEach(person => {
-        if (person.name.toLowerCase().includes(term)) {
-          matchingIds.add(person.id);
-        }
+      // Find matches in the full data (allPeopleFlat), not D3 nodes
+      const matches = allPeopleFlat.filter(p => {
+        return p.name.toLowerCase().includes(term)
+          || (p.nickname && p.nickname.toLowerCase().includes(term));
       });
 
-      // Apply opacity based on matches
-      personGroups.forEach(group => {
-        const personId = group.getAttribute('data-person-id');
-        if (matchingIds.has(personId)) {
-          group.style.opacity = '1';
-        } else {
-          group.style.opacity = '0.2';
+      info.textContent = matches.length > 0 ? matches.length + " found" : "No matches";
+
+      if (matches.length === 0) return;
+
+      // Only expand ancestors of matched nodes — not the whole tree
+      // First collapse everything
+      root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+      root.each(d => { if (d.depth >= 1) d.children = null; });
+
+      // Then expand only the paths to matches
+      const matchDataNodes = new Set(matches.map(m => m.isSpouse ? m.partnerNode : m.node));
+
+      function expandToNode(targetData) {
+        // Walk the D3 hierarchy to find and expand ancestors
+        // We need to repeatedly expand until we can see the target
+        let found = false;
+        for (let attempt = 0; attempt < 10 && !found; attempt++) {
+          root.each(d => {
+            if (matchDataNodes.has(d.data)) found = true;
+            // If this node's hidden children contain a match, expand it
+            if (!d.children && d._allChildren) {
+              const hasMatch = d._allChildren.some(function check(child) {
+                if (matchDataNodes.has(child.data)) return true;
+                if (child.data.isMarriageNode && child.children) {
+                  return child.children.some(check);
+                }
+                if (child._allChildren) return child._allChildren.some(check);
+                if (child.children) return child.children.some(check);
+                return false;
+              });
+              if (hasMatch) d.children = d._allChildren;
+            }
+          });
+        }
+      }
+
+      expandToNode();
+      draw();
+
+      // Dim non-matches — also highlight marriage nodes whose name matches
+      const matchD3Set = new Set();
+      root.descendants().forEach(d => {
+        if (matchDataNodes.has(d.data)) matchD3Set.add(d);
+        // Also highlight marriage pseudo-nodes whose name matches the search
+        if (d.data.isMarriageNode && d.data.name.toLowerCase().includes(term)) {
+          matchD3Set.add(d);
+        }
+      });
+      g.selectAll(".node-card").style("opacity", d => matchD3Set.has(d) ? 1 : 0.15);
+
+      // Zoom in tight to the first match
+      const firstMatch = root.descendants().find(d => matchDataNodes.has(d.data));
+      if (firstMatch) {
+        const parentRect = svg.node().getBoundingClientRect();
+        svg.transition().duration(400).call(
+          zoomBehavior.transform,
+          d3.zoomIdentity
+            .translate(parentRect.width / 2, parentRect.height / 2)
+            .scale(0.85)
+            .translate(-firstMatch.x, -firstMatch.y)
+        );
+      }
+    }
+
+    // ══════════════════════════════════════════════
+    // INIT
+    // ══════════════════════════════════════════════
+
+    // ══════════════════════════════════════════════
+    // RELATIONSHIP CALCULATOR — Step 1: LCA Algorithm
+    // Works on raw treeData, independent of D3/collapse state
+    // ══════════════════════════════════════════════
+
+    // Build a flat lookup of all people (blood relatives only, not marriage pseudo-nodes)
+    // Each entry: { name, generation, node, parent }
+    const allPeopleFlat = [];
+
+    function buildPeopleLookup(node, parent) {
+      if (node.isMarriageNode) {
+        // Marriage node itself is a spouse — add them linked to the blood parent
+        allPeopleFlat.push({
+          name: node.name, generation: node.generation, node: node,
+          parent: parent, isSpouse: true, partnerNode: parent
+        });
+        if (node.children) {
+          node.children.forEach(c => buildPeopleLookup(c, parent));
+        }
+        return;
+      }
+      allPeopleFlat.push({ name: node.name, nickname: node.nickname || null, generation: node.generation, node: node, parent: parent });
+      // Add single spouse if present
+      if (node.spouse) {
+        allPeopleFlat.push({
+          name: node.spouse, generation: node.generation, node: node,
+          parent: parent, isSpouse: true, partnerNode: node
+        });
+      }
+      if (node.children) {
+        node.children.forEach(c => buildPeopleLookup(c, node));
+      }
+    }
+    // Run AFTER preprocessMarriages has converted marriages to pseudo-nodes
+    buildPeopleLookup(treeData, null);
+
+    // Build parent map: node → parent node (skipping marriage pseudo-nodes)
+    const parentMap = new Map();
+    function buildParentMap(node, bloodParent) {
+      if (node.isMarriageNode) {
+        // Marriage node's children belong to the blood parent above
+        if (node.children) {
+          node.children.forEach(c => buildParentMap(c, bloodParent));
+        }
+        return;
+      }
+      parentMap.set(node, bloodParent);
+      if (node.children) {
+        node.children.forEach(c => {
+          if (c.isMarriageNode) {
+            // Children of marriage nodes belong to this blood parent
+            buildParentMap(c, node);
+          } else {
+            buildParentMap(c, node);
+          }
+        });
+      }
+    }
+    buildParentMap(treeData, null);
+
+    // Get ancestors chain: [self, parent, grandparent, ..., root]
+    function getAncestors(node) {
+      const chain = [];
+      let current = node;
+      while (current) {
+        chain.push(current);
+        current = parentMap.get(current) || null;
+      }
+      return chain;
+    }
+
+    // Find Lowest Common Ancestor and return path
+    function findLCA(nodeA, nodeB) {
+      const ancestorsA = getAncestors(nodeA);
+      const ancestorsB = getAncestors(nodeB);
+
+      // Convert B's ancestors to a Set for fast lookup
+      const setB = new Set(ancestorsB);
+
+      // Walk up A's ancestors until we find one in B's chain
+      let lca = null;
+      for (const ancestor of ancestorsA) {
+        if (setB.has(ancestor)) {
+          lca = ancestor;
+          break;
+        }
+      }
+
+      if (!lca) return null;
+
+      // Build path: A → ... → LCA → ... → B
+      const pathUp = []; // A up to LCA (inclusive)
+      for (const a of ancestorsA) {
+        pathUp.push(a);
+        if (a === lca) break;
+      }
+
+      const pathDown = []; // LCA down to B (exclusive of LCA)
+      for (const b of ancestorsB) {
+        if (b === lca) break;
+        pathDown.push(b);
+      }
+      pathDown.reverse();
+
+      const fullPath = [...pathUp, ...pathDown];
+
+      // Generation distances from LCA
+      const stepsA = pathUp.length - 1;  // A to LCA
+      const stepsB = pathDown.length;     // LCA to B
+
+      return { lca, path: fullPath, stepsA, stepsB, personA: nodeA, personB: nodeB };
+    }
+
+    // Find a person entry by name or nickname
+    function findPersonByName(name) {
+      const lower = name.toLowerCase();
+      return allPeopleFlat.find(p =>
+        p.name.toLowerCase() === lower ||
+        (p.nickname && p.nickname.toLowerCase() === lower)
+      ) || null;
+    }
+
+    // Get the blood-relative node for LCA calculation (spouse → their partner)
+    function getBloodNode(entry) {
+      if (!entry) return null;
+      return entry.isSpouse ? entry.partnerNode : entry.node;
+    }
+
+    // ══════════════════════════════════════════════
+    // Step 2: Relationship Labeler
+    // ══════════════════════════════════════════════
+
+    function getRelationshipLabel(stepsA, stepsB) {
+      // Same person
+      if (stepsA === 0 && stepsB === 0) return "same person";
+
+      // Direct ancestor/descendant
+      if (stepsA === 0 || stepsB === 0) {
+        const steps = Math.max(stepsA, stepsB);
+        const isAncestor = stepsA === 0; // A is ancestor of B
+        if (steps === 1) return isAncestor ? "parent / child" : "child / parent";
+        if (steps === 2) return isAncestor ? "grandparent / grandchild" : "grandchild / grandparent";
+        const greats = steps - 2;
+        const prefix = greats === 1 ? "great-" : greats + "x great-";
+        return isAncestor
+          ? prefix + "grandparent / " + prefix + "grandchild"
+          : prefix + "grandchild / " + prefix + "grandparent";
+      }
+
+      // Siblings
+      if (stepsA === 1 && stepsB === 1) return "siblings";
+
+      // Uncle/aunt / niece/nephew
+      if (stepsA === 1 || stepsB === 1) {
+        const otherSteps = Math.max(stepsA, stepsB);
+        if (otherSteps === 2) return "uncle·aunt / niece·nephew";
+        const greats = otherSteps - 2;
+        const prefix = greats === 1 ? "great-" : greats + "x great-";
+        return prefix + "uncle·aunt / " + prefix + "niece·nephew";
+      }
+
+      // Cousins
+      const cousinDegree = Math.min(stepsA, stepsB) - 1;
+      const removed = Math.abs(stepsA - stepsB);
+
+      const ordinal = cousinDegree === 1 ? "1st" : cousinDegree === 2 ? "2nd" : cousinDegree === 3 ? "3rd" : cousinDegree + "th";
+
+      let label = ordinal + " cousins";
+      if (removed > 0) {
+        const removedText = removed === 1 ? "once" : removed === 2 ? "twice" : removed + "x";
+        label += ", " + removedText + " removed";
+      }
+      return label;
+    }
+
+    // ══════════════════════════════════════════════
+    // Step 3: UI — Autocomplete + Calculate
+    // ══════════════════════════════════════════════
+
+    const relInputA = document.getElementById("rel-person-a");
+    const relInputB = document.getElementById("rel-person-b");
+    const relAcA = document.getElementById("rel-ac-a");
+    const relAcB = document.getElementById("rel-ac-b");
+    const relResult = document.getElementById("rel-result");
+    const relLca = document.getElementById("rel-lca");
+    const relShowBtn = document.getElementById("rel-show-btn");
+    const journeyControls = document.getElementById("journey-controls");
+    const journeyStatus = document.getElementById("journey-status");
+    const journeyPauseBtn = document.getElementById("journey-pause-btn");
+
+    let lastPathResult = null;
+    let journeyPaused = false;
+    let journeyStopped = false;
+    let journeyResolve = null;  // resolve function for pause/resume
+
+    let selectedA = null;  // stored entry reference { name, node, isSpouse, partnerNode }
+    let selectedB = null;
+
+    // Sort people alphabetically for autocomplete
+    const sortedPeople = allPeopleFlat
+      .filter(p => !p.node.isFounders)
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    function setupAutocomplete(input, dropdown, onSelect) {
+      input.addEventListener("input", () => {
+        const term = input.value.toLowerCase().trim();
+        if (term.length < 1) { dropdown.classList.remove("open"); return; }
+
+        const matches = sortedPeople.filter(p =>
+          p.name.toLowerCase().includes(term) ||
+          (p.nickname && p.nickname.toLowerCase().includes(term))
+        ).slice(0, 10);
+        if (matches.length === 0) { dropdown.classList.remove("open"); return; }
+
+        dropdown.innerHTML = matches.map((p, i) => {
+          const nick = p.nickname ? ' "' + p.nickname + '"' : '';
+          const tag = p.isSpouse ? ' <span class="gen-tag">(spouse, Gen ' + p.generation + ')</span>' : ' <span class="gen-tag">Gen ' + p.generation + '</span>';
+          return `<div class="rel-option" data-idx="${i}">${p.name}${nick}${tag}</div>`;
+        }).join("");
+
+        dropdown.classList.add("open");
+
+        dropdown.querySelectorAll(".rel-option").forEach((el, i) => {
+          el.addEventListener("click", () => {
+            input.value = matches[i].name;
+            onSelect(matches[i]);  // store full entry, not just node
+            dropdown.classList.remove("open");
+          });
+        });
+      });
+
+      // Close on blur (slight delay so click registers)
+      input.addEventListener("blur", () => setTimeout(() => dropdown.classList.remove("open"), 150));
+
+      // Keyboard nav
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const first = dropdown.querySelector(".rel-option");
+          if (first) first.click();
         }
       });
     }
 
-    searchInput.addEventListener('input', (e) => {
-      highlightMatches(e.target.value);
-    });
-  </script>
+    setupAutocomplete(relInputA, relAcA, (entry) => { selectedA = entry; });
+    setupAutocomplete(relInputB, relAcB, (entry) => { selectedB = entry; });
 
-  <footer>
-    <p>Treasure Island Camp · Pointe au Baril, Ontario · Est. 1926</p>
-  </footer>
+    // Auto-clear highlights when inputs change
+    relInputA.addEventListener("input", () => { selectedA = null; clearHighlights(); });
+    relInputB.addEventListener("input", () => { selectedB = null; clearHighlights(); });
+
+    function clearHighlights() {
+      relResult.textContent = "";
+      relLca.textContent = "";
+      relShowBtn.style.display = "none";
+      lastPathResult = null;
+      stopJourney();
+      g.selectAll(".node-card").style("opacity", 1);
+      g.selectAll(".link").attr("stroke", "#c5ccc3").attr("stroke-width", 1.5);
+      g.selectAll(".journey-label").remove();
+    }
+
+    function swapPersons() {
+      const tmpName = relInputA.value;
+      const tmpNode = selectedA;
+      relInputA.value = relInputB.value;
+      selectedA = selectedB;
+      relInputB.value = tmpName;
+      selectedB = tmpNode;
+    }
+
+    function calculateRelationship() {
+      // Try to resolve by name if user typed but didn't click autocomplete
+      if (!selectedA && relInputA.value) selectedA = findPersonByName(relInputA.value);
+      if (!selectedB && relInputB.value) selectedB = findPersonByName(relInputB.value);
+
+      if (!selectedA || !selectedB) {
+        relResult.textContent = "Please select two people";
+        relResult.style.color = "#a33";
+        return;
+      }
+
+      // Get blood-relative nodes (spouses map to their partner)
+      const bloodA = getBloodNode(selectedA);
+      const bloodB = getBloodNode(selectedB);
+
+      if (bloodA === bloodB) {
+        if (selectedA.name === selectedB.name) {
+          relResult.textContent = "Same person!";
+        } else {
+          relResult.textContent = "Spouses";
+        }
+        relResult.style.color = "var(--green-dark)";
+        relLca.textContent = "";
+        relShowBtn.style.display = "none";
+        relClearBtn.style.display = "inline";
+        lastPathResult = null;
+        return;
+      }
+
+      const result = findLCA(bloodA, bloodB);
+      if (!result) {
+        relResult.textContent = "No relation found";
+        relResult.style.color = "#a33";
+        return;
+      }
+
+      let label = getRelationshipLabel(result.stepsA, result.stepsB);
+
+      // Add "by marriage" qualifier if one or both are spouses
+      const aIsSpouse = selectedA.isSpouse;
+      const bIsSpouse = selectedB.isSpouse;
+      if (aIsSpouse || bIsSpouse) {
+        label += " (by marriage)";
+      }
+
+      relResult.textContent = label;
+      relResult.style.color = "var(--green-dark)";
+      relLca.textContent = "via " + result.lca.name;
+      relShowBtn.style.display = "inline";
+      lastPathResult = result;
+
+      // Highlight path immediately (no zoom/navigation)
+      highlightPath(result.path);
+
+      console.log("Relationship:", label,
+        aIsSpouse ? `(${selectedA.name} → spouse of ${bloodA.name})` : "",
+        bIsSpouse ? `(${selectedB.name} → spouse of ${bloodB.name})` : "",
+        "| Path:", result.path.map(n => n.name).join(" → "));
+    }
+
+    function showOnTree() {
+      if (!lastPathResult) return;
+      // Path is already highlighted from "Find" — just start the journey
+      journeyStopped = false;
+      journeyPaused = false;
+      journeyPauseBtn.textContent = "⏸ Pause";
+      journeyStatus.textContent = "Following path...";
+      journeyControls.classList.add("visible");
+      animateJourney(lastPathResult);
+    }
+
+    // ══════════════════════════════════════════════
+    // Step 5: Animated Camera Journey
+    // ══════════════════════════════════════════════
+
+    function animateJourney(result) {
+      const pathNodes = result.path;
+      const lcaNode = result.lca;
+      const stepsA = result.stepsA;
+
+      // Find D3 nodes for each path node
+      const allD3 = root.descendants();
+      const d3Path = pathNodes.map(rawNode => {
+        let d3n = allD3.find(d => d.data === rawNode);
+        if (!d3n) {
+          d3n = allD3.find(d => d.data.name === rawNode.name && d.data.generation === rawNode.generation);
+        }
+        return d3n;
+      }).filter(Boolean);
+
+      if (d3Path.length === 0) return;
+
+      g.selectAll(".journey-label").remove();
+
+      const parent = svg.node().getBoundingClientRect();
+      const zoomScale = 0.9;
+      const pauseMs = 1200;
+      const transMs = 600;
+
+      function waitForResume() {
+        return new Promise(resolve => { journeyResolve = resolve; });
+      }
+
+      function panToNode(d3node) {
+        return new Promise(resolve => {
+          const transform = d3.zoomIdentity
+            .translate(parent.width / 2, parent.height / 2)
+            .scale(zoomScale)
+            .translate(-d3node.x, -d3node.y);
+
+          svg.transition().duration(transMs).call(zoomBehavior.transform, transform)
+            .on("end", resolve);
+        });
+      }
+
+      function wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      async function runJourney() {
+        for (let i = 0; i < d3Path.length; i++) {
+          if (journeyStopped) break;
+          if (journeyPaused) await waitForResume();
+          if (journeyStopped) break;
+
+          const d3node = d3Path[i];
+          const rawNode = pathNodes[i];
+
+          // Determine label
+          let label = "";
+          let statusText = "";
+          if (i === 0) {
+            label = "▶ " + rawNode.name;
+            statusText = "Starting at " + rawNode.name;
+          } else if (rawNode === lcaNode) {
+            label = "★ " + rawNode.name;
+            statusText = "Common Ancestor: " + rawNode.name;
+          } else if (i < stepsA) {
+            label = "↑ " + rawNode.name;
+            statusText = "Going up...";
+          } else if (i === d3Path.length - 1) {
+            label = "▶ " + rawNode.name;
+            statusText = "Arriving at " + rawNode.name;
+          } else {
+            label = "↓ " + rawNode.name;
+            statusText = "Going down...";
+          }
+
+          journeyStatus.textContent = statusText;
+
+          g.selectAll(".journey-label").remove();
+          g.append("text")
+            .attr("class", "journey-label")
+            .attr("x", d3node.x)
+            .attr("y", d3node.y - CARD_H / 2 - 14)
+            .attr("text-anchor", "middle")
+            .attr("font-family", "Lato, sans-serif")
+            .attr("font-size", 13)
+            .attr("font-weight", "700")
+            .attr("fill", rawNode === lcaNode ? "#c8860a" : "#1e4d2b")
+            .text(label);
+
+          await panToNode(d3node);
+          if (i < d3Path.length - 1) await wait(pauseMs);
+        }
+
+        // Journey complete — zoom out to full path
+        if (!journeyStopped) {
+          journeyStatus.textContent = relResult.textContent;
+          g.selectAll(".journey-label").remove();
+
+          const midIdx = Math.floor(d3Path.length / 2);
+          const midNode = d3Path[midIdx];
+          if (midNode) {
+            g.append("text")
+              .attr("class", "journey-label")
+              .attr("x", midNode.x)
+              .attr("y", midNode.y - CARD_H / 2 - 14)
+              .attr("text-anchor", "middle")
+              .attr("font-family", "Playfair Display, serif")
+              .attr("font-size", 15)
+              .attr("font-weight", "700")
+              .attr("fill", "#c8860a")
+              .text(relResult.textContent);
+          }
+
+          await wait(800);
+          fitToPath(new Set(d3Path));
+
+          // Hide controls after a delay
+          setTimeout(() => journeyControls.classList.remove("visible"), 2000);
+        }
+      }
+
+      runJourney();
+    }
+
+    // ══════════════════════════════════════════════
+    // Step 4: Expand path + Highlight
+    // ══════════════════════════════════════════════
+
+    function highlightPath(pathNodes) {
+      // Build a set of raw data nodes in the path
+      const pathSet = new Set(pathNodes);
+
+      // Step 4a: Expand all ancestors of path nodes so they're visible
+      // We need to walk the D3 hierarchy and uncollapse nodes along the path
+      root.each(d => { if (d._allChildren) d.children = d._allChildren; });
+      draw();
+
+      // Step 4b: Find the D3 nodes that correspond to our path
+      // Path nodes are raw treeData nodes. D3 nodes have .data pointing to them.
+      // But marriage pseudo-nodes sit between blood parents and children in D3.
+      // We need to match by reference.
+      const allD3Nodes = root.descendants();
+
+      // Build set of D3 nodes whose .data is in the path OR whose .data is a
+      // marriage node that connects two path nodes (parent and child both in path)
+      const pathD3Set = new Set();
+      allD3Nodes.forEach(d3node => {
+        if (pathSet.has(d3node.data)) {
+          pathD3Set.add(d3node);
+        }
+        // Include marriage nodes that bridge two path members
+        if (d3node.data.isMarriageNode) {
+          const parent = d3node.parent;
+          const children = d3node.children || d3node._allChildren || [];
+          const parentInPath = parent && pathSet.has(parent.data);
+          const childInPath = children.some(c => pathSet.has(c.data));
+          if (parentInPath && childInPath) {
+            pathD3Set.add(d3node);
+          }
+        }
+      });
+
+      // Step 4c: Build set of link pairs that are on the path
+      const pathLinkSet = new Set();
+      const allLinks = root.links();
+      allLinks.forEach(link => {
+        if (pathD3Set.has(link.source) && pathD3Set.has(link.target)) {
+          pathLinkSet.add(link);
+        }
+      });
+
+      // Step 4d: Dim non-path nodes, highlight path nodes
+      g.selectAll(".node-card")
+        .style("opacity", d => pathD3Set.has(d) ? 1 : 0.12);
+
+      // Highlight path links in amber, dim others
+      g.selectAll(".link")
+        .attr("stroke", (d, i, nodes) => {
+          // D3 binds data to links — check if this link is in our path
+          const linkData = d3.select(nodes[i]).datum();
+          if (!linkData) return "#e8e4dc";
+          return (pathD3Set.has(linkData.source) && pathD3Set.has(linkData.target)) ? "#c8860a" : "#e8e4dc";
+        })
+        .attr("stroke-width", (d, i, nodes) => {
+          const linkData = d3.select(nodes[i]).datum();
+          if (!linkData) return 1;
+          return (pathD3Set.has(linkData.source) && pathD3Set.has(linkData.target)) ? 3 : 1;
+        });
+
+    }
+
+    function fitToPath(pathD3Set) {
+      const pathNodes = Array.from(pathD3Set);
+      if (pathNodes.length === 0) return;
+
+      // Calculate bounding box of just the path nodes
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      pathNodes.forEach(d => {
+        minX = Math.min(minX, d.x - CARD_W);
+        maxX = Math.max(maxX, d.x + CARD_W);
+        minY = Math.min(minY, d.y - CARD_H);
+        maxY = Math.max(maxY, d.y + CARD_H);
+      });
+
+      const parent = svg.node().getBoundingClientRect();
+      if (parent.width === 0) return;
+
+      const padding = 60;
+      const bw = maxX - minX;
+      const bh = maxY - minY;
+      const scale = Math.min(
+        (parent.width - padding * 2) / bw,
+        (parent.height - padding * 2) / bh,
+        1.2
+      );
+      const cx = (minX + maxX) / 2;
+      const cy = (minY + maxY) / 2;
+
+      svg.transition().duration(600).call(
+        zoomBehavior.transform,
+        d3.zoomIdentity
+          .translate(parent.width / 2, parent.height / 2)
+          .scale(scale)
+          .translate(-cx, -cy)
+      );
+    }
+
+    // Journey pause/stop/resume controls
+    function toggleJourneyPause() {
+      journeyPaused = !journeyPaused;
+      journeyPauseBtn.textContent = journeyPaused ? "▶ Resume" : "⏸ Pause";
+      journeyStatus.textContent = journeyPaused ? "Paused" : "Following path...";
+      if (!journeyPaused && journeyResolve) {
+        journeyResolve();
+        journeyResolve = null;
+      }
+    }
+
+    function stopJourney() {
+      journeyStopped = true;
+      journeyPaused = false;
+      journeyResolve = null;
+      journeyControls.classList.remove("visible");
+      g.selectAll(".journey-label").remove();
+    }
+
+    // ══════════════════════════════════════════════
+    // Step 1+2 TEST — open browser console to verify
+    // ══════════════════════════════════════════════
+
+    console.log("People found:", allPeopleFlat.length);
+    console.log("Parent map size:", parentMap.size);
+
+    function testLCA(nameA, nameB) {
+      const entryA = findPersonByName(nameA);
+      const entryB = findPersonByName(nameB);
+      if (!entryA) { console.warn("Not found:", nameA); return; }
+      if (!entryB) { console.warn("Not found:", nameB); return; }
+      const bloodA = getBloodNode(entryA);
+      const bloodB = getBloodNode(entryB);
+      if (bloodA === bloodB) {
+        console.log(`${nameA} ↔ ${nameB}  →  SPOUSES or SAME PERSON`);
+        return;
+      }
+      const result = findLCA(bloodA, bloodB);
+      if (!result) { console.warn("No common ancestor found"); return; }
+      let label = getRelationshipLabel(result.stepsA, result.stepsB);
+      if (entryA.isSpouse || entryB.isSpouse) label += " (by marriage)";
+      console.log(
+        `${nameA} ↔ ${nameB}  →  ${label.toUpperCase()}`,
+        `\n  LCA: ${result.lca.name} (gen ${result.lca.generation})`,
+        `\n  Steps: ${result.stepsA} up, ${result.stepsB} down`,
+        `\n  Path: ${result.path.map(n => n.name).join(" → ")}`
+      );
+    }
+
+    // Test cases — check browser console (Cmd+Option+J)
+    console.log("═══ RELATIONSHIP CALCULATOR TESTS ═══");
+    testLCA("Benjamin Boughton", "Jennifer Boughton");     // Siblings
+    testLCA("Benjamin Boughton", "Bill Boughton");         // Parent/child
+    testLCA("Benjamin Boughton", "Peter Horning");         // 1st cousins
+    testLCA("Benjamin Boughton", "Chloe Boughton");        // 1st cousins
+    testLCA("Benjamin Boughton", "Eila Horning");          // 1st cousins once removed
+    testLCA("Eila Horning", "Chloe Boughton");             // 2nd cousins
+    testLCA("Roland Richardson", "Adelaide Richardson");    // Siblings (Gen 1)
+    testLCA("Benjamin Boughton", "Nancy Kurlin");          // 1st cousins once removed
+    testLCA("Chloe Boughton", "Charlotte Parsley");        // 3rd cousins (across Roland → Adelaide)
+    testLCA("Benjamin Boughton", "Alex Scott");            // 2nd cousins once removed (across Roland → Coombs)
+    testLCA("Benjamin Boughton", "Joe Boughton");          // Grandfather (by marriage)
+    testLCA("Joe Boughton", "Althea Ford");                // Spouses' in-laws (by marriage)
+
+    draw();
+    setTimeout(fitToScreen, 50);
+  </script>
 
 </body>
 </html>

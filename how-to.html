@@ -257,7 +257,7 @@
       <li><a href="how-to.html" class="active">How-to</a></li>
       <li><a href="family.html">Family</a></li>
       <li><a href="schedule.html">Schedule</a></li>
-      <li><a href="archive.html">Archive</a></li>
+      <li><a href="documents.html">Documents</a></li>
     </ul>
   </nav>
 
@@ -265,6 +265,13 @@
     <div class="draft-badge">DRAFT — NOT YET PUBLIC</div>
     <h1>Island How-To Guide</h1>
     <p>Video guides for everything you need to know — whether it's your first visit or you haven't been up in a while.</p>
+    <div style="margin-top: 0.75rem;">
+      <input type="text" id="howto-search" placeholder="Search videos... (e.g. electricity, fire, boat)" style="
+        padding: 0.5rem 1rem; width: 320px; font-family: 'Lato', sans-serif; font-size: 0.9rem;
+        border: 2px solid #2e6b3e; border-radius: 20px; outline: none;
+      " />
+      <span id="howto-search-info" style="font-size: 0.8rem; color: #3d5a42; margin-left: 0.5rem;"></span>
+    </div>
   </header>
 
   <main class="content">
@@ -429,7 +436,7 @@
     <!-- SYSTEMS & UTILITIES -->
     <!-- ══════════════════════════════════════ -->
     <details>
-      <summary>Systems & Utilities <span class="section-count">5 videos</span></summary>
+      <summary>Systems & Utilities <span class="section-count">6 videos</span></summary>
       <div class="section-body">
 
         <div class="video-card">
@@ -474,6 +481,15 @@
           <div class="video-info">
             <h3>Holding Tanks Walkthrough</h3>
             <p>Walkthrough of the holding tanks on Treasure.</p>
+            <span class="video-tag tag-treasure">TREASURE</span>
+          </div>
+        </div>
+
+        <div class="video-card">
+          <div class="video-thumb"><span class="play-icon">▶</span></div>
+          <div class="video-info">
+            <h3>Operating the WiFi</h3>
+            <p>How to connect to and operate the WiFi system.</p>
             <span class="video-tag tag-treasure">TREASURE</span>
           </div>
         </div>
@@ -567,7 +583,7 @@
     <!-- ══════════════════════════════════════ -->
     <!-- SAFETY -->
     <!-- ══════════════════════════════════════ -->
-    <details open>
+    <details>
       <summary>🔥 Safety <span class="section-count">2 videos</span></summary>
       <div class="section-body">
 
@@ -728,6 +744,56 @@
   <footer>
     <p>Treasure Island Camp &middot; Pointe au Baril, Ontario &middot; Est. 1926</p>
   </footer>
+
+  <script>
+    const searchInput = document.getElementById('howto-search');
+    const searchInfo = document.getElementById('howto-search-info');
+    const allSections = document.querySelectorAll('main.content > details');
+
+    searchInput.addEventListener('input', function() {
+      const term = this.value.toLowerCase().trim();
+
+      if (!term) {
+        // Reset: show all cards, collapse all sections
+        allSections.forEach(section => {
+          section.removeAttribute('open');
+          section.style.display = '';
+          section.querySelectorAll('.video-card').forEach(card => card.style.display = '');
+        });
+        searchInfo.textContent = '';
+        return;
+      }
+
+      let totalMatches = 0;
+
+      allSections.forEach(section => {
+        const cards = section.querySelectorAll('.video-card');
+        let sectionMatches = 0;
+
+        cards.forEach(card => {
+          const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+          const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
+          if (title.includes(term) || desc.includes(term)) {
+            card.style.display = '';
+            sectionMatches++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (sectionMatches > 0) {
+          section.style.display = '';
+          section.setAttribute('open', '');
+        } else {
+          section.style.display = 'none';
+        }
+
+        totalMatches += sectionMatches;
+      });
+
+      searchInfo.textContent = totalMatches > 0 ? totalMatches + ' found' : 'No matches';
+    });
+  </script>
 
 </body>
 </html>
