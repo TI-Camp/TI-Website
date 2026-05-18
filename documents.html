@@ -62,8 +62,8 @@
         padding: 1rem; gap: 0; display: none;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       }
-      .nav-links.open { display: flex; }
-      .nav-links a { padding: 0.75rem 1rem; border-radius: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+      .nav-links.open { display: flex; z-index: 999; }
+      .nav-links li { width: 100%; } .nav-links a { display: block; padding: 0.75rem 1rem; border-radius: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
       .nav-links li:last-child a { border-bottom: none; }
     }
 
@@ -244,5 +244,15 @@
     <p>Treasure Island Camp &middot; Pointe au Baril, Ontario &middot; Est. 1926</p>
   </footer>
 
+  <script>
+    // close nav on outside click
+    document.addEventListener("click", function(e) {
+      const nav = document.querySelector(".nav-links");
+      const toggle = document.querySelector(".nav-toggle");
+      if (nav.classList.contains("open") && !nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove("open");
+      }
+    });
+  </script>
 </body>
 </html>
