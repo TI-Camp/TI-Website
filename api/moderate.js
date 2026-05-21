@@ -108,7 +108,17 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).send('Method not allowed');
 
   try {
-    const { action } = req.query;
+    // Determine action — either from query param or from base64 payload
+    let action = req.query.action;
+
+    if (!action && req.query.d) {
+      try {
+        const peek = JSON.parse(Buffer.from(req.query.d, 'base64url').toString('utf-8'));
+        action = peek.action;
+      } catch {
+        // will be caught below
+      }
+    }
 
     if (!action) {
       return res.status(400).send(html('Invalid Link', 'This moderation link is missing required parameters.', '#c0392b'));
@@ -117,17 +127,26 @@ export default async function handler(req, res) {
     // ── PROFILE EDIT ACTIONS (check before photo actions) ──
 
     if (action === 'approve-edit' || action === 'reject-edit') {
-      const { edit, token: editToken } = req.query;
+      // Decode from single base64url param or legacy multi-param format
+      let editData, editToken;
 
-      if (!edit || !editToken) {
+      if (req.query.d) {
+        try {
+          const decoded = JSON.parse(Buffer.from(req.query.d, 'base64url').toString('utf-8'));
+          editData = { personId: decoded.personId, field: decoded.field, value: decoded.value };
+          editToken = decoded.token;
+        } catch {
+          return res.status(400).send(html('Invalid Link', 'Could not decode edit data.', '#c0392b'));
+        }
+      } else if (req.query.edit && req.query.token) {
+        try {
+          editData = JSON.parse(decodeURIComponent(req.query.edit));
+          editToken = req.query.token;
+        } catch {
+          return res.status(400).send(html('Invalid Link', 'Could not parse edit data.', '#c0392b'));
+        }
+      } else {
         return res.status(400).send(html('Invalid Link', 'This moderation link is missing required parameters.', '#c0392b'));
-      }
-
-      let editData;
-      try {
-        editData = JSON.parse(decodeURIComponent(edit));
-      } catch {
-        return res.status(400).send(html('Invalid Link', 'Could not parse edit data.', '#c0392b'));
       }
 
       if (!verifyEditToken(editData, editToken)) {

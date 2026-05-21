@@ -34,10 +34,13 @@ export default async function handler(req, res) {
     }
 
     const token = generateEditToken(personId, field, value);
-    const editData = encodeURIComponent(JSON.stringify({ personId, field, value }));
 
-    const approveUrl = `${SITE_URL}/api/moderate?action=approve-edit&edit=${editData}&token=${token}`;
-    const rejectUrl = `${SITE_URL}/api/moderate?action=reject-edit&edit=${editData}&token=${token}`;
+    // Encode entire payload as base64url to avoid Resend click tracking breaking multi-param URLs
+    const approvePayload = Buffer.from(JSON.stringify({ action: 'approve-edit', personId, field, value, token })).toString('base64url');
+    const rejectPayload = Buffer.from(JSON.stringify({ action: 'reject-edit', personId, field, value, token })).toString('base64url');
+
+    const approveUrl = `${SITE_URL}/api/moderate?d=${approvePayload}`;
+    const rejectUrl = `${SITE_URL}/api/moderate?d=${rejectPayload}`;
 
     // Format the value for display in email
     let displayValue;
