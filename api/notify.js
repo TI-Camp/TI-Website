@@ -98,6 +98,7 @@ export default async function handler(req, res) {
         to: [MODERATOR_EMAIL],
         subject: `${publicIds.length} new photo${publicIds.length === 1 ? '' : 's'} pending review`,
         html: emailHtml,
+        tracking: { click: false },
       }),
     });
 
