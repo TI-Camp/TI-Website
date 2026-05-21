@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile - Treasure Island Camp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:  #1e4d2b;
+      --green-mid:   #2e6b3e;
+      --green-light: #4a8c5c;
+      --cream:       #f5f0e6;
+      --cream-dark:  #ede6d8;
+      --amber:       #c8860a;
+      --text-dark:   #1a2e1e;
+      --text-mid:    #3d5a42;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      padding-top: 60px;
+    }
+
+    /* ── NAVIGATION ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: var(--green-dark);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: center;
+      height: 60px; z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .nav-logo {
+      position: absolute; left: 2rem; top: 50%;
+      transform: translateY(-50%); height: 40px; width: auto;
+    }
+    .nav-links { display: flex; gap: 0.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--cream); text-decoration: none;
+      font-family: 'Lato', sans-serif; font-size: 0.9rem; font-weight: 400;
+      letter-spacing: 0.05em; padding: 0.5rem 1rem; border-radius: 4px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .nav-links a:hover { background: rgba(255, 255, 255, 0.1); }
+    .nav-links a.active { background: var(--amber); color: var(--green-dark); font-weight: 700; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--cream); margin: 5px 0; transition: 0.3s; }
+
+    @media (max-width: 768px) {
+      .nav { padding: 0 1rem; }
+      .nav-logo { left: 1rem; }
+      .nav-toggle { display: block; }
+      .nav-links {
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: var(--green-dark); flex-direction: column;
+        padding: 1rem; gap: 0; display: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      .nav-links.open { display: flex; z-index: 999; }
+      .nav-links li { width: 100%; }
+      .nav-links a { display: block; padding: 0.75rem 1rem; border-radius: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+      .nav-links li:last-child a { border-bottom: none; }
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .profile-container {
+      max-width: 820px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      color: var(--green-mid); text-decoration: none; font-size: 0.85rem;
+      margin-bottom: 1.5rem; transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--green-dark); }
+
+    /* ── HEADER CARD (photo + name + bio in one card) ── */
+    .profile-header {
+      background: white;
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      position: relative;
+    }
+
+    .profile-header-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    /* ── NICKNAMES BOX ── */
+    .nicknames-box {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--cream);
+      border: 1px solid var(--cream-dark);
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+      max-width: 220px;
+    }
+
+    .nicknames-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .nicknames-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--amber);
+    }
+
+    .nicknames-edit-btn {
+      background: none;
+      border: none;
+      font-size: 0.75rem;
+      color: var(--green-mid);
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .nicknames-edit-btn:hover { color: var(--green-dark); }
+
+    .nicknames-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .nickname-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: white;
+      border: 1px solid var(--cream-dark);
+      border-radius: 14px;
+      padding: 0.2rem 0.6rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--text-dark);
+    }
+
+    .nickname-chip.new-nick {
+      background: #fdf6e3;
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .nickname-chip .remove-nick {
+      display: none;
+      background: none;
+      border: none;
+      color: #b0a89c;
+      font-size: 0.85rem;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+    }
+    .nickname-chip .remove-nick:hover { color: #8b3a3a; }
+    .nicknames-box.editing .nickname-chip .remove-nick { display: inline; }
+
+    .nicknames-empty {
+      font-size: 0.8rem;
+      color: var(--text-mid);
+      font-style: italic;
+    }
+
+    /* Edit mode */
+    .nicknames-add-row {
+      display: none;
+      margin-top: 0.4rem;
+      gap: 0.3rem;
+      align-items: center;
+    }
+    .nicknames-box.editing .nicknames-add-row { display: flex; }
+
+    .nicknames-add-input {
+      flex: 1;
+      padding: 0.25rem 0.5rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.8rem;
+      border: 1px solid var(--green-mid);
+      border-radius: 4px;
+      outline: none;
+      min-width: 0;
+    }
+    .nicknames-add-input:focus { border-color: var(--green-dark); }
+
+    .nicknames-add-btn {
+      background: var(--green-dark);
+      color: white;
+      border: none;
+      width: 24px; height: 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .nicknames-add-btn:hover { background: var(--green-mid); }
+
+    .nicknames-submit-row {
+      display: none;
+      margin-top: 0.5rem;
+      gap: 0.4rem;
+    }
+    .nicknames-submit-row.visible { display: flex; }
+
+    .nicknames-submit-btn {
+      background: var(--amber);
+      color: white;
+      border: none;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nicknames-submit-btn:hover { background: #b07808; }
+
+    .nicknames-cancel-btn {
+      background: none;
+      border: 1px solid #ccc;
+      color: var(--text-mid);
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
+    .nicknames-cancel-btn:hover { background: var(--cream-dark); }
+
+    .nicknames-status {
+      font-size: 0.75rem;
+      margin-top: 0.4rem;
+    }
+    .nicknames-status.success { color: var(--green-mid); }
+    .nicknames-status.error { color: #8b3a3a; }
+
+    .profile-photo-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .profile-photo {
+      width: 140px; height: 140px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: var(--cream-dark);
+      border: 2px solid var(--cream-dark);
+    }
+
+    .profile-photo-placeholder {
+      width: 140px; height: 140px;
+      border-radius: 8px;
+      background: var(--cream-dark);
+      border: 2px solid #e0ddd5;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 52px;
+      color: #c5bfb2;
+    }
+
+    .upload-photo-btn {
+      position: absolute; bottom: -6px; right: -6px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--green-dark);
+      color: white;
+      border: 2px solid white;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .upload-photo-btn:hover { background: var(--green-mid); }
+
+    .profile-info { flex: 1; min-width: 0; }
+
+    .profile-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      line-height: 1.2;
+    }
+
+    .profile-maiden {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      font-style: italic;
+      margin-top: 0.15rem;
+    }
+
+    .profile-dates {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      margin-top: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .profile-dates .label {
+      font-weight: 700;
+      color: var(--green-dark);
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+    }
+
+    .profile-generation {
+      display: inline-block;
+      margin-top: 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      background: var(--cream);
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      letter-spacing: 0.03em;
+    }
+
+    /* Bio sits below the photo+name row, still inside the same card */
+    .profile-bio {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--cream-dark);
+    }
+
+    .profile-bio p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--text-dark);
+    }
+
+    .profile-bio .empty-bio {
+      color: var(--text-mid);
+      font-style: italic;
+    }
+
+    /* ── TIMELINE SECTION ── */
+    .timeline-section {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .timeline-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--green-dark);
+      margin-bottom: 1.2rem;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 5rem;
+    }
+
+    /* Vertical line */
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 3.8rem;
+      top: 0.4rem;
+      bottom: 0.4rem;
+      width: 2px;
+      background: var(--cream-dark);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 1.5rem;
+    }
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    /* Dot on the line */
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -1.25rem;
+      top: 0.55rem;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--green-mid);
+      border: 2px solid white;
+      box-shadow: 0 0 0 2px var(--cream-dark);
+    }
+
+    .timeline-year {
+      position: absolute;
+      left: -5rem;
+      top: 0.15rem;
+      width: 3.2rem;
+      text-align: right;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-mid);
+      line-height: 1.4;
+    }
+
+    .timeline-content {
+      background: var(--cream);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--cream-dark);
+    }
+
+    .timeline-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--green-dark);
+    }
+
+    .timeline-detail {
+      font-size: 0.85rem;
+      color: var(--text-mid);
+      margin-top: 0.15rem;
+    }
+
+    .timeline-empty {
+      color: var(--text-mid);
+      font-style: italic;
+      font-size: 0.9rem;
+      padding-left: 0.5rem;
+    }
+
+    /* ── NOT FOUND / LOADING ── */
+    .profile-not-found {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .profile-not-found h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--green-dark);
+      margin-bottom: 0.5rem;
+    }
+    .profile-not-found p { color: var(--text-mid); margin-bottom: 1.5rem; }
+    .profile-not-found a { color: var(--green-mid); }
+
+    .profile-loading {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-mid);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      .profile-header { padding: 1.5rem; padding-top: 3.5rem; }
+      .profile-header-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+      }
+      .profile-photo, .profile-photo-placeholder { width: 120px; height: 120px; font-size: 44px; }
+      .profile-name { font-size: 1.6rem; }
+      .profile-dates { text-align: center; }
+      .nicknames-box {
+        position: relative;
+        top: auto; right: auto;
+        max-width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      .timeline-section { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="index.html"><img src="logo.png" alt="Treasure Island" class="nav-logo" /></a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="how-to.html">How-to</a></li>
+      <li><a href="family.html">Family</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="documents.html">Documents</a></li>
+    </ul>
+  </nav>
+
+  <main class="profile-container" id="profile-main">
+    <div class="profile-loading">Loading profile...</div>
+  </main>
+
+  <script>
+    const CLOUD_NAME = "dqni1tcfn";
+    const params = new URLSearchParams(window.location.search);
+    const personId = params.get("id");
+
+    const generationLabels = {
+      0: "Founders",
+      1: "Generation 1",
+      2: "Generation 2",
+      3: "Generation 3",
+      4: "Generation 4",
+      5: "Generation 5"
+    };
+
+    async function loadProfile() {
+      const main = document.getElementById("profile-main");
+
+      if (!personId) {
+        showNotFound(main, "No profile specified.");
+        return;
+      }
+
+      let profiles;
+      try {
+        const resp = await fetch("profiles.json");
+        if (!resp.ok) throw new Error("Failed to load profiles");
+        profiles = await resp.json();
+      } catch (e) {
+        main.innerHTML = '<div class="profile-not-found"><h1>Error</h1><p>Could not load profile data.</p><a href="family.html">&larr; Back to Family Tree</a></div>';
+        return;
+      }
+
+      const profile = profiles[personId];
+      if (!profile) {
+        showNotFound(main, 'Profile "' + personId + '" not found.');
+        return;
+      }
+
+      document.title = profile.name + " \u2014 Treasure Island Camp";
+      renderProfile(main, profile);
+    }
+
+    function showNotFound(main, message) {
+      main.innerHTML =
+        '<div class="profile-not-found">' +
+        '<h1>Profile Not Found</h1>' +
+        '<p>' + message + '</p>' +
+        '<a href="family.html">&larr; Back to Family Tree</a>' +
+        '</div>';
+    }
+
+    function renderProfile(main, profile) {
+      const photoPublicId = "ti-profile-photos/" + personId;
+      const photoUrl = "https://res.cloudinary.com/" + CLOUD_NAME + "/image/upload/c_fill,g_face,w_300,h_300,q_auto,f_auto/" + photoPublicId;
+
+      // -- Header: birth/death lines --
+      var datesHtml = "";
+      if (profile.birth_year) {
+        datesHtml += '<div><span class="label">BIRTH</span> ' + profile.birth_year;
+        if (profile.birth_place) datesHtml += " &bull; " + profile.birth_place;
+        datesHtml += '</div>';
+      }
+      if (profile.death_year) {
+        datesHtml += '<div><span class="label">DEATH</span> ' + profile.death_year;
+        if (profile.death_place) datesHtml += " &bull; " + profile.death_place;
+        datesHtml += '</div>';
+      }
+
+      var maidenHtml = profile.maiden_name
+        ? '<div class="profile-maiden">n\u00e9e ' + profile.maiden_name + '</div>'
+        : "";
+
+      var genLabel = generationLabels[profile.generation] || "Generation " + profile.generation;
+
+      // -- Bio (inside the same card) --
+      var bioHtml = profile.bio
+        ? '<p>' + profile.bio + '</p>'
+        : '<p class="empty-bio">No bio has been added yet.</p>';
+
+      // -- Timeline events --
+      var timelineItems = [];
+
+      if (profile.birth_year) {
+        timelineItems.push({
+          year: profile.birth_year,
+          label: "Birth",
+          detail: profile.birth_place || null
+        });
+      }
+
+      // Additional facts from the facts array
+      if (profile.facts && profile.facts.length > 0) {
+        profile.facts.forEach(function(fact) {
+          timelineItems.push({
+            year: fact.year || null,
+            label: fact.label,
+            detail: fact.value
+          });
+        });
+      }
+
+      if (profile.death_year) {
+        timelineItems.push({
+          year: profile.death_year,
+          label: "Death",
+          detail: profile.death_place || null
+        });
+      }
+
+      var timelineHtml = "";
+      if (timelineItems.length > 0) {
+        timelineHtml = '<div class="timeline">';
+        timelineItems.forEach(function(item) {
+          timelineHtml += '<div class="timeline-item">';
+          if (item.year) {
+            timelineHtml += '<div class="timeline-year">' + item.year + '</div>';
+          }
+          timelineHtml += '<div class="timeline-content">';
+          timelineHtml += '<div class="timeline-label">' + item.label + '</div>';
+          if (item.detail) {
+            timelineHtml += '<div class="timeline-detail">' + item.detail + '</div>';
+          }
+          timelineHtml += '</div></div>';
+        });
+        timelineHtml += '</div>';
+      } else {
+        timelineHtml = '<p class="timeline-empty">No timeline events yet.</p>';
+      }
+
+      // -- Nicknames box --
+      var nicknames = profile.nicknames || [];
+      var chipsHtml = "";
+      if (nicknames.length > 0) {
+        nicknames.forEach(function(n) {
+          chipsHtml += '<span class="nickname-chip">' + n + '<button class="remove-nick" data-nick="' + n + '">&times;</button></span>';
+        });
+      } else {
+        chipsHtml = '<span class="nicknames-empty">None yet</span>';
+      }
+
+      main.innerHTML =
+        '<a href="family.html" class="back-link">&larr; Back to Family Tree</a>' +
+
+        '<div class="profile-header">' +
+
+          '<div class="nicknames-box" id="nicknames-box">' +
+            '<div class="nicknames-header">' +
+              '<span class="nicknames-label">Nicknames</span>' +
+              '<button class="nicknames-edit-btn" id="nicknames-edit-btn">Edit</button>' +
+            '</div>' +
+            '<div class="nicknames-list" id="nicknames-list">' + chipsHtml + '</div>' +
+            '<div class="nicknames-add-row">' +
+              '<input type="text" class="nicknames-add-input" id="nicknames-add-input" placeholder="Add nickname..." />' +
+              '<button class="nicknames-add-btn" id="nicknames-add-btn">+</button>' +
+            '</div>' +
+            '<div class="nicknames-submit-row">' +
+              '<button class="nicknames-submit-btn" id="nicknames-submit-btn">Submit for Review</button>' +
+              '<button class="nicknames-cancel-btn" id="nicknames-cancel-btn">Cancel</button>' +
+            '</div>' +
+            '<div class="nicknames-status" id="nicknames-status"></div>' +
+          '</div>' +
+
+          '<div class="profile-header-top">' +
+
+            '<div class="profile-photo-wrap">' +
+              '<div class="profile-photo-placeholder" id="photo-placeholder">&#128100;</div>' +
+              '<img src="' + photoUrl + '" alt="' + profile.name + '" class="profile-photo" id="profile-photo-img" style="display:none;" ' +
+                'onload="this.style.display=\'block\'; document.getElementById(\'photo-placeholder\').style.display=\'none\';" ' +
+                'onerror="this.style.display=\'none\';" />' +
+              '<button class="upload-photo-btn" id="upload-photo-btn" title="Upload profile photo">&#128247;</button>' +
+            '</div>' +
+
+            '<div class="profile-info">' +
+              '<h1 class="profile-name">' + profile.name + '</h1>' +
+              maidenHtml +
+              '<div class="profile-dates">' + datesHtml + '</div>' +
+              '<span class="profile-generation">' + genLabel + '</span>' +
+            '</div>' +
+
+          '</div>' +
+
+          '<div class="profile-bio">' + bioHtml + '</div>' +
+        '</div>' +
+
+        '<div class="timeline-section">' +
+          '<h2>Timeline</h2>' +
+          timelineHtml +
+        '</div>';
+
+      // -- Nicknames edit logic --
+      var editNicknames = nicknames.slice(); // working copy
+      var box = document.getElementById("nicknames-box");
+      var listEl = document.getElementById("nicknames-list");
+      var editBtn = document.getElementById("nicknames-edit-btn");
+      var addInput = document.getElementById("nicknames-add-input");
+      var addBtn = document.getElementById("nicknames-add-btn");
+      var submitBtn = document.getElementById("nicknames-submit-btn");
+      var cancelBtn = document.getElementById("nicknames-cancel-btn");
+      var statusEl = document.getElementById("nicknames-status");
+
+      var submitRow = document.querySelector(".nicknames-submit-row");
+
+      function hasChanges() {
+        if (editNicknames.length !== nicknames.length) return true;
+        return !editNicknames.every(function(n, i) { return n === nicknames[i]; });
+      }
+
+      function updateSubmitVisibility() {
+        if (hasChanges()) {
+          submitRow.classList.add("visible");
+        } else {
+          submitRow.classList.remove("visible");
+        }
+      }
+
+      function renderChips() {
+        listEl.innerHTML = "";
+        if (editNicknames.length === 0) {
+          listEl.innerHTML = '<span class="nicknames-empty">None yet</span>';
+        } else {
+          editNicknames.forEach(function(n) {
+            var chip = document.createElement("span");
+            var isNew = nicknames.indexOf(n) === -1;
+            chip.className = "nickname-chip" + (isNew ? " new-nick" : "");
+            chip.textContent = n;
+            var removeBtn = document.createElement("button");
+            removeBtn.className = "remove-nick";
+            removeBtn.innerHTML = "&times;";
+            removeBtn.addEventListener("click", function() {
+              editNicknames = editNicknames.filter(function(x) { return x !== n; });
+              renderChips();
+            });
+            chip.appendChild(removeBtn);
+            listEl.appendChild(chip);
+          });
+        }
+        updateSubmitVisibility();
+      }
+
+      editBtn.addEventListener("click", function() {
+        editNicknames = nicknames.slice();
+        box.classList.add("editing");
+        editBtn.style.display = "none";
+        statusEl.textContent = "";
+        renderChips();
+      });
+
+      cancelBtn.addEventListener("click", function() {
+        box.classList.remove("editing");
+        submitRow.classList.remove("visible");
+        editBtn.style.display = "";
+        editNicknames = nicknames.slice();
+        renderChips();
+      });
+
+      function addNickname() {
+        var val = addInput.value.trim();
+        if (!val) return;
+        if (editNicknames.indexOf(val) === -1) {
+          editNicknames.push(val);
+          renderChips();
+        }
+        addInput.value = "";
+        addInput.focus();
+      }
+
+      addBtn.addEventListener("click", addNickname);
+      addInput.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") { e.preventDefault(); addNickname(); }
+      });
+
+      submitBtn.addEventListener("click", async function() {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+        statusEl.textContent = "";
+
+        try {
+          var resp = await fetch("/api/profile-edit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              personId: personId,
+              field: "nicknames",
+              value: editNicknames
+            })
+          });
+
+          if (!resp.ok) throw new Error("Request failed");
+
+          box.classList.remove("editing");
+          editBtn.style.display = "";
+          statusEl.className = "nicknames-status success";
+          statusEl.textContent = "Submitted for review!";
+        } catch (e) {
+          statusEl.className = "nicknames-status error";
+          statusEl.textContent = "Failed to submit. Try again.";
+        }
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit for Review";
+      });
+    }
+
+    loadProfile();
+
+    // Close nav on outside click
+    document.addEventListener("click", function(e) {
+      var nav = document.querySelector(".nav-links");
+      var toggle = document.querySelector(".nav-toggle");
+      if (nav.classList.contains("open") && !nav.contains(e.target) && !toggle.contains(e.target)) {
+        nav.classList.remove("open");
+      }
+    });
+  </script>
+</body>
+</html>

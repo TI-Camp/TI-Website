@@ -8,11 +8,87 @@ cloudinary.config({
 });
 
 const MODERATION_SECRET = process.env.MODERATION_SECRET;
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GITHUB_OWNER = 'TI-Camp';
+const GITHUB_REPO = 'TI-Website';
+const GITHUB_BRANCH = 'main';
+const PROFILES_PATH = 'profiles.json';
 
 function verifyToken(publicIds, token) {
   const payload = publicIds.slice().sort().join(',');
   const expected = createHmac('sha256', MODERATION_SECRET).update(payload).digest('hex');
   return expected === token;
+}
+
+function verifyEditToken(editData, token) {
+  const payload = JSON.stringify({ personId: editData.personId, field: editData.field, value: editData.value });
+  const expected = createHmac('sha256', MODERATION_SECRET).update(payload).digest('hex');
+  return expected === token;
+}
+
+async function applyProfileEdit(editData) {
+  // 1. Fetch current profiles.json from GitHub
+  const getUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${PROFILES_PATH}?ref=${GITHUB_BRANCH}`;
+  const getResp = await fetch(getUrl, {
+    headers: {
+      'Authorization': `Bearer ${GITHUB_TOKEN}`,
+      'Accept': 'application/vnd.github.v3+json',
+    },
+  });
+
+  if (!getResp.ok) {
+    const err = await getResp.text();
+    throw new Error('Failed to fetch profiles.json from GitHub: ' + err);
+  }
+
+  const fileData = await getResp.json();
+  const content = Buffer.from(fileData.content, 'base64').toString('utf-8');
+  const profiles = JSON.parse(content);
+
+  // 2. Apply the edit
+  const { personId, field, value } = editData;
+  if (!profiles[personId]) {
+    // Create a new profile entry if it doesn't exist
+    profiles[personId] = {
+      name: personId.replace(/-\d+$/, '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+      maiden_name: null,
+      nicknames: [],
+      birth_year: null,
+      birth_place: null,
+      death_year: null,
+      death_place: null,
+      bio: null,
+      generation: null,
+      facts: []
+    };
+  }
+  profiles[personId][field] = value;
+
+  // 3. Commit updated profiles.json back to GitHub
+  const updatedContent = Buffer.from(JSON.stringify(profiles, null, 2) + '\n').toString('base64');
+  const displayName = personId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+  const putResp = await fetch(getUrl.split('?')[0], {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${GITHUB_TOKEN}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      message: `Update ${field} for ${displayName}`,
+      content: updatedContent,
+      sha: fileData.sha,
+      branch: GITHUB_BRANCH,
+    }),
+  });
+
+  if (!putResp.ok) {
+    const err = await putResp.text();
+    throw new Error('Failed to commit profiles.json to GitHub: ' + err);
+  }
+
+  return true;
 }
 
 function html(title, message, color) {
@@ -32,9 +108,68 @@ export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).send('Method not allowed');
 
   try {
-    const { action, ids, token } = req.query;
+    const { action } = req.query;
 
-    if (!action || !ids || !token) {
+    if (!action) {
+      return res.status(400).send(html('Invalid Link', 'This moderation link is missing required parameters.', '#c0392b'));
+    }
+
+    // ── PROFILE EDIT ACTIONS (check before photo actions) ──
+
+    if (action === 'approve-edit' || action === 'reject-edit') {
+      const { edit, token: editToken } = req.query;
+
+      if (!edit || !editToken) {
+        return res.status(400).send(html('Invalid Link', 'This moderation link is missing required parameters.', '#c0392b'));
+      }
+
+      let editData;
+      try {
+        editData = JSON.parse(decodeURIComponent(edit));
+      } catch {
+        return res.status(400).send(html('Invalid Link', 'Could not parse edit data.', '#c0392b'));
+      }
+
+      if (!verifyEditToken(editData, editToken)) {
+        return res.status(403).send(html('Unauthorized', 'This moderation link is invalid or has been tampered with.', '#c0392b'));
+      }
+
+      const displayName = editData.personId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      const displayValue = Array.isArray(editData.value)
+        ? editData.value.join(', ') || '(empty)'
+        : String(editData.value ?? '(cleared)');
+
+      if (action === 'approve-edit') {
+        try {
+          await applyProfileEdit(editData);
+          res.setHeader('Content-Type', 'text/html');
+          return res.status(200).send(html(
+            'Edit Approved',
+            `Updated <strong>${editData.field}</strong> for ${displayName} to: ${displayValue}. The site will redeploy in ~30 seconds.`,
+            '#2e6b3e'
+          ));
+        } catch (err) {
+          console.error('Profile edit commit error:', err);
+          res.setHeader('Content-Type', 'text/html');
+          return res.status(500).send(html('Error', 'Failed to apply edit: ' + err.message, '#c0392b'));
+        }
+      }
+
+      if (action === 'reject-edit') {
+        res.setHeader('Content-Type', 'text/html');
+        return res.status(200).send(html(
+          'Edit Rejected',
+          `Rejected change to <strong>${editData.field}</strong> for ${displayName}. No changes were made.`,
+          '#c0392b'
+        ));
+      }
+    }
+
+    // ── PHOTO MODERATION ACTIONS ──
+
+    const { ids, token } = req.query;
+
+    if (!ids || !token) {
       return res.status(400).send(html('Invalid Link', 'This moderation link is missing required parameters.', '#c0392b'));
     }
 
