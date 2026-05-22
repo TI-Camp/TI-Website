@@ -338,7 +338,9 @@
   "jennifer-boughton": {
     "name": "Jennifer Boughton",
     "maiden_name": null,
-    "nicknames": [],
+    "nicknames": [
+      "Jenny"
+    ],
     "birth_year": null,
     "birth_place": null,
     "death_year": null,
