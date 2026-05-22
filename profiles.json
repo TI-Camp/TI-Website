@@ -2,7 +2,10 @@
   "benjamin-boughton": {
     "name": "Benjamin Boughton",
     "maiden_name": null,
-    "nicknames": ["Ben"],
+    "nicknames": [
+      "Ben",
+      "Benji"
+    ],
     "birth_year": 1997,
     "birth_place": null,
     "death_year": null,
@@ -10,11 +13,31 @@
     "bio": null,
     "generation": 5,
     "facts": [
-      { "year": 2015, "label": "Graduated High School", "value": null },
-      { "year": 2019, "label": "Graduated College", "value": "Ohio State University" },
-      { "year": 2019, "label": "Moved", "value": "Arlington, Virginia" },
-      { "year": 2022, "label": "Moved", "value": "Honolulu, Hawaii" },
-      { "year": 2025, "label": "Graduated Masters", "value": "Georgia Tech" }
+      {
+        "year": 2015,
+        "label": "Graduated High School",
+        "value": null
+      },
+      {
+        "year": 2019,
+        "label": "Graduated College",
+        "value": "Ohio State University"
+      },
+      {
+        "year": 2019,
+        "label": "Moved",
+        "value": "Arlington, Virginia"
+      },
+      {
+        "year": 2022,
+        "label": "Moved",
+        "value": "Honolulu, Hawaii"
+      },
+      {
+        "year": 2025,
+        "label": "Graduated Masters",
+        "value": "Georgia Tech"
+      }
     ]
   }
 }
