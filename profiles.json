@@ -42,7 +42,9 @@
   "althea-ford": {
     "name": "Althea Ford",
     "maiden_name": null,
-    "nicknames": [],
+    "nicknames": [
+      "Gami"
+    ],
     "birth_year": null,
     "birth_place": null,
     "death_year": null,
