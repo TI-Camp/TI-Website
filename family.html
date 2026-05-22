@@ -103,6 +103,16 @@
     .node-card { cursor: pointer; transition: filter 0.2s; }
     .node-card:hover { filter: drop-shadow(0 3px 8px rgba(30, 77, 43, 0.3)); }
 
+    .view-profile-icon { opacity: 0; transition: opacity 0.2s; cursor: pointer; }
+    .node-card:hover .view-profile-icon { opacity: 1; }
+    .view-profile-tooltip { opacity: 0; transition: opacity 0.15s; pointer-events: none; }
+    .view-profile-icon:hover + .view-profile-tooltip,
+    .view-profile-icon:hover ~ .view-profile-tooltip { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .view-profile-icon { opacity: 0.8; }
+    }
+
     .legend {
       position: fixed; bottom: 1rem; left: 1rem; background: white;
       border: 1px solid rgba(30, 77, 43, 0.15); border-radius: 8px;
@@ -348,33 +358,38 @@
 
     const treeData = {
       name: "Sarah Annis Withenbury",
+      id: "sarah-annis-withenbury",
       spouse: "James Clement Richardson Jr.",
       generation: 1,
       isFounders: true,
       children: [
         {
           name: "Roland Richardson",
+          id: "roland-richardson",
           nickname: "Bobo",
           spouse: "Althea Ford",
           generation: 2,
           children: [
             {
               name: "Emily Richardson",
+              id: "emily-richardson-1",
               nickname: "Grambie",
               spouse: "Joe Boughton",
               generation: 3,
               children: [
                 {
                   name: "David Boughton",
+                  id: "david-boughton",
                   spouse: "Lori Urenovitch",
                   generation: 4,
                   children: [
-                    { name: "Chloe Boughton", generation: 5 },
-                    { name: "Cassidy Boughton", generation: 5 }
+                    { name: "Chloe Boughton", id: "chloe-boughton", generation: 5 },
+                    { name: "Cassidy Boughton", id: "cassidy-boughton", generation: 5 }
                   ]
                 },
                 {
                   name: "Betsy Boughton",
+                  id: "betsy-boughton",
                   generation: 4,
                   marriages: [
                     {
@@ -382,21 +397,23 @@
                       children: [
                         {
                           name: "Peter Horning",
+                          id: "peter-horning",
                           spouse: "Jacqueline Joos",
                           generation: 5,
                           children: [
-                            { name: "Eila Horning", generation: 6 },
-                            { name: "Anderson Horning", generation: 6 },
-                            { name: "Frances Horning", generation: 6 }
+                            { name: "Eila Horning", id: "eila-horning", generation: 6 },
+                            { name: "Anderson Horning", id: "anderson-horning", generation: 6 },
+                            { name: "Frances Horning", id: "frances-horning", generation: 6 }
                           ]
                         },
                         {
                           name: "Sarah Horning",
+                          id: "sarah-horning",
                           spouse: "Noah Pollack",
                           generation: 5,
                           children: [
-                            { name: "Jesse Pollack", generation: 6 },
-                            { name: "Abigail Pollack", generation: 6 }
+                            { name: "Jesse Pollack", id: "jesse-pollack", generation: 6 },
+                            { name: "Abigail Pollack", id: "abigail-pollack", generation: 6 }
                           ]
                         }
                       ]
@@ -409,31 +426,35 @@
                 },
                 {
                   name: "Bill Boughton",
+                  id: "bill-boughton",
                   spouse: "Jill Courts",
                   generation: 4,
                   children: [
-                    { name: "Benjamin Boughton", generation: 5 },
-                    { name: "Jennifer Boughton", generation: 5 }
+                    { name: "Benjamin Boughton", id: "benjamin-boughton", generation: 5 },
+                    { name: "Jennifer Boughton", id: "jennifer-boughton", generation: 5 }
                   ]
                 },
                 {
                   name: "Sarah Boughton",
+                  id: "sarah-boughton",
                   spouse: "Max Holt",
                   generation: 4,
                   children: [
-                    { name: "Charles Holt", generation: 5 },
-                    { name: "McAlester Holt", generation: 5 }
+                    { name: "Charles Holt", id: "charles-holt", generation: 5 },
+                    { name: "McAlester Holt", id: "mcalester-holt", generation: 5 }
                   ]
                 }
               ]
             },
             {
               name: "Ted Richardson",
+              id: "ted-richardson",
               spouse: "Priscilla Grandin",
               generation: 3,
               children: [
                 {
                   name: "Michael Richardson",
+                  id: "michael-richardson-1",
                   generation: 4,
                   marriages: [
                     {
@@ -441,12 +462,13 @@
                       children: [
                         {
                           name: "Michael Richardson",
+                          id: "michael-richardson-2",
                           spouse: "Laura Curcio",
                           generation: 5,
                           children: [
-                            { name: "Madelyn Richardson", generation: 6 },
-                            { name: "Blake Richardson", generation: 6 },
-                            { name: "Hailey Richardson", generation: 6 }
+                            { name: "Madelyn Richardson", id: "madelyn-richardson", generation: 6 },
+                            { name: "Blake Richardson", id: "blake-richardson", generation: 6 },
+                            { name: "Hailey Richardson", id: "hailey-richardson", generation: 6 }
                           ]
                         }
                       ]
@@ -456,11 +478,12 @@
                       children: [
                         {
                           name: "Tyler Richardson",
+                          id: "tyler-richardson",
                           spouse: "Abigail Craig",
                           generation: 5,
                           children: [
-                            { name: "Cash Richardson", generation: 6 },
-                            { name: "Colt Richardson", generation: 6 }
+                            { name: "Cash Richardson", id: "cash-richardson", generation: 6 },
+                            { name: "Colt Richardson", id: "colt-richardson", generation: 6 }
                           ]
                         }
                       ]
@@ -469,40 +492,45 @@
                 },
                 {
                   name: "Andrew Richardson",
+                  id: "andrew-richardson",
                   spouse: "Janie Wentz",
                   generation: 4,
                   children: [
-                    { name: "Jared Richardson", generation: 5 },
+                    { name: "Jared Richardson", id: "jared-richardson", generation: 5 },
                     {
                       name: "Brian Richardson",
+                      id: "brian-richardson",
                       generation: 5,
                       children: [
-                        { name: "Tessa Richardson", generation: 6 }
+                        { name: "Tessa Richardson", id: "tessa-richardson", generation: 6 }
                       ]
                     }
                   ]
                 },
                 {
                   name: "Polly Richardson",
+                  id: "polly-richardson",
                   spouse: "Greg Rentfro",
                   generation: 4,
                   children: [
-                    { name: "Heather Rentfro", generation: 5 },
-                    { name: "Theodore Rentfro", generation: 5 }
+                    { name: "Heather Rentfro", id: "heather-rentfro", generation: 5 },
+                    { name: "Theodore Rentfro", id: "theodore-rentfro", generation: 5 }
                   ]
                 }
               ]
             },
             {
               name: "Betsy Richardson",
+              id: "betsy-richardson",
               spouse: "George Kurlin",
               generation: 3,
               children: [
-                { name: "Nancy Kurlin", generation: 4 }
+                { name: "Nancy Kurlin", id: "nancy-kurlin", generation: 4 }
               ]
             },
             {
               name: "Althea Richardson",
+              id: "althea-richardson",
               nickname: "Fifi",
               generation: 3,
               marriages: [
@@ -511,43 +539,48 @@
                   children: [
                     {
                       name: "John Mathers McCaslin",
+                      id: "john-mathers-mccaslin",
                       spouse: "Constance Plattenburg",
                       generation: 4,
                       children: [
                         {
                           name: "Henry Plattenburg McCaslin",
+                          id: "henry-plattenburg-mccaslin",
                           spouse: "Sarah Anne Kipling",
                           generation: 5,
                           children: [
-                            { name: "Jesse Albert McKay", generation: 6 },
-                            { name: "Robin Ragone McKay", generation: 6 }
+                            { name: "Jesse Albert McKay", id: "jesse-albert-mckay", generation: 6 },
+                            { name: "Robin Ragone McKay", id: "robin-ragone-mckay", generation: 6 }
                           ]
                         },
-                        { name: "Will Roland McCaslin", generation: 5 },
-                        { name: "Jack Theodore McCaslin", generation: 5 }
+                        { name: "Will Roland McCaslin", id: "will-roland-mccaslin", generation: 5 },
+                        { name: "Jack Theodore McCaslin", id: "jack-theodore-mccaslin", generation: 5 }
                       ]
                     },
                     {
                       name: "Susan McCaslin",
+                      id: "susan-mccaslin",
                       spouse: "Vic Henningsen",
                       generation: 4,
                       children: [
-                        { name: "Ned Henningsen", generation: 5 },
-                        { name: "Caitlin Henningsen", spouse: "Russell Ford Rennie", generation: 5 }
+                        { name: "Ned Henningsen", id: "ned-henningsen", generation: 5 },
+                        { name: "Caitlin Henningsen", id: "caitlin-henningsen", spouse: "Russell Ford Rennie", generation: 5 }
                       ]
                     },
                     {
                       name: "Bob McCaslin",
+                      id: "bob-mccaslin",
                       spouse: "Francine Allee",
                       generation: 4,
                       children: [
-                        { name: "Caitlin McCaslin", generation: 5 },
-                        { name: "Jenny Eloise McCaslin", generation: 5 },
-                        { name: "Coombs McCaslin", generation: 5 }
+                        { name: "Caitlin McCaslin", id: "caitlin-mccaslin", generation: 5 },
+                        { name: "Jenny Eloise McCaslin", id: "jenny-eloise-mccaslin", generation: 5 },
+                        { name: "Coombs McCaslin", id: "coombs-mccaslin", generation: 5 }
                       ]
                     },
                     {
                       name: "Hugh McCaslin",
+                      id: "hugh-mccaslin",
                       generation: 4,
                       marriages: [
                         {
@@ -555,29 +588,32 @@
                           children: [
                             {
                               name: "Aaron McCaslin",
+                              id: "aaron-mccaslin",
                               spouse: "Erin Saunders",
                               generation: 5,
                               children: [
-                                { name: "Issabella Erin Elena McCaslin", generation: 6 }
+                                { name: "Issabella Erin Elena McCaslin", id: "issabella-erin-elena-mccaslin", generation: 6 }
                               ]
                             },
-                            { name: "Addason McCaslin", spouse: "Kimberly Iwaki", generation: 5 },
+                            { name: "Addason McCaslin", id: "addason-mccaslin", spouse: "Kimberly Iwaki", generation: 5 },
                             {
                               name: "Lara Heath",
+                              id: "lara-heath",
                               spouse: "William Allen",
                               generation: 5,
                               children: [
-                                { name: "Luke Henry Allen", generation: 6 },
-                                { name: "Noah Albert Allen", generation: 6 }
+                                { name: "Luke Henry Allen", id: "luke-henry-allen", generation: 6 },
+                                { name: "Noah Albert Allen", id: "noah-albert-allen", generation: 6 }
                               ]
                             },
                             {
                               name: "Erik Heath",
+                              id: "erik-heath",
                               spouse: "Jaime Wilson",
                               generation: 5,
                               children: [
-                                { name: "Adalee Heath", generation: 6 },
-                                { name: "Kellan Erik Heath", generation: 6 }
+                                { name: "Adalee Heath", id: "adalee-heath", generation: 6 },
+                                { name: "Kellan Erik Heath", id: "kellan-erik-heath", generation: 6 }
                               ]
                             }
                           ]
@@ -600,6 +636,7 @@
         },
         {
           name: "Emily Richardson",
+          id: "emily-richardson-2",
           generation: 2,
           marriages: [
             {
@@ -607,6 +644,7 @@
               children: [
                 {
                   name: "Mary Tylor Burton",
+                  id: "mary-tylor-burton",
                   generation: 3,
                   marriages: [
                     {
@@ -614,37 +652,42 @@
                       children: [
                         {
                           name: "Robert Garrison",
+                          id: "robert-garrison",
                           spouse: "Lucinda Baker",
                           generation: 4,
                           children: [
-                            { name: "Amber Garrison", generation: 5 },
-                            { name: "Henna Garrison", generation: 5 }
+                            { name: "Amber Garrison", id: "amber-garrison", generation: 5 },
+                            { name: "Henna Garrison", id: "henna-garrison", generation: 5 }
                           ]
                         },
                         {
                           name: "Emily Garrison",
+                          id: "emily-garrison",
                           spouse: "Peter Toll",
                           generation: 4,
                           children: [
-                            { name: "Tylor Toll", generation: 5 }
+                            { name: "Tylor Toll", id: "tylor-toll", generation: 5 }
                           ]
                         },
                         {
                           name: "Priscilla Stewart",
+                          id: "priscilla-stewart",
                           spouse: "Manley Morgan",
                           generation: 3
                         },
                         {
                           name: "Mary Tylor Stewart",
+                          id: "mary-tylor-stewart",
                           spouse: "Will Compton",
                           generation: 4,
                           children: [
-                            { name: "Emily Compton", generation: 5 },
-                            { name: "Jami Compton", spouse: "Reuben Pressman", generation: 5 }
+                            { name: "Emily Compton", id: "emily-compton", generation: 5 },
+                            { name: "Jami Compton", id: "jami-compton", spouse: "Reuben Pressman", generation: 5 }
                           ]
                         },
                         {
                           name: "Jim Garrison",
+                          id: "jim-garrison",
                           generation: 4,
                           marriages: [
                             {
@@ -652,20 +695,22 @@
                               children: [
                                 {
                                   name: "Austin Garrison",
+                                  id: "austin-garrison",
                                   spouse: "Katelyn Steinkoenig",
                                   generation: 5,
                                   children: [
-                                    { name: "Chloe Garrison", generation: 6 },
-                                    { name: "Arlo Garrison", generation: 6 },
-                                    { name: "Elliott Garrison", generation: 6 }
+                                    { name: "Chloe Garrison", id: "chloe-garrison", generation: 6 },
+                                    { name: "Arlo Garrison", id: "arlo-garrison", generation: 6 },
+                                    { name: "Elliott Garrison", id: "elliott-garrison", generation: 6 }
                                   ]
                                 },
                                 {
                                   name: "Aubrey Garrison",
+                                  id: "aubrey-garrison",
                                   generation: 5,
                                   children: [
-                                    { name: "Lila Campton", generation: 6 },
-                                    { name: "Finnegan McAvoy", generation: 6 }
+                                    { name: "Lila Campton", id: "lila-campton", generation: 6 },
+                                    { name: "Finnegan McAvoy", id: "finnegan-mcavoy", generation: 6 }
                                   ]
                                 }
                               ]
@@ -673,8 +718,8 @@
                             {
                               spouse: "Kimberly Leeson",
                               children: [
-                                { name: "Paige Garrison", generation: 5 },
-                                { name: "Olivia Garrison", generation: 5 }
+                                { name: "Paige Garrison", id: "paige-garrison", generation: 5 },
+                                { name: "Olivia Garrison", id: "olivia-garrison", generation: 5 }
                               ]
                             }
                           ]
@@ -692,13 +737,14 @@
             {
               spouse: "Jim Carruthers",
               children: [
-                { name: "Jimsy Carruthers", generation: 3 }
+                { name: "Jimsy Carruthers", id: "jimsy-carruthers", generation: 3 }
               ]
             }
           ]
         },
         {
           name: "Coombs Richardson",
+          id: "coombs-richardson",
           generation: 2,
           marriages: [
             {
@@ -706,29 +752,33 @@
               children: [
                 {
                   name: "Emily LaBoiteaux",
+                  id: "emily-laboiteaux",
                   spouse: "Larry Mannion",
                   generation: 3,
                   children: [
-                    { name: "John Mannion", generation: 4 },
+                    { name: "John Mannion", id: "john-mannion", generation: 4 },
                     {
                       name: "Margaret Mannion",
+                      id: "margaret-mannion",
                       spouse: "Brian Smart",
                       generation: 4,
                       children: [
-                        { name: "Jarrett Ryan Smart", generation: 5 }
+                        { name: "Jarrett Ryan Smart", id: "jarrett-ryan-smart", generation: 5 }
                       ]
                     },
                     {
                       name: "Mary Elizabeth Mannion",
+                      id: "mary-elizabeth-mannion",
                       spouse: "Robin Rowe",
                       generation: 4,
                       children: [
-                        { name: "Davin Rowe", generation: 5 },
-                        { name: "Elizabeth Rowe", generation: 5 }
+                        { name: "Davin Rowe", id: "davin-rowe", generation: 5 },
+                        { name: "Elizabeth Rowe", id: "elizabeth-rowe", generation: 5 }
                       ]
                     },
                     {
                       name: "Lawrence Mannion",
+                      id: "lawrence-mannion",
                       spouse: "Ariadne Fellows",
                       generation: 3
                     }
@@ -736,31 +786,35 @@
                 },
                 {
                   name: "Edith LaBoiteaux",
+                  id: "edith-laboiteaux",
                   spouse: "Thomas Bogardus",
                   generation: 3,
                   children: [
                     {
                       name: "Nancy Bogardus",
+                      id: "nancy-bogardus",
                       spouse: "Mike Polisson",
                       generation: 4,
                       children: [
-                        { name: "Lindsay Polisson", generation: 5 },
-                        { name: "George Polisson", spouse: "Kelly Grace", generation: 5 }
+                        { name: "Lindsay Polisson", id: "lindsay-polisson", generation: 5 },
+                        { name: "George Polisson", id: "george-polisson", spouse: "Kelly Grace", generation: 5 }
                       ]
                     },
                     {
                       name: "William Bogardus",
+                      id: "william-bogardus",
                       spouse: "Michelle Neal",
                       generation: 4,
                       children: [
-                        { name: "Billy Neal", generation: 5 },
-                        { name: "John Neal", generation: 5 },
-                        { name: "Addison Bogardus", generation: 5 },
-                        { name: "Skylar Bogardus", generation: 5 }
+                        { name: "Billy Neal", id: "billy-neal", generation: 5 },
+                        { name: "John Neal", id: "john-neal", generation: 5 },
+                        { name: "Addison Bogardus", id: "addison-bogardus", generation: 5 },
+                        { name: "Skylar Bogardus", id: "skylar-bogardus", generation: 5 }
                       ]
                     },
                     {
                       name: "Kristina Bogardus",
+                      id: "kristina-bogardus",
                       generation: 4,
                       marriages: [
                         {
@@ -768,34 +822,37 @@
                           children: [
                             {
                               name: "Nathaniel Puckett",
+                              id: "nathaniel-puckett",
                               spouse: "Lynn Malone",
                               generation: 5,
                               children: [
-                                { name: "Vivian Puckett", generation: 6 }
+                                { name: "Vivian Puckett", id: "vivian-puckett", generation: 6 }
                               ]
                             },
-                            { name: "Alison Puckett", generation: 5 },
-                            { name: "Kathryn Puckett", generation: 5 }
+                            { name: "Alison Puckett", id: "alison-puckett", generation: 5 },
+                            { name: "Kathryn Puckett", id: "kathryn-puckett", generation: 5 }
                           ]
                         },
                         {
                           spouse: "Bob Scott",
                           children: [
-                            { name: "Alex Scott", generation: 5 }
+                            { name: "Alex Scott", id: "alex-scott", generation: 5 }
                           ]
                         }
                       ]
                     },
                     {
                       name: "Ellen Coombs Bogardus",
+                      id: "ellen-coombs-bogardus",
                       spouse: "Gerald Edward Szymaniak",
                       generation: 4,
                       children: [
-                        { name: "Sarah Annis Szymaniak", generation: 5 }
+                        { name: "Sarah Annis Szymaniak", id: "sarah-annis-szymaniak", generation: 5 }
                       ]
                     },
                     {
                       name: "Thomas L. Bogardus",
+                      id: "thomas-l-bogardus",
                       spouse: "Robert de Haan",
                       generation: 3
                     }
@@ -808,83 +865,92 @@
               children: [
                 {
                   name: "Linda Coombs Lovett",
+                  id: "linda-coombs-lovett",
                   spouse: "James Crawford",
                   generation: 3,
                   children: [
                     {
                       name: "Henry Richardson Crawford",
+                      id: "henry-richardson-crawford",
                       spouse: "Siobhan Louise Murphy",
                       generation: 4,
                       children: [
-                        { name: "Barbara Lovett Crawford", generation: 5 },
-                        { name: "Martin Keenholtz Crawford", generation: 5 },
-                        { name: "Linda Colleen Crawford", generation: 5 },
-                        { name: "Helen Winfield Crawford", generation: 5 }
+                        { name: "Barbara Lovett Crawford", id: "barbara-lovett-crawford", generation: 5 },
+                        { name: "Martin Keenholtz Crawford", id: "martin-keenholtz-crawford", generation: 5 },
+                        { name: "Linda Colleen Crawford", id: "linda-colleen-crawford", generation: 5 },
+                        { name: "Helen Winfield Crawford", id: "helen-winfield-crawford", generation: 5 }
                       ]
                     },
                     {
                       name: "Elizabeth Coombs Crawford",
+                      id: "elizabeth-coombs-crawford",
                       spouse: "William A. Ragan",
                       generation: 4,
                       children: [
-                        { name: "James Crawford Ragan", generation: 5 },
-                        { name: "Sarah Elizabeth Ragan", generation: 5 },
-                        { name: "Joseph Richardson Ragan", generation: 5 }
+                        { name: "James Crawford Ragan", id: "james-crawford-ragan", generation: 5 },
+                        { name: "Sarah Elizabeth Ragan", id: "sarah-elizabeth-ragan", generation: 5 },
+                        { name: "Joseph Richardson Ragan", id: "joseph-richardson-ragan", generation: 5 }
                       ]
                     },
                     {
                       name: "Robert Lovett Crawford",
+                      id: "robert-lovett-crawford-1",
                       spouse: "Margaret Harding",
                       generation: 4,
                       children: [
-                        { name: "Robert Lovett Crawford", generation: 5 },
-                        { name: "Benjamin Harding Crawford", generation: 5 },
-                        { name: "Elizabeth Margaret Crawford", generation: 5 },
-                        { name: "Charlotte Grace Crawford", generation: 5 },
-                        { name: "Katherine Emily Crawford", generation: 5 }
+                        { name: "Robert Lovett Crawford", id: "robert-lovett-crawford-2", generation: 5 },
+                        { name: "Benjamin Harding Crawford", id: "benjamin-harding-crawford", generation: 5 },
+                        { name: "Elizabeth Margaret Crawford", id: "elizabeth-margaret-crawford", generation: 5 },
+                        { name: "Charlotte Grace Crawford", id: "charlotte-grace-crawford", generation: 5 },
+                        { name: "Katherine Emily Crawford", id: "katherine-emily-crawford", generation: 5 }
                       ]
                     },
                     {
                       name: "Benjamin Crawford",
+                      id: "benjamin-crawford",
                       spouse: "Stephanie Luongo",
                       generation: 4,
                       children: [
-                        { name: "Ava Cohen Crawford", generation: 5 },
-                        { name: "Harrison Baker Crawford", generation: 5 },
-                        { name: "Macy Coombs Crawford", generation: 5 }
+                        { name: "Ava Cohen Crawford", id: "ava-cohen-crawford", generation: 5 },
+                        { name: "Harrison Baker Crawford", id: "harrison-baker-crawford", generation: 5 },
+                        { name: "Macy Coombs Crawford", id: "macy-coombs-crawford", generation: 5 }
                       ]
                     }
                   ]
                 },
                 {
                   name: "Robert Fillmore Lovett",
+                  id: "robert-fillmore-lovett-1",
                   spouse: "Sara C. Newcomb",
                   generation: 3,
                   children: [
                     {
                       name: "Robert Fillmore Lovett",
+                      id: "robert-fillmore-lovett-2",
                       spouse: "Amy M. Sibert",
                       generation: 4,
                       children: [
-                        { name: "Sophia Myers Lovett", generation: 5 },
-                        { name: "Robert Fillmore Lovett", generation: 5 }
+                        { name: "Sophia Myers Lovett", id: "sophia-myers-lovett", generation: 5 },
+                        { name: "Robert Fillmore Lovett", id: "robert-fillmore-lovett-3", generation: 5 }
                       ]
                     },
                     {
                       name: "Andrew Jerrel Lovett",
+                      id: "andrew-jerrel-lovett",
                       spouse: "Li Miao",
                       generation: 4,
                       children: [
-                        { name: "Alexander Weida Lovett", generation: 5 }
+                        { name: "Alexander Weida Lovett", id: "alexander-weida-lovett", generation: 5 }
                       ]
                     },
                     {
                       name: "Edward Richardson Lovett",
+                      id: "edward-richardson-lovett",
                       spouse: "Erin Sinesky",
                       generation: 4,
                       children: [
-                        { name: "Maxine Cecilia Lovett", generation: 5 },
-                        { name: "Audrey Lorraine Lovett", generation: 5 }
+                        { name: "Maxine Cecilia Lovett", id: "maxine-cecilia-lovett", generation: 5 },
+                        { name: "Audrey Lorraine Lovett", id: "audrey-lorraine-lovett", generation: 5 }
                       ]
                     }
                   ]
@@ -895,11 +961,13 @@
         },
         {
           name: "Adelaide Richardson",
+          id: "adelaide-richardson",
           spouse: "Hugh Garvin",
           generation: 2,
           children: [
             {
               name: "James Garvin",
+              id: "james-garvin",
               generation: 3,
               marriages: [
                 {
@@ -907,55 +975,61 @@
                   children: [
                     {
                       name: "Nancy Garvin",
+                      id: "nancy-garvin",
                       generation: 4,
                       children: [
                         {
                           name: "Mary Elizabeth Garvin",
+                          id: "mary-elizabeth-garvin",
                           spouse: "Philipe Rivaldi",
                           generation: 5,
                           children: [
-                            { name: "Taylor Rivaldi", generation: 6 }
+                            { name: "Taylor Rivaldi", id: "taylor-rivaldi", generation: 6 }
                           ]
                         },
-                        { name: "Christinia Garvin", generation: 5 }
+                        { name: "Christinia Garvin", id: "christinia-garvin", generation: 5 }
                       ]
                     },
                     {
                       name: "Frances Garvin",
+                      id: "frances-garvin-1",
                       spouse: "Keith Puccinelli",
                       generation: 3
                     },
                     {
                       name: "Louise Garvin",
+                      id: "louise-garvin",
                       spouse: "Paul Rosel",
                       generation: 4,
                       children: [
                         {
                           name: "Frances Rosel",
+                          id: "frances-rosel",
                           spouse: "Kevin O'Donnell",
                           generation: 5,
                           children: [
-                            { name: "Madelyn O'Donnell", generation: 6 },
-                            { name: "Riley O'Donnell", generation: 6 }
+                            { name: "Madelyn O'Donnell", id: "madelyn-odonnell", generation: 6 },
+                            { name: "Riley O'Donnell", id: "riley-odonnell", generation: 6 }
                           ]
                         },
-                        { name: "Christian Rosel", generation: 5 }
+                        { name: "Christian Rosel", id: "christian-rosel", generation: 5 }
                       ]
                     },
                     {
                       name: "Harrison Garvin",
+                      id: "harrison-garvin",
                       generation: 4,
                       marriages: [
                         {
                           spouse: "Karry Usher",
                           children: [
-                            { name: "James Bodhi Garvin", generation: 5 }
+                            { name: "James Bodhi Garvin", id: "james-bodhi-garvin", generation: 5 }
                           ]
                         },
                         {
                           spouse: "Penny Harding",
                           children: [
-                            { name: "Alexandria Lucy Garvin", generation: 5 }
+                            { name: "Alexandria Lucy Garvin", id: "alexandria-lucy-garvin", generation: 5 }
                           ]
                         }
                       ]
@@ -974,76 +1048,85 @@
             },
             {
               name: "Hugh Garvin",
+              id: "hugh-garvin-1",
               spouse: "Jane Hamilton",
               generation: 3,
               children: [
-                { name: "Ann Garvin", generation: 4 },
+                { name: "Ann Garvin", id: "ann-garvin", generation: 4 },
                 {
                   name: "Sarah Garvin",
+                  id: "sarah-garvin",
                   spouse: "Michael Callahan",
                   generation: 4,
                   children: [
-                    { name: "Grace Callahan", generation: 5 }
+                    { name: "Grace Callahan", id: "grace-callahan", generation: 5 }
                   ]
                 },
                 {
                   name: "Hugh Garvin",
+                  id: "hugh-garvin-2",
                   spouse: "Dana Cress",
                   generation: 4,
                   children: [
-                    { name: "Taylor Garvin", spouse: "Taylor Lukas", generation: 5 },
+                    { name: "Taylor Garvin", id: "taylor-garvin", spouse: "Taylor Lukas", generation: 5 },
                     {
                       name: "Alexander Garvin",
+                      id: "alexander-garvin",
                       spouse: "Kerry Rockwood",
                       generation: 5,
                       children: [
-                        { name: "Lilly Garvin", generation: 6 },
-                        { name: "Brayden Garvin", generation: 6 },
-                        { name: "Lilah Garvin", generation: 6 },
-                        { name: "Ari Garvin", generation: 6 }
+                        { name: "Lilly Garvin", id: "lilly-garvin", generation: 6 },
+                        { name: "Brayden Garvin", id: "brayden-garvin", generation: 6 },
+                        { name: "Lilah Garvin", id: "lilah-garvin", generation: 6 },
+                        { name: "Ari Garvin", id: "ari-garvin", generation: 6 }
                       ]
                     },
-                    { name: "Andrew Garvin", spouse: "Brittany Hock", generation: 5 }
+                    { name: "Andrew Garvin", id: "andrew-garvin", spouse: "Brittany Hock", generation: 5 }
                   ]
                 }
               ]
             },
             {
               name: "Annis Garvin",
+              id: "annis-garvin",
               spouse: "Bob Welch",
               generation: 3,
               children: [
-                { name: "Sarah Welch", generation: 4 },
+                { name: "Sarah Welch", id: "sarah-welch", generation: 4 },
                 {
                   name: "Robert Welch",
+                  id: "robert-welch",
                   spouse: "Pattie Packer",
                   generation: 4,
                   children: [
-                    { name: "Olivia Welch", generation: 5 },
-                    { name: "Gillian Welch", generation: 5 }
+                    { name: "Olivia Welch", id: "olivia-welch", generation: 5 },
+                    { name: "Gillian Welch", id: "gillian-welch", generation: 5 }
                   ]
                 },
                 {
                   name: "William Welch",
+                  id: "william-welch",
                   spouse: "Linda Wilson",
                   generation: 4,
                   children: [
-                    { name: "Kelly Welch", spouse: "Brian Bowman", generation: 5 },
-                    { name: "Ryan Welch", spouse: "Panda Stackhouse", generation: 5 }
+                    { name: "Kelly Welch", id: "kelly-welch", spouse: "Brian Bowman", generation: 5 },
+                    { name: "Ryan Welch", id: "ryan-welch", spouse: "Panda Stackhouse", generation: 5 }
                   ]
                 },
                 {
                   name: "Betsy Welch",
+                  id: "betsy-welch",
                   spouse: "Bruce Bensen",
                   generation: 4,
                   children: [
-                    { name: "Caelen Bensen", spouse: "Andre Janusz", generation: 5 },
+                    { name: "Caelen Bensen", id: "caelen-bensen", spouse: "Andre Janusz", generation: 5 },
                     {
                       name: "Taylor Bensen",
+                      id: "taylor-bensen",
                       spouse: "Cody Parsley",
                       generation: 5,
                       children: [
-                        { name: "Charlotte Parsley", generation: 6 }
+                        { name: "Charlotte Parsley", id: "charlotte-parsley", generation: 6 }
                       ]
                     }
                   ]
@@ -1052,68 +1135,76 @@
             },
             {
               name: "Adelaide Garvin",
+              id: "adelaide-garvin",
               spouse: "Bob Cohan",
               generation: 3,
               children: [
                 {
                   name: "James Cohan",
+                  id: "james-cohan",
                   spouse: "Susan Sekel",
                   generation: 4,
                   children: [
-                    { name: "James Cohan Cohan", generation: 5 },
-                    { name: "Daniel Cohan", generation: 5 }
+                    { name: "James Cohan Cohan", id: "james-cohan-cohan", generation: 5 },
+                    { name: "Daniel Cohan", id: "daniel-cohan", generation: 5 }
                   ]
                 },
                 {
                   name: "Robert Cohan",
+                  id: "robert-cohan",
                   spouse: "Pamela Philips",
                   generation: 4,
                   children: [
-                    { name: "Evan Cohan", generation: 5 },
-                    { name: "Marlie Lee Cohan", generation: 5 }
+                    { name: "Evan Cohan", id: "evan-cohan", generation: 5 },
+                    { name: "Marlie Lee Cohan", id: "marlie-lee-cohan", generation: 5 }
                   ]
                 },
                 {
                   name: "Betsy Cohan",
+                  id: "betsy-cohan",
                   spouse: "Robert Dawson",
                   generation: 4,
                   children: [
-                    { name: "Danille Dawson", generation: 5 }
+                    { name: "Danille Dawson", id: "danille-dawson", generation: 5 }
                   ]
                 },
                 {
                   name: "Kathleen Cohan",
+                  id: "kathleen-cohan",
                   spouse: "Richard Ellis",
                   generation: 4,
                   children: [
-                    { name: "Dylan Ellis", generation: 5 }
+                    { name: "Dylan Ellis", id: "dylan-ellis", generation: 5 }
                   ]
                 }
               ]
             },
             {
               name: "Frances Garvin",
+              id: "frances-garvin-2",
               spouse: "William Byrne",
               generation: 3,
               children: [
                 {
                   name: "Larry Byrne",
+                  id: "larry-byrne",
                   spouse: "Sarah Jones",
                   generation: 4,
                   children: [
-                    { name: "Marcie Byrne", generation: 5 },
-                    { name: "Anne Byrne", generation: 5 }
+                    { name: "Marcie Byrne", id: "marcie-byrne", generation: 5 },
+                    { name: "Anne Byrne", id: "anne-byrne", generation: 5 }
                   ]
                 },
                 {
                   name: "Mary Byrne",
+                  id: "mary-byrne",
                   generation: 4,
                   marriages: [
                     {
                       spouse: "Tim Taylor",
                       children: [
-                        { name: "Tim Taylor", generation: 5 },
-                        { name: "Tracy Taylor", generation: 5 }
+                        { name: "Tim Taylor", id: "tim-taylor", generation: 5 },
+                        { name: "Tracy Taylor", id: "tracy-taylor", generation: 5 }
                       ]
                     },
                     {
@@ -1124,12 +1215,13 @@
                 },
                 {
                   name: "Joe Byrne",
+                  id: "joe-byrne",
                   generation: 4,
                   marriages: [
                     {
                       spouse: "Denise Fawcett",
                       children: [
-                        { name: "Aaron Byrne", generation: 5 }
+                        { name: "Aaron Byrne", id: "aaron-byrne", generation: 5 }
                       ]
                     },
                     {
@@ -1140,19 +1232,20 @@
                 },
                 {
                   name: "Ann Byrne",
+                  id: "ann-byrne",
                   generation: 4,
                   marriages: [
                     {
                       spouse: "Guy Winchester",
                       children: [
-                        { name: "Sean Winchester", generation: 5 },
-                        { name: "Travis Winchester", generation: 5 }
+                        { name: "Sean Winchester", id: "sean-winchester", generation: 5 },
+                        { name: "Travis Winchester", id: "travis-winchester", generation: 5 }
                       ]
                     },
                     {
                       spouse: "Cameron Sauder",
                       children: [
-                        { name: "Emma Sauder Byrne", generation: 5 }
+                        { name: "Emma Sauder Byrne", id: "emma-sauder-byrne", generation: 5 }
                       ]
                     }
                   ]
@@ -1182,7 +1275,12 @@
     const CARD_W = 145;
     const CARD_H = 155;
     const PHOTO_R = 32;
-    const COUPLE_GAP = 16;  // gap between couple cards
+    const COUPLE_GAP = 16;
+
+    // Slugify a name for profile URL (used for spouses without explicit IDs)
+    function slugifyName(name) {
+      return name.toLowerCase().replace(/[.']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    }  // gap between couple cards
     const H_SPACING = 310;
     const V_SPACING = 190;
 
@@ -1356,6 +1454,45 @@
           .text(years);
       }
 
+      // Profile icon — top-right amber circle
+      const personId = opts.id || slugifyName(name);
+      const iconX = CARD_W / 2 - 14;
+      const iconY = -CARD_H / 2 + 14;
+      const iconR = 10;
+
+      const iconG = cg.append("g")
+        .attr("class", "view-profile-icon")
+        .attr("cursor", "pointer");
+
+      iconG.append("circle")
+        .attr("cx", iconX).attr("cy", iconY).attr("r", iconR)
+        .attr("fill", "#c8860a")
+        .attr("stroke", "white").attr("stroke-width", 1.5);
+
+      // Small arrow icon (→)
+      iconG.append("text")
+        .attr("x", iconX).attr("y", iconY + 1)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .attr("font-size", 11).attr("font-weight", "700")
+        .attr("fill", "white")
+        .text("\u2192");
+
+      iconG.on("click", function(event) {
+        event.stopPropagation();
+        window.location.href = "/profile?id=" + personId;
+      });
+
+      // Tooltip on hover
+      cg.append("text")
+        .attr("class", "view-profile-tooltip")
+        .attr("x", iconX - iconR - 4).attr("y", iconY + 3)
+        .attr("text-anchor", "end")
+        .attr("font-family", "Lato, sans-serif")
+        .attr("font-size", 9).attr("font-weight", "700")
+        .attr("fill", "#c8860a")
+        .text("View Profile");
+
       return cg;
     }
 
@@ -1421,7 +1558,7 @@
       const rightX = CARD_W / 2 + halfGap;
 
       // Left card: Grammie
-      drawPersonCard(el, d.data.name, 0, leftX);
+      drawPersonCard(el, d.data.name, 0, leftX, { id: d.data.id });
 
       // Horizontal connector
       el.append("line")
@@ -1442,7 +1579,7 @@
       const hasChildren = d._allChildren && d._allChildren.length > 0;
 
       // Render a single spouse card (slightly smaller, with a subtle marriage indicator)
-      drawPersonCard(el, spouseName, gen, 0);
+      drawPersonCard(el, spouseName, gen, 0, { id: d.data.id });
 
       drawExpandBadge(el, d);
     }
@@ -1456,7 +1593,7 @@
       const rightX = CARD_W / 2 + halfGap;
 
       // Blood relative card
-      drawPersonCard(el, d.data.name, d.data.generation, leftX, { isPlaceholder: true });
+      drawPersonCard(el, d.data.name, d.data.generation, leftX, { isPlaceholder: true, id: d.data.id });
 
       // Spouse card
       if (hasSp) {
@@ -1517,7 +1654,8 @@
       // Blood relative card
       drawPersonCard(el, d.data.name, d.data.generation, leftX, {
         birthYear: d.data.birthYear,
-        deathYear: d.data.deathYear
+        deathYear: d.data.deathYear,
+        id: d.data.id
       });
 
       // Spouse card + connector
