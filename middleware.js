@@ -1,5 +1,5 @@
 export const config = {
-  matcher: ['/((?!api|login\\.html|logo\\.png|.*\\.(?:png|jpg|ico|svg|css|js|json|woff|woff2|ttf)$).*)'],
+  matcher: ['/((?!api|login\\.html|login$|logo\\.png|.*\\.(?:png|jpg|ico|svg|css|js|json|woff|woff2|ttf)$).*)'],
 };
 
 export default function middleware(request) {
