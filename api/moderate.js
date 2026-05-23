@@ -160,11 +160,40 @@ export default async function handler(req, res) {
 
       if (action === 'approve-edit') {
         try {
+          // Special handling for profile photos
+          if (editData.field === 'profile_photo') {
+            const pendingId = editData.value; // e.g. ti-profile-photos/benjamin-boughton-pending
+            const finalId = pendingId.replace(/-pending$/, ''); // e.g. ti-profile-photos/benjamin-boughton
+
+            // Rename pending photo to final ID (overwrites any existing photo)
+            try {
+              await cloudinary.uploader.rename(pendingId, finalId, { overwrite: true, invalidate: true });
+            } catch (renameErr) {
+              console.error('Cloudinary rename error:', renameErr);
+              throw new Error('Failed to finalize photo in Cloudinary');
+            }
+
+            // Re-tag from pending to approved
+            try {
+              await cloudinary.uploader.replace_tag('ti-profile', [finalId]);
+            } catch (tagErr) {
+              console.error('Cloudinary tag error:', tagErr);
+            }
+
+            // Update the value to the final public ID before committing
+            editData.value = finalId;
+          }
+
           await applyProfileEdit(editData);
           res.setHeader('Content-Type', 'text/html');
+
+          const msg = editData.field === 'profile_photo'
+            ? `Profile photo for ${displayName} has been approved and is now visible.`
+            : `Updated <strong>${editData.field}</strong> for ${displayName} to: ${displayValue}. The site will redeploy in ~30 seconds.`;
+
           return res.status(200).send(html(
-            'Edit Approved',
-            `Updated <strong>${editData.field}</strong> for ${displayName} to: ${displayValue}. The site will redeploy in ~30 seconds.`,
+            editData.field === 'profile_photo' ? 'Photo Approved' : 'Edit Approved',
+            msg,
             '#2e6b3e'
           ));
         } catch (err) {
@@ -175,10 +204,23 @@ export default async function handler(req, res) {
       }
 
       if (action === 'reject-edit') {
+        // For profile photos, delete the pending upload from Cloudinary
+        if (editData.field === 'profile_photo' && editData.value) {
+          try {
+            await cloudinary.uploader.destroy(editData.value, { invalidate: true });
+          } catch (delErr) {
+            console.error('Cloudinary delete error:', delErr);
+          }
+        }
+
         res.setHeader('Content-Type', 'text/html');
+        const msg = editData.field === 'profile_photo'
+          ? `Profile photo for ${displayName} has been rejected and deleted.`
+          : `Rejected change to <strong>${editData.field}</strong> for ${displayName}. No changes were made.`;
+
         return res.status(200).send(html(
-          'Edit Rejected',
-          `Rejected change to <strong>${editData.field}</strong> for ${displayName}. No changes were made.`,
+          editData.field === 'profile_photo' ? 'Photo Rejected' : 'Edit Rejected',
+          msg,
           '#c0392b'
         ));
       }

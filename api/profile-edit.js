@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     }
 
     // Whitelist of editable fields
-    const allowedFields = ['nicknames', 'bio', 'birth_year', 'birth_place', 'death_year', 'death_place', 'maiden_name'];
+    const allowedFields = ['nicknames', 'bio', 'birth_year', 'birth_place', 'death_year', 'death_place', 'maiden_name', 'profile_photo'];
     if (!allowedFields.includes(field)) {
       return res.status(400).json({ error: 'Field not editable: ' + field });
     }
@@ -43,8 +43,19 @@ export default async function handler(req, res) {
     const rejectUrl = `${SITE_URL}/api/moderate?d=${rejectPayload}`;
 
     // Format the value for display in email
+    const displayName = personId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     let displayValue;
-    if (Array.isArray(value)) {
+    let photoPreviewHtml = '';
+
+    if (field === 'profile_photo') {
+      displayValue = 'New profile photo';
+      const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME || 'dqni1tcfn';
+      const thumbUrl = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/c_fill,g_face,w_300,h_300,q_auto,f_jpg/${value}`;
+      photoPreviewHtml = `
+        <div style="margin:16px 0;text-align:center;">
+          <img src="${thumbUrl}" alt="Profile photo" style="width:200px;height:200px;border-radius:8px;object-fit:cover;border:2px solid #e0ddd5;" />
+        </div>`;
+    } else if (Array.isArray(value)) {
       displayValue = value.length > 0 ? value.join(', ') : '<em>(empty)</em>';
     } else if (value === null || value === '') {
       displayValue = '<em>(cleared)</em>';
@@ -54,14 +65,14 @@ export default async function handler(req, res) {
 
     const emailHtml = `
       <div style="font-family:sans-serif;max-width:560px;margin:0 auto;padding:20px;">
-        <h2 style="color:#1e4d2b;">Profile Edit Pending Review</h2>
+        <h2 style="color:#1e4d2b;">${field === 'profile_photo' ? 'Profile Photo Pending Review' : 'Profile Edit Pending Review'}</h2>
         <p>Someone wants to update a profile on Treasure Island Camp:</p>
 
         <div style="background:#f5f0e6;border-radius:8px;padding:16px;margin:16px 0;">
-          <p style="margin:0 0 8px;"><strong>Person:</strong> ${personId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</p>
-          <p style="margin:0 0 8px;"><strong>Field:</strong> ${field}</p>
-          <p style="margin:0;"><strong>New value:</strong> ${displayValue}</p>
+          <p style="margin:0 0 8px;"><strong>Person:</strong> ${displayName}</p>
+          <p style="margin:0;"><strong>${field === 'profile_photo' ? 'Change' : 'Field'}:</strong> ${field === 'profile_photo' ? displayValue : field + ' → ' + displayValue}</p>
         </div>
+        ${photoPreviewHtml}
 
         <div style="margin:20px 0;">
           <a href="${approveUrl}" style="display:inline-block;background:#2e6b3e;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;margin-right:12px;">
@@ -72,7 +83,7 @@ export default async function handler(req, res) {
           </a>
         </div>
 
-        <p style="font-size:13px;color:#888;">Changes won't appear on the site until approved.</p>
+        <p style="font-size:13px;color:#888;">${field === 'profile_photo' ? 'Photo won\'t appear on the site until approved.' : 'Changes won\'t appear on the site until approved.'}</p>
       </div>
     `;
 

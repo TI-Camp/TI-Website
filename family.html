@@ -1755,7 +1755,8 @@
       if (term.length >= 1) {
         const acMatches = sortedPeople.filter(p =>
           p.name.toLowerCase().includes(term) ||
-          (p.nickname && p.nickname.toLowerCase().includes(term))
+          (p.nickname && p.nickname.toLowerCase().includes(term)) ||
+          (p.nicknames && p.nicknames.some(n => n.toLowerCase().includes(term)))
         ).slice(0, 8);
         if (acMatches.length > 0) {
           searchAc.innerHTML = acMatches.map((p, i) => {
@@ -1805,7 +1806,8 @@
       // Find matches in the full data (allPeopleFlat), not D3 nodes
       const matches = allPeopleFlat.filter(p => {
         return p.name.toLowerCase().includes(term)
-          || (p.nickname && p.nickname.toLowerCase().includes(term));
+          || (p.nickname && p.nickname.toLowerCase().includes(term))
+          || (p.nicknames && p.nicknames.some(n => n.toLowerCase().includes(term)));
       });
 
       info.textContent = matches.length > 0 ? matches.length + " found" : "No matches";
@@ -1911,6 +1913,18 @@
     }
     // Run AFTER preprocessMarriages has converted marriages to pseudo-nodes
     buildPeopleLookup(treeData, null);
+
+    // Fetch profiles.json to merge nicknames into search data
+    fetch("profiles.json").then(r => r.ok ? r.json() : {}).then(profiles => {
+      allPeopleFlat.forEach(p => {
+        // Match by id or slugified name
+        const id = p.node && p.node.id ? p.node.id : slugifyName(p.name);
+        const profile = profiles[id];
+        if (profile && profile.nicknames && profile.nicknames.length > 0) {
+          p.nicknames = profile.nicknames;
+        }
+      });
+    }).catch(() => {});
 
     // Build parent map: node → parent node (skipping marriage pseudo-nodes)
     const parentMap = new Map();
@@ -2086,7 +2100,8 @@
 
         const matches = sortedPeople.filter(p =>
           p.name.toLowerCase().includes(term) ||
-          (p.nickname && p.nickname.toLowerCase().includes(term))
+          (p.nickname && p.nickname.toLowerCase().includes(term)) ||
+          (p.nicknames && p.nicknames.some(n => n.toLowerCase().includes(term)))
         ).slice(0, 10);
         if (matches.length === 0) { dropdown.classList.remove("open"); return; }
 

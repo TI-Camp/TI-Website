@@ -484,6 +484,130 @@
       }
       .timeline-section { padding: 1.5rem 1rem; }
     }
+
+    /* ── PHOTO UPLOAD MODAL ── */
+    .photo-upload-overlay {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      justify-content: center; align-items: center;
+    }
+    .photo-upload-overlay.open { display: flex; }
+
+    .photo-upload-modal {
+      background: white;
+      border-radius: 12px;
+      width: 90%; max-width: 420px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .photo-upload-header {
+      background: var(--green-dark);
+      color: var(--cream);
+      padding: 1rem 1.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .photo-upload-close {
+      background: none; border: none; color: var(--cream);
+      font-size: 1.4rem; cursor: pointer; padding: 0; line-height: 1;
+    }
+    .photo-upload-close:hover { opacity: 0.7; }
+
+    .photo-upload-body { padding: 1.5rem; }
+
+    .photo-dropzone {
+      border: 2px dashed var(--green-mid);
+      border-radius: 8px;
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .photo-dropzone:hover, .photo-dropzone.dragover {
+      border-color: var(--amber);
+      background: #fdf6e3;
+    }
+
+    .photo-dropzone-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .photo-dropzone-text { font-size: 0.85rem; color: var(--text-mid); }
+    .photo-dropzone-text strong { color: var(--green-dark); }
+
+    .photo-preview-area { display: none; text-align: center; }
+
+    .photo-preview-img {
+      width: 180px; height: 180px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid var(--cream-dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .photo-preview-name {
+      font-size: 0.8rem;
+      color: var(--text-mid);
+      margin-bottom: 0.75rem;
+      word-break: break-all;
+    }
+
+    .photo-preview-change {
+      background: none; border: 1px solid #ccc;
+      color: var(--text-mid); padding: 0.3rem 0.8rem;
+      border-radius: 4px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.8rem;
+    }
+    .photo-preview-change:hover { background: var(--cream-dark); }
+
+    .photo-upload-footer {
+      padding: 0 1.5rem 1.5rem;
+      display: flex; gap: 0.75rem; justify-content: flex-end;
+    }
+
+    .photo-upload-cancel {
+      background: none; border: 1px solid #ccc;
+      color: var(--text-mid); padding: 0.5rem 1rem;
+      border-radius: 6px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.85rem;
+    }
+    .photo-upload-cancel:hover { background: var(--cream-dark); }
+
+    .photo-upload-submit {
+      background: var(--amber); color: white; border: none;
+      padding: 0.5rem 1.2rem; border-radius: 6px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.85rem; font-weight: 700;
+      transition: background 0.2s;
+    }
+    .photo-upload-submit:hover { background: #b07808; }
+    .photo-upload-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .photo-upload-progress {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .photo-upload-progress-bar {
+      height: 6px;
+      background: var(--cream-dark);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .photo-upload-progress-fill {
+      height: 100%; width: 0%;
+      background: var(--green-mid);
+      border-radius: 3px;
+      transition: width 0.2s;
+    }
+    .photo-upload-status {
+      font-size: 0.8rem;
+      color: var(--text-mid);
+      margin-top: 0.4rem;
+      text-align: center;
+    }
+    .photo-upload-status.error { color: #8b3a3a; }
+    .photo-upload-status.success { color: var(--green-mid); }
   </style>
 </head>
 <body>
@@ -819,6 +943,218 @@
         nav.classList.remove("open");
       }
     });
+  </script>
+
+  <!-- Photo Upload Modal -->
+  <div class="photo-upload-overlay" id="photo-upload-overlay">
+    <div class="photo-upload-modal">
+      <div class="photo-upload-header">
+        Upload Profile Photo
+        <button class="photo-upload-close" id="photo-upload-close">&times;</button>
+      </div>
+      <div class="photo-upload-body">
+        <div class="photo-dropzone" id="photo-dropzone">
+          <div class="photo-dropzone-icon">&#128247;</div>
+          <div class="photo-dropzone-text"><strong>Click to choose</strong> or drag a photo here<br>JPG, PNG, or WebP &bull; Max 10 MB</div>
+          <input type="file" id="photo-file-input" accept="image/jpeg,image/png,image/webp" style="display:none" />
+        </div>
+        <div class="photo-preview-area" id="photo-preview-area">
+          <img class="photo-preview-img" id="photo-preview-img" />
+          <div class="photo-preview-name" id="photo-preview-name"></div>
+          <button class="photo-preview-change" id="photo-preview-change">Choose Different Photo</button>
+        </div>
+        <div class="photo-upload-progress" id="photo-upload-progress">
+          <div class="photo-upload-progress-bar"><div class="photo-upload-progress-fill" id="photo-upload-progress-fill"></div></div>
+          <div class="photo-upload-status" id="photo-upload-status"></div>
+        </div>
+      </div>
+      <div class="photo-upload-footer">
+        <button class="photo-upload-cancel" id="photo-upload-cancel">Cancel</button>
+        <button class="photo-upload-submit" id="photo-upload-submit" disabled>Upload &amp; Submit for Review</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      var CLOUD_NAME = "dqni1tcfn";
+      var UPLOAD_PRESET = "ti-camp";
+      var MAX_SIZE = 10 * 1024 * 1024; // 10MB
+
+      var overlay = document.getElementById("photo-upload-overlay");
+      var closeBtn = document.getElementById("photo-upload-close");
+      var dropzone = document.getElementById("photo-dropzone");
+      var fileInput = document.getElementById("photo-file-input");
+      var previewArea = document.getElementById("photo-preview-area");
+      var previewImg = document.getElementById("photo-preview-img");
+      var previewName = document.getElementById("photo-preview-name");
+      var changeBtn = document.getElementById("photo-preview-change");
+      var cancelBtn = document.getElementById("photo-upload-cancel");
+      var submitBtn = document.getElementById("photo-upload-submit");
+      var progressEl = document.getElementById("photo-upload-progress");
+      var progressFill = document.getElementById("photo-upload-progress-fill");
+      var statusEl = document.getElementById("photo-upload-status");
+
+      var selectedFile = null;
+
+      // Open modal when camera button is clicked
+      document.addEventListener("click", function(e) {
+        if (e.target.closest("#upload-photo-btn")) {
+          openModal();
+        }
+      });
+
+      function openModal() {
+        selectedFile = null;
+        dropzone.style.display = "";
+        previewArea.style.display = "none";
+        progressEl.style.display = "none";
+        statusEl.textContent = "";
+        statusEl.className = "photo-upload-status";
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Upload & Submit for Review";
+        progressFill.style.width = "0%";
+        overlay.classList.add("open");
+      }
+
+      function closeModal() {
+        overlay.classList.remove("open");
+        selectedFile = null;
+      }
+
+      closeBtn.addEventListener("click", closeModal);
+      cancelBtn.addEventListener("click", closeModal);
+      overlay.addEventListener("click", function(e) {
+        if (e.target === overlay) closeModal();
+      });
+
+      // File selection
+      dropzone.addEventListener("click", function() { fileInput.click(); });
+      changeBtn.addEventListener("click", function() { fileInput.click(); });
+
+      fileInput.addEventListener("change", function() {
+        if (fileInput.files.length > 0) handleFile(fileInput.files[0]);
+      });
+
+      // Drag and drop
+      dropzone.addEventListener("dragover", function(e) {
+        e.preventDefault();
+        dropzone.classList.add("dragover");
+      });
+      dropzone.addEventListener("dragleave", function() {
+        dropzone.classList.remove("dragover");
+      });
+      dropzone.addEventListener("drop", function(e) {
+        e.preventDefault();
+        dropzone.classList.remove("dragover");
+        if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+      });
+
+      function handleFile(file) {
+        if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
+          statusEl.textContent = "Please select a JPG, PNG, or WebP image.";
+          statusEl.className = "photo-upload-status error";
+          return;
+        }
+        if (file.size > MAX_SIZE) {
+          statusEl.textContent = "File is too large. Max 10 MB.";
+          statusEl.className = "photo-upload-status error";
+          return;
+        }
+
+        selectedFile = file;
+        statusEl.textContent = "";
+        statusEl.className = "photo-upload-status";
+
+        // Show preview
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          previewImg.src = e.target.result;
+          previewName.textContent = file.name + " (" + (file.size / 1024 / 1024).toFixed(1) + " MB)";
+          dropzone.style.display = "none";
+          previewArea.style.display = "";
+          submitBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // Upload
+      submitBtn.addEventListener("click", function() {
+        if (!selectedFile || !personId) return;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Uploading...";
+        progressEl.style.display = "";
+        progressFill.style.width = "0%";
+        statusEl.textContent = "Uploading to server...";
+        statusEl.className = "photo-upload-status";
+
+        var publicId = "ti-profile-photos/" + personId + "-pending";
+
+        var formData = new FormData();
+        formData.append("file", selectedFile);
+        formData.append("upload_preset", UPLOAD_PRESET);
+        formData.append("public_id", publicId);
+        formData.append("tags", "ti-profile-pending");
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://api.cloudinary.com/v1_1/" + CLOUD_NAME + "/image/upload");
+
+        xhr.upload.addEventListener("progress", function(e) {
+          if (e.lengthComputable) {
+            var pct = Math.round((e.loaded / e.total) * 100);
+            progressFill.style.width = pct + "%";
+            statusEl.textContent = "Uploading... " + pct + "%";
+          }
+        });
+
+        xhr.addEventListener("load", function() {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            var result = JSON.parse(xhr.responseText);
+            progressFill.style.width = "100%";
+            statusEl.textContent = "Submitting for review...";
+
+            // Now submit for moderation
+            fetch("/api/profile-edit", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                personId: personId,
+                field: "profile_photo",
+                value: result.public_id
+              })
+            }).then(function(resp) {
+              if (!resp.ok) throw new Error("Failed");
+              statusEl.textContent = "Photo submitted for review!";
+              statusEl.className = "photo-upload-status success";
+              submitBtn.textContent = "Done";
+
+              // Replace footer with a Done button
+              cancelBtn.textContent = "Close";
+            }).catch(function() {
+              statusEl.textContent = "Photo uploaded but failed to send for review. Contact admin.";
+              statusEl.className = "photo-upload-status error";
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Retry";
+            });
+          } else {
+            statusEl.textContent = "Upload failed. Please try again.";
+            statusEl.className = "photo-upload-status error";
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Upload & Submit for Review";
+          }
+        });
+
+        xhr.addEventListener("error", function() {
+          statusEl.textContent = "Network error. Please try again.";
+          statusEl.className = "photo-upload-status error";
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Upload & Submit for Review";
+        });
+
+        xhr.send(formData);
+      });
+    })();
   </script>
 </body>
 </html>
