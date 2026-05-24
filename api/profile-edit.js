@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     }
 
     // Whitelist of editable fields
-    const allowedFields = ['nicknames', 'bio', 'birth_year', 'birth_place', 'death_year', 'death_place', 'maiden_name', 'profile_photo'];
+    const allowedFields = ['nicknames', 'bio', 'birth_year', 'birth_place', 'death_year', 'death_place', 'maiden_name', 'profile_photo', 'facts'];
     if (!allowedFields.includes(field)) {
       return res.status(400).json({ error: 'Field not editable: ' + field });
     }
@@ -55,6 +55,10 @@ export default async function handler(req, res) {
         <div style="margin:16px 0;text-align:center;">
           <img src="${thumbUrl}" alt="Profile photo" style="width:200px;height:200px;border-radius:8px;object-fit:cover;border:2px solid #e0ddd5;" />
         </div>`;
+    } else if (field === 'facts' && Array.isArray(value)) {
+      displayValue = value.length > 0
+        ? value.map(f => (f.year || '?') + ' — ' + f.label + (f.value ? ' (' + f.value + ')' : '')).join('<br>')
+        : '<em>(no events)</em>';
     } else if (Array.isArray(value)) {
       displayValue = value.length > 0 ? value.join(', ') : '<em>(empty)</em>';
     } else if (value === null || value === '') {

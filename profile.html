@@ -438,6 +438,111 @@
       margin-top: 0.15rem;
     }
 
+    /* Timeline edit controls */
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+    .timeline-header h2 { margin-bottom: 0; }
+
+    .timeline-edit-btn {
+      background: none; border: none;
+      font-size: 0.75rem; color: var(--green-mid);
+      cursor: pointer; text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .timeline-edit-btn:hover { color: var(--green-dark); }
+
+    .timeline-remove {
+      display: none;
+      background: none; border: none;
+      color: #b0a89c; font-size: 0.9rem;
+      cursor: pointer; padding: 0 0 0 0.5rem;
+      line-height: 1; float: right;
+    }
+    .timeline-remove:hover { color: #8b3a3a; }
+    .timeline-section.editing .timeline-remove { display: inline; }
+
+    .timeline-content.new-fact {
+      border-color: var(--amber);
+      background: #fdf6e3;
+    }
+
+    .timeline-add-form {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--cream);
+      border-radius: 8px;
+      border: 1px dashed var(--green-mid);
+    }
+    .timeline-section.editing .timeline-add-form { display: block; }
+
+    .timeline-add-form label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.2rem;
+      margin-top: 0.6rem;
+    }
+    .timeline-add-form label:first-child { margin-top: 0; }
+
+    .timeline-add-input {
+      width: 100%;
+      padding: 0.35rem 0.5rem;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.85rem;
+      border: 1px solid var(--green-mid);
+      border-radius: 4px;
+      outline: none;
+    }
+    .timeline-add-input:focus { border-color: var(--green-dark); }
+    .timeline-add-input.short { width: 80px; }
+
+    .timeline-add-row {
+      display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap;
+    }
+
+    .timeline-add-btn {
+      background: var(--green-dark); color: white; border: none;
+      padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.8rem; font-weight: 700;
+      margin-top: 0.75rem;
+    }
+    .timeline-add-btn:hover { background: var(--green-mid); }
+
+    .timeline-submit-row {
+      display: none;
+      margin-top: 1rem;
+      gap: 0.5rem;
+    }
+    .timeline-submit-row.visible { display: flex; }
+
+    .timeline-submit-btn {
+      background: var(--amber); color: white; border: none;
+      padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.8rem; font-weight: 700;
+    }
+    .timeline-submit-btn:hover { background: #b07808; }
+
+    .timeline-cancel-btn {
+      background: none; border: 1px solid #ccc; color: var(--text-mid);
+      padding: 0.4rem 0.8rem; border-radius: 4px; cursor: pointer;
+      font-family: 'Lato', sans-serif; font-size: 0.8rem;
+    }
+    .timeline-cancel-btn:hover { background: var(--cream-dark); }
+
+    .timeline-status {
+      font-size: 0.75rem; margin-top: 0.5rem;
+    }
+    .timeline-status.success { color: var(--green-mid); }
+    .timeline-status.error { color: #8b3a3a; }
+
     .timeline-empty {
       color: var(--text-mid);
       font-style: italic;
@@ -739,15 +844,22 @@
         });
       }
 
+      // Build timeline HTML — birth/death are not editable (they're separate fields), only facts are
       var timelineHtml = "";
+      var factsForEdit = (profile.facts || []).slice();
+
       if (timelineItems.length > 0) {
-        timelineHtml = '<div class="timeline">';
-        timelineItems.forEach(function(item) {
-          timelineHtml += '<div class="timeline-item">';
+        timelineHtml = '<div class="timeline" id="timeline-list">';
+        timelineItems.forEach(function(item, idx) {
+          var isFact = item.label !== "Birth" && item.label !== "Death";
+          timelineHtml += '<div class="timeline-item" data-fact-idx="' + (isFact ? idx : '') + '">';
           if (item.year) {
             timelineHtml += '<div class="timeline-year">' + item.year + '</div>';
           }
           timelineHtml += '<div class="timeline-content">';
+          if (isFact) {
+            timelineHtml += '<button class="timeline-remove" data-idx="' + idx + '">&times;</button>';
+          }
           timelineHtml += '<div class="timeline-label">' + item.label + '</div>';
           if (item.detail) {
             timelineHtml += '<div class="timeline-detail">' + item.detail + '</div>';
@@ -756,8 +868,24 @@
         });
         timelineHtml += '</div>';
       } else {
-        timelineHtml = '<p class="timeline-empty">No timeline events yet.</p>';
+        timelineHtml = '<div id="timeline-list"><p class="timeline-empty">No timeline events yet.</p></div>';
       }
+
+      // Add form for new events
+      timelineHtml += '<div class="timeline-add-form" id="timeline-add-form">' +
+        '<div class="timeline-add-row">' +
+          '<div><label>Year</label><input type="number" class="timeline-add-input short" id="tl-add-year" placeholder="2020" /></div>' +
+          '<div style="flex:1"><label>Event</label><input type="text" class="timeline-add-input" id="tl-add-label" placeholder="e.g. Graduated College" /></div>' +
+        '</div>' +
+        '<div><label>Detail (optional)</label><input type="text" class="timeline-add-input" id="tl-add-detail" placeholder="e.g. Ohio State University" /></div>' +
+        '<button class="timeline-add-btn" id="tl-add-btn">+ Add Event</button>' +
+      '</div>';
+
+      timelineHtml += '<div class="timeline-submit-row" id="tl-submit-row">' +
+        '<button class="timeline-submit-btn" id="tl-submit-btn">Submit for Review</button>' +
+        '<button class="timeline-cancel-btn" id="tl-cancel-btn">Cancel</button>' +
+      '</div>' +
+      '<div class="timeline-status" id="tl-status"></div>';
 
       // -- Nicknames box --
       var nicknames = profile.nicknames || [];
@@ -814,8 +942,11 @@
           '<div class="profile-bio">' + bioHtml + '</div>' +
         '</div>' +
 
-        '<div class="timeline-section">' +
-          '<h2>Timeline</h2>' +
+        '<div class="timeline-section" id="timeline-section">' +
+          '<div class="timeline-header">' +
+            '<h2>Timeline</h2>' +
+            '<button class="timeline-edit-btn" id="tl-edit-btn">Edit</button>' +
+          '</div>' +
           timelineHtml +
         '</div>';
 
@@ -930,6 +1061,155 @@
 
         submitBtn.disabled = false;
         submitBtn.textContent = "Submit for Review";
+      });
+
+      // ── TIMELINE EDIT LOGIC ──
+      var originalFacts = (profile.facts || []).map(function(f) { return { year: f.year, label: f.label, value: f.value }; });
+      var editFacts = originalFacts.map(function(f) { return { year: f.year, label: f.label, value: f.value }; });
+
+      var tlSection = document.getElementById("timeline-section");
+      var tlEditBtn = document.getElementById("tl-edit-btn");
+      var tlSubmitRow = document.getElementById("tl-submit-row");
+      var tlSubmitBtn = document.getElementById("tl-submit-btn");
+      var tlCancelBtn = document.getElementById("tl-cancel-btn");
+      var tlStatus = document.getElementById("tl-status");
+      var tlAddYear = document.getElementById("tl-add-year");
+      var tlAddLabel = document.getElementById("tl-add-label");
+      var tlAddDetail = document.getElementById("tl-add-detail");
+      var tlAddBtn = document.getElementById("tl-add-btn");
+
+      function factsChanged() {
+        if (editFacts.length !== originalFacts.length) return true;
+        return !editFacts.every(function(f, i) {
+          var o = originalFacts[i];
+          return f.year === o.year && f.label === o.label && f.value === o.value;
+        });
+      }
+
+      function renderEditTimeline() {
+        var listEl = document.getElementById("timeline-list");
+
+        // Build items: birth + editFacts + death
+        var items = [];
+        if (profile.birth_year) {
+          items.push({ year: profile.birth_year, label: "Birth", detail: profile.birth_place || null, fixed: true });
+        }
+        editFacts.forEach(function(f, i) {
+          items.push({ year: f.year, label: f.label, detail: f.value, factIdx: i, isNew: i >= originalFacts.length });
+        });
+        if (profile.death_year) {
+          items.push({ year: profile.death_year, label: "Death", detail: profile.death_place || null, fixed: true });
+        }
+
+        if (items.length === 0) {
+          listEl.innerHTML = '<p class="timeline-empty">No timeline events yet.</p>';
+        } else {
+          var html = '<div class="timeline">';
+          items.forEach(function(item) {
+            html += '<div class="timeline-item">';
+            if (item.year) {
+              html += '<div class="timeline-year">' + item.year + '</div>';
+            }
+            html += '<div class="timeline-content' + (item.isNew ? ' new-fact' : '') + '">';
+            if (!item.fixed) {
+              html += '<button class="timeline-remove" data-fact-idx="' + item.factIdx + '">&times;</button>';
+            }
+            html += '<div class="timeline-label">' + item.label + '</div>';
+            if (item.detail) {
+              html += '<div class="timeline-detail">' + item.detail + '</div>';
+            }
+            html += '</div></div>';
+          });
+          html += '</div>';
+          listEl.innerHTML = html;
+        }
+
+        // Attach remove handlers
+        listEl.querySelectorAll(".timeline-remove").forEach(function(btn) {
+          btn.addEventListener("click", function() {
+            var idx = parseInt(btn.getAttribute("data-fact-idx"));
+            editFacts.splice(idx, 1);
+            renderEditTimeline();
+          });
+        });
+
+        // Show/hide submit based on changes
+        if (factsChanged()) {
+          tlSubmitRow.classList.add("visible");
+        } else {
+          tlSubmitRow.classList.remove("visible");
+        }
+      }
+
+      tlEditBtn.addEventListener("click", function() {
+        editFacts = originalFacts.map(function(f) { return { year: f.year, label: f.label, value: f.value }; });
+        tlSection.classList.add("editing");
+        tlEditBtn.style.display = "none";
+        tlStatus.textContent = "";
+        renderEditTimeline();
+      });
+
+      tlCancelBtn.addEventListener("click", function() {
+        tlSection.classList.remove("editing");
+        tlSubmitRow.classList.remove("visible");
+        tlEditBtn.style.display = "";
+        editFacts = originalFacts.map(function(f) { return { year: f.year, label: f.label, value: f.value }; });
+        renderEditTimeline();
+      });
+
+      tlAddBtn.addEventListener("click", function() {
+        var label = tlAddLabel.value.trim();
+        if (!label) { tlAddLabel.focus(); return; }
+        var year = tlAddYear.value ? parseInt(tlAddYear.value) : null;
+        var detail = tlAddDetail.value.trim() || null;
+
+        editFacts.push({ year: year, label: label, value: detail });
+
+        // Sort by year (nulls at end)
+        editFacts.sort(function(a, b) {
+          if (a.year === null && b.year === null) return 0;
+          if (a.year === null) return 1;
+          if (b.year === null) return -1;
+          return a.year - b.year;
+        });
+
+        tlAddYear.value = "";
+        tlAddLabel.value = "";
+        tlAddDetail.value = "";
+        tlAddLabel.focus();
+        renderEditTimeline();
+      });
+
+      tlSubmitBtn.addEventListener("click", async function() {
+        tlSubmitBtn.disabled = true;
+        tlSubmitBtn.textContent = "Submitting...";
+        tlStatus.textContent = "";
+
+        try {
+          var resp = await fetch("/api/profile-edit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              personId: personId,
+              field: "facts",
+              value: editFacts
+            })
+          });
+
+          if (!resp.ok) throw new Error("Request failed");
+
+          tlSection.classList.remove("editing");
+          tlEditBtn.style.display = "";
+          tlSubmitRow.classList.remove("visible");
+          tlStatus.className = "timeline-status success";
+          tlStatus.textContent = "Changes submitted for review!";
+        } catch (e) {
+          tlStatus.className = "timeline-status error";
+          tlStatus.textContent = "Failed to submit. Try again.";
+        }
+
+        tlSubmitBtn.disabled = false;
+        tlSubmitBtn.textContent = "Submit for Review";
       });
     }
 

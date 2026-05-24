@@ -154,9 +154,16 @@ export default async function handler(req, res) {
       }
 
       const displayName = editData.personId.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-      const displayValue = Array.isArray(editData.value)
-        ? editData.value.join(', ') || '(empty)'
-        : String(editData.value ?? '(cleared)');
+      let displayValue;
+      if (editData.field === 'facts' && Array.isArray(editData.value)) {
+        displayValue = editData.value.length > 0
+          ? editData.value.map(f => (f.year || '?') + ' — ' + f.label + (f.value ? ' (' + f.value + ')' : '')).join(', ')
+          : '(no events)';
+      } else if (Array.isArray(editData.value)) {
+        displayValue = editData.value.join(', ') || '(empty)';
+      } else {
+        displayValue = String(editData.value ?? '(cleared)');
+      }
 
       if (action === 'approve-edit') {
         try {
@@ -187,9 +194,15 @@ export default async function handler(req, res) {
           await applyProfileEdit(editData);
           res.setHeader('Content-Type', 'text/html');
 
-          const msg = editData.field === 'profile_photo'
-            ? `Profile photo for ${displayName} has been approved and is now visible.`
-            : `Updated <strong>${editData.field}</strong> for ${displayName} to: ${displayValue}. The site will redeploy in ~30 seconds.`;
+          let msg;
+          if (editData.field === 'profile_photo') {
+            msg = `Profile photo for ${displayName} has been approved and is now visible.`;
+          } else if (editData.field === 'facts') {
+            const count = Array.isArray(editData.value) ? editData.value.length : 0;
+            msg = `Timeline updated for ${displayName} (${count} event${count === 1 ? '' : 's'}). The site will redeploy in ~30 seconds.`;
+          } else {
+            msg = `Updated <strong>${editData.field}</strong> for ${displayName} to: ${displayValue}. The site will redeploy in ~30 seconds.`;
+          }
 
           return res.status(200).send(html(
             editData.field === 'profile_photo' ? 'Photo Approved' : 'Edit Approved',
