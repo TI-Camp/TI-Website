@@ -646,9 +646,16 @@
 
     .photo-preview-img {
       width: 180px; height: 180px;
-      border-radius: 8px;
+      border-radius: 50%;
       object-fit: cover;
-      border: 2px solid var(--cream-dark);
+      border: 3px solid var(--cream-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .photo-preview-hint {
+      font-size: 0.75rem;
+      color: var(--text-mid);
+      font-style: italic;
       margin-bottom: 0.75rem;
     }
 
@@ -705,6 +712,20 @@
       border-radius: 3px;
       transition: width 0.2s;
     }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .photo-upload-spinner {
+      display: none;
+      width: 28px; height: 28px;
+      border: 3px solid var(--cream-dark);
+      border-top-color: var(--green-mid);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0.75rem auto 0;
+    }
+    .photo-upload-spinner.visible { display: block; }
+
     .photo-upload-status {
       font-size: 0.8rem;
       color: var(--text-mid);
@@ -1240,11 +1261,13 @@
         </div>
         <div class="photo-preview-area" id="photo-preview-area">
           <img class="photo-preview-img" id="photo-preview-img" />
+          <div class="photo-preview-hint">This is how your photo will appear</div>
           <div class="photo-preview-name" id="photo-preview-name"></div>
           <button class="photo-preview-change" id="photo-preview-change">Choose Different Photo</button>
         </div>
         <div class="photo-upload-progress" id="photo-upload-progress">
           <div class="photo-upload-progress-bar"><div class="photo-upload-progress-fill" id="photo-upload-progress-fill"></div></div>
+          <div class="photo-upload-spinner" id="photo-upload-spinner"></div>
           <div class="photo-upload-status" id="photo-upload-status"></div>
         </div>
       </div>
@@ -1273,6 +1296,7 @@
       var submitBtn = document.getElementById("photo-upload-submit");
       var progressEl = document.getElementById("photo-upload-progress");
       var progressFill = document.getElementById("photo-upload-progress-fill");
+      var spinnerEl = document.getElementById("photo-upload-spinner");
       var statusEl = document.getElementById("photo-upload-status");
 
       var selectedFile = null;
@@ -1289,10 +1313,14 @@
         dropzone.style.display = "";
         previewArea.style.display = "none";
         progressEl.style.display = "none";
+        spinnerEl.classList.remove("visible");
         statusEl.textContent = "";
         statusEl.className = "photo-upload-status";
         submitBtn.disabled = true;
+        submitBtn.style.display = "";
         submitBtn.textContent = "Upload & Submit for Review";
+        cancelBtn.style.display = "";
+        cancelBtn.textContent = "Cancel";
         progressFill.style.width = "0%";
         overlay.classList.add("open");
       }
@@ -1370,7 +1398,8 @@
         cancelBtn.style.display = "none";
         progressEl.style.display = "";
         progressFill.style.width = "0%";
-        statusEl.textContent = "Uploading photo...";
+        spinnerEl.classList.add("visible");
+        statusEl.textContent = "Uploading photo — this may take a moment...";
         statusEl.className = "photo-upload-status";
 
         // Use unique public_id with timestamp to avoid Cloudinary caching old versions
@@ -1402,6 +1431,7 @@
           if (xhr.status >= 200 && xhr.status < 300) {
             var result = JSON.parse(xhr.responseText);
             progressFill.style.width = "100%";
+            spinnerEl.classList.remove("visible");
             statusEl.textContent = "Sending for review...";
 
             // Now submit for moderation
@@ -1441,6 +1471,7 @@
               cancelBtn.style.display = "";
             });
           } else {
+            spinnerEl.classList.remove("visible");
             statusEl.textContent = "Upload failed. Please try again.";
             statusEl.className = "photo-upload-status error";
             submitBtn.disabled = false;
@@ -1452,6 +1483,7 @@
         });
 
         xhr.addEventListener("error", function() {
+          spinnerEl.classList.remove("visible");
           statusEl.textContent = "Network error. Please try again.";
           statusEl.className = "photo-upload-status error";
           submitBtn.disabled = false;
