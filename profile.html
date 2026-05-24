@@ -809,7 +809,8 @@
 
     function renderProfile(main, profile) {
       const photoPublicId = "ti-profile-photos/" + personId;
-      const photoUrl = "https://res.cloudinary.com/" + CLOUD_NAME + "/image/upload/c_fill,g_face,w_300,h_300,q_auto,f_auto/" + photoPublicId;
+      const cacheBust = profile.profile_photo ? "?v=" + Date.now() : "";
+      const photoUrl = "https://res.cloudinary.com/" + CLOUD_NAME + "/image/upload/c_fill,g_face,w_300,h_300,q_auto,f_auto/" + photoPublicId + cacheBust;
 
       // -- Header: birth/death lines --
       var datesHtml = "";
