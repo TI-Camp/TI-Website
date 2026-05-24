@@ -1265,6 +1265,7 @@
           <div class="photo-preview-name" id="photo-preview-name"></div>
           <button class="photo-preview-change" id="photo-preview-change">Choose Different Photo</button>
         </div>
+        <div id="photo-upload-success" style="display:none;text-align:center;padding:1rem 0;"></div>
         <div class="photo-upload-progress" id="photo-upload-progress">
           <div class="photo-upload-progress-bar"><div class="photo-upload-progress-fill" id="photo-upload-progress-fill"></div></div>
           <div class="photo-upload-spinner" id="photo-upload-spinner"></div>
@@ -1298,6 +1299,7 @@
       var progressFill = document.getElementById("photo-upload-progress-fill");
       var spinnerEl = document.getElementById("photo-upload-spinner");
       var statusEl = document.getElementById("photo-upload-status");
+      var successEl = document.getElementById("photo-upload-success");
 
       var selectedFile = null;
 
@@ -1313,6 +1315,8 @@
         dropzone.style.display = "";
         previewArea.style.display = "none";
         progressEl.style.display = "none";
+        successEl.style.display = "none";
+        successEl.innerHTML = "";
         spinnerEl.classList.remove("visible");
         statusEl.textContent = "";
         statusEl.className = "photo-upload-status";
@@ -1446,18 +1450,18 @@
             }).then(function(resp) {
               if (!resp.ok) throw new Error("Failed");
 
-              // Keep preview, hide progress
+              // Hide upload UI, show success state
               progressEl.style.display = "none";
+              previewArea.style.display = "none";
+              dropzone.style.display = "none";
 
-              // Show success message with photo preview
-              var body = document.querySelector(".photo-upload-body");
-              body.innerHTML =
-                '<div style="text-align:center;padding:1rem 0;">' +
-                  '<img src="' + previewImg.src + '" style="width:150px;height:150px;border-radius:8px;object-fit:cover;border:2px solid #e0ddd5;margin-bottom:1rem;" />' +
-                  '<div style="font-size:1.5rem;margin-bottom:0.3rem;color:#2e6b3e;">&#10003;</div>' +
-                  '<p style="font-size:1rem;font-weight:700;color:#2e6b3e;margin-bottom:0.3rem;">Photo submitted for review!</p>' +
-                  '<p style="font-size:0.85rem;color:#3d5a42;">You\'ll see it on the profile once approved.</p>' +
-                '</div>';
+              // Show success message
+              successEl.innerHTML =
+                '<img src="' + previewImg.src + '" style="width:150px;height:150px;border-radius:50%;object-fit:cover;border:3px solid #e0ddd5;margin-bottom:1rem;" />' +
+                '<div style="font-size:1.5rem;margin-bottom:0.3rem;color:#2e6b3e;">&#10003;</div>' +
+                '<p style="font-size:1rem;font-weight:700;color:#2e6b3e;margin-bottom:0.3rem;">Photo submitted for review!</p>' +
+                '<p style="font-size:0.85rem;color:#3d5a42;">You\'ll see it on the profile once approved.</p>';
+              successEl.style.display = "";
 
               // Footer: just a close button
               submitBtn.style.display = "none";
