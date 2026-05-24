@@ -1082,14 +1082,20 @@
       submitBtn.addEventListener("click", function() {
         if (!selectedFile || !personId) return;
 
+        // Hide the change button, keep preview visible
+        changeBtn.style.display = "none";
+        previewName.style.display = "none";
         submitBtn.disabled = true;
         submitBtn.textContent = "Uploading...";
+        cancelBtn.style.display = "none";
         progressEl.style.display = "";
         progressFill.style.width = "0%";
-        statusEl.textContent = "Uploading to server...";
+        statusEl.textContent = "Uploading photo...";
         statusEl.className = "photo-upload-status";
 
-        var publicId = "ti-profile-photos/" + personId + "-pending";
+        // Use unique public_id with timestamp to avoid Cloudinary caching old versions
+        var timestamp = Date.now();
+        var publicId = "ti-profile-photos/" + personId + "-pending-" + timestamp;
 
         var formData = new FormData();
         formData.append("file", selectedFile);
@@ -1104,7 +1110,11 @@
           if (e.lengthComputable) {
             var pct = Math.round((e.loaded / e.total) * 100);
             progressFill.style.width = pct + "%";
-            statusEl.textContent = "Uploading... " + pct + "%";
+            if (pct < 100) {
+              statusEl.textContent = "Uploading photo... " + pct + "%";
+            } else {
+              statusEl.textContent = "Processing...";
+            }
           }
         });
 
@@ -1112,7 +1122,7 @@
           if (xhr.status >= 200 && xhr.status < 300) {
             var result = JSON.parse(xhr.responseText);
             progressFill.style.width = "100%";
-            statusEl.textContent = "Submitting for review...";
+            statusEl.textContent = "Sending for review...";
 
             // Now submit for moderation
             fetch("/api/profile-edit", {
@@ -1125,23 +1135,39 @@
               })
             }).then(function(resp) {
               if (!resp.ok) throw new Error("Failed");
-              statusEl.textContent = "Photo submitted for review!";
-              statusEl.className = "photo-upload-status success";
-              submitBtn.textContent = "Done";
 
-              // Replace footer with a Done button
+              // Keep preview, hide progress
+              progressEl.style.display = "none";
+
+              // Show success message with photo preview
+              var body = document.querySelector(".photo-upload-body");
+              body.innerHTML =
+                '<div style="text-align:center;padding:1rem 0;">' +
+                  '<img src="' + previewImg.src + '" style="width:150px;height:150px;border-radius:8px;object-fit:cover;border:2px solid #e0ddd5;margin-bottom:1rem;" />' +
+                  '<div style="font-size:1.5rem;margin-bottom:0.3rem;color:#2e6b3e;">&#10003;</div>' +
+                  '<p style="font-size:1rem;font-weight:700;color:#2e6b3e;margin-bottom:0.3rem;">Photo submitted for review!</p>' +
+                  '<p style="font-size:0.85rem;color:#3d5a42;">You\'ll see it on the profile once approved.</p>' +
+                '</div>';
+
+              // Footer: just a close button
+              submitBtn.style.display = "none";
+              cancelBtn.style.display = "";
               cancelBtn.textContent = "Close";
             }).catch(function() {
               statusEl.textContent = "Photo uploaded but failed to send for review. Contact admin.";
               statusEl.className = "photo-upload-status error";
               submitBtn.disabled = false;
               submitBtn.textContent = "Retry";
+              cancelBtn.style.display = "";
             });
           } else {
             statusEl.textContent = "Upload failed. Please try again.";
             statusEl.className = "photo-upload-status error";
             submitBtn.disabled = false;
             submitBtn.textContent = "Upload & Submit for Review";
+            changeBtn.style.display = "";
+            previewName.style.display = "";
+            cancelBtn.style.display = "";
           }
         });
 
@@ -1150,6 +1176,9 @@
           statusEl.className = "photo-upload-status error";
           submitBtn.disabled = false;
           submitBtn.textContent = "Upload & Submit for Review";
+          changeBtn.style.display = "";
+          previewName.style.display = "";
+          cancelBtn.style.display = "";
         });
 
         xhr.send(formData);

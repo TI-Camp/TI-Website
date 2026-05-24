@@ -162,8 +162,8 @@ export default async function handler(req, res) {
         try {
           // Special handling for profile photos
           if (editData.field === 'profile_photo') {
-            const pendingId = editData.value; // e.g. ti-profile-photos/benjamin-boughton-pending
-            const finalId = pendingId.replace(/-pending$/, ''); // e.g. ti-profile-photos/benjamin-boughton
+            const pendingId = editData.value; // e.g. ti-profile-photos/benjamin-boughton-pending-1716400000000
+            const finalId = 'ti-profile-photos/' + editData.personId; // e.g. ti-profile-photos/benjamin-boughton
 
             // Rename pending photo to final ID (overwrites any existing photo)
             try {
