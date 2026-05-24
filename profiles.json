@@ -348,7 +348,13 @@
     "death_place": null,
     "bio": null,
     "generation": 5,
-    "facts": []
+    "facts": [
+      {
+        "year": 1994,
+        "label": "Birth",
+        "value": null
+      }
+    ]
   },
   "sarah-boughton": {
     "name": "Sarah Boughton",
