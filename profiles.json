@@ -3746,5 +3746,17 @@
     "bio": null,
     "generation": 5,
     "facts": []
+  },
+  "saptarshi-ghose": {
+    "name": "Saptarshi Ghose",
+    "maiden_name": null,
+    "nicknames": [],
+    "birth_year": null,
+    "birth_place": null,
+    "death_year": null,
+    "death_place": null,
+    "bio": null,
+    "generation": 5,
+    "facts": []
   }
 }
