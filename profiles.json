@@ -298,6 +298,41 @@
         "year": 1965,
         "label": "Birth",
         "value": null
+      },
+      {
+        "year": 1965,
+        "label": "Birth",
+        "value": "March 23"
+      },
+      {
+        "year": 1988,
+        "label": "Graduated from College; BS Chemical Engineering",
+        "value": "The Ohio State University"
+      },
+      {
+        "year": 1991,
+        "label": "Married William Boughton",
+        "value": "June 1"
+      },
+      {
+        "year": 1994,
+        "label": "Gave birth to Jennifer Boughton",
+        "value": "March 27"
+      },
+      {
+        "year": 1994,
+        "label": "Gave Birth to Benjamin Boughton",
+        "value": "May 15"
+      },
+      {
+        "year": 2012,
+        "label": "Retired from Procter & Gamble",
+        "value": null
+      },
+      {
+        "year": 2013,
+        "label": "Started Waste to Worth Innovations",
+        "value": null
       }
     ]
   },
