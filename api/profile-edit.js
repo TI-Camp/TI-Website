@@ -102,7 +102,8 @@ export default async function handler(req, res) {
         to: [MODERATOR_EMAIL],
         subject: `Profile edit pending: ${field} for ${personId.replace(/-/g, ' ')}`,
         html: emailHtml,
-        tracking: { click: false },
+        tracking: { click: false, open: false },
+        headers: { "X-Entity-Ref-ID": personId + "-" + Date.now() },
       }),
     });
 
