@@ -373,7 +373,6 @@
     .bio-edit-btn:hover { color: var(--green-dark); }
 
     .bio-textarea {
-      display: none;
       width: 100%;
       min-height: 100px;
       padding: 0.6rem 0.8rem;
@@ -1012,7 +1011,7 @@
               '<button class="bio-edit-btn" id="bio-edit-btn">Edit</button>' +
             '</div>' +
             '<div id="bio-display">' + bioHtml + '</div>' +
-            '<textarea class="bio-textarea" id="bio-textarea" placeholder="Write a short bio...">' + (profile.bio || '') + '</textarea>' +
+            '<textarea class="bio-textarea" id="bio-textarea" style="display:none" placeholder="Write a short bio...">' + (profile.bio || '') + '</textarea>' +
             '<div class="bio-submit-row" id="bio-submit-row">' +
               '<button class="nicknames-submit-btn" id="bio-submit-btn">Submit for Review</button>' +
               '<button class="nicknames-cancel-btn" id="bio-cancel-btn">Cancel</button>' +
@@ -1154,7 +1153,7 @@
 
       bioEditBtn.addEventListener("click", function() {
         bioDisplay.style.display = "none";
-        bioTextarea.style.display = "";
+        bioTextarea.style.display = "block";
         bioTextarea.focus();
         bioEditBtn.style.display = "none";
         bioSubmitRow.classList.add("visible");
