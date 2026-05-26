@@ -297,6 +297,11 @@
       {
         "year": 1965,
         "label": "Birth",
+        "value": null
+      },
+      {
+        "year": 1965,
+        "label": "Birth",
         "value": "March 23"
       },
       {
@@ -313,6 +318,11 @@
         "year": 1994,
         "label": "Gave birth to Jennifer Boughton",
         "value": "March 27"
+      },
+      {
+        "year": 1997,
+        "label": "Gave Birth to Benjamin Boughton",
+        "value": "May 15"
       },
       {
         "year": 2012,
