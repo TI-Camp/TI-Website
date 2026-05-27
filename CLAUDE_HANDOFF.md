@@ -1,6 +1,6 @@
 # Claude Handoff — TI-Website Full Context
 
-**Last updated:** May 23, 2026
+**Last updated:** May 26, 2026
 **Purpose:** Complete context for any new Claude session picking up this project.
 
 ---
@@ -11,7 +11,9 @@
 
 - **GitHub:** https://github.com/TI-Camp/TI-Website
 - **Hosting:** Vercel — auto-deploys on push to `main`
-- **Live URL:** https://ti-website-gamma.vercel.app
+- **Live URL:** https://ti-camp.org (custom domain, bought through Vercel)
+- **Old URL:** https://ti-website-gamma.vercel.app (redirects to ti-camp.org)
+- **www:** www.ti-camp.org redirects to ti-camp.org
 - **Stack:** Plain HTML/CSS + vanilla JavaScript. No frameworks. Google Fonts (Playfair Display + Lato).
 - **Auth:** Password-protected via Vercel middleware. Password: `Grammie1926`. Cookie-based (30-day).
 
@@ -84,15 +86,13 @@ GITHUB_TOKEN=<fine-grained PAT, expires ~Aug 2026, TI-Camp org, Contents read+wr
 - **Nickname search** — family tree search includes nicknames from profiles.json
 - **Login redirect** — middleware preserves query params through auth flow via `?returnTo=` param
 
-### What's NOT Working (needs debugging)
-- **Profile photo: approved photo not displaying** — Upload works, moderation email works, approve endpoint runs, but the photo doesn't show on the profile page after approval. Likely issue: mismatch between the Cloudinary public ID after rename and the URL the profile page expects. The profile page tries to load `ti-profile-photos/{person-id}` but the rename from `{person-id}-pending` to `{person-id}` may not be working correctly.
-
 ### What's Not Built Yet
-- [ ] Extend edit UI to other fields (bio, birth/death dates, birthplace, maiden name)
-- [ ] Timeline event editing (v2)
+- [ ] **Mobile responsiveness on profile page** — widened container (960px) broke mobile layout. Needs dedicated pass with screenshots.
+- [ ] Extend edit UI to remaining fields (birth/death dates, birthplace, maiden name)
 - [ ] "Add new person" flow — for family members not yet in the tree (minimum: full name + parents, moderated)
-- [ ] Profile photos showing on tree card nodes (replace silhouette placeholders)
-- [ ] Photo upload for homepage slideshow from profile page
+- [ ] Photo crop/adjust tool — user feedback: want to reposition photo in frame before upload
+- [ ] **Documents page: TI Manual integration** — Adapt the TI Manual Google Doc into the documents page with better aesthetics. Includes cabin specs, board member info.
+- [ ] Nickname box overlaps long names on desktop — partially fixed with wider container + padding-right, needs more work on mobile
 
 ---
 
@@ -210,18 +210,33 @@ Approved profile edits commit to `profiles.json` via GitHub API. This means the 
 - `api/profile-edit.js` — profile edit submission (~110 lines)
 - `middleware.js` — auth middleware (16 lines but critical)
 - `vercel.json` — clean URLs config
-- `profiles.json` — 305 profile entries
+- `profiles.json` — 310 profile entries
 
 ---
 
 ## Immediate Next Steps
 
-1. **Debug profile photo display** — approved photo not showing. Check Cloudinary rename, verify public ID matches what profile.html expects
-2. **Extend edit UI** — add edit capability for bio, birth/death dates, birthplace, maiden name (same moderation flow as nicknames)
-3. **Profile photos on tree cards** — replace silhouette placeholders with approved Cloudinary photos
-4. **"Add new person" flow** — for family members to add people not yet in the tree
-5. **Film how-to videos** — equipment ready
-6. **Security review session** — see security.md
+1. **Mobile responsiveness on profile page** — priority #1. Get screenshots from Ben, fix layout for mobile.
+2. **Extend edit UI** — add edit capability for birth/death dates, birthplace, maiden name (bio is done, same moderation flow)
+3. **"Add new person" flow** — for family members to add people not yet in the tree (name + parents minimum, moderated)
+4. **Photo crop/adjust tool** — let users reposition photo in frame before uploading
+5. **Documents page: TI Manual** — adapt Google Doc content into styled documents page (cabin specs, board info)
+6. **Film how-to videos** — equipment ready
+7. **Security review session** — see security.md
+
+## Development History (Summary)
+
+| Session | Date | Key Work |
+|---------|------|----------|
+| 1-5 | Mar 1–24 | Landing page, Cloudinary integration, slideshow, photo moderation, family wheel |
+| 6 | Apr 5 | Abandoned wheel, designed vertical tree spec |
+| 7-10 | Apr 22–May 14 | D3 vertical tree, all 4 branches, relationship calculator, journey animation, how-to skeleton |
+| 11 | May 18 | Mobile nav fixes, responsive tree header, collapsed sections |
+| 12 | May 19-21 | Profile pages: scaffold, nicknames edit+moderation, GitHub API commits, tree node IDs, View Profile icons, 305 skeleton profiles |
+| 13 | May 22 | Profile photo upload modal, photo moderation APIs, nickname search fix |
+| 14 | May 23 | Handoff doc, new family members (Mariah, Patrick, Emily Thornton, Alex Richardson, Saptarshi) |
+| 15 | May 24 | Photo upload UX fixes (circular preview, spinner), deploy bug investigation (was domain redirect all along) |
+| 16 | May 26 | Domain setup (ti-camp.org + www redirect), bio editing, timeline event editing, schedule sheet URL update |
 
 ---
 
