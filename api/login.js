@@ -1,6 +1,9 @@
 import { createHmac } from 'crypto';
 
-const SITE_PASSWORD = process.env.SITE_PASSWORD || 'Grammie1926';
+const SITE_PASSWORD = process.env.SITE_PASSWORD;
+if (!SITE_PASSWORD) {
+  console.error('FATAL: SITE_PASSWORD environment variable is not set');
+}
 const AUTH_SECRET = process.env.MODERATION_SECRET;
 const MAX_AGE = 30 * 24 * 60 * 60; // 30 days in seconds
 

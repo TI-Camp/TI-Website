@@ -2,55 +2,56 @@ export const config = {
   matcher: ['/((?!api|login\\.html|login$|logo\\.png|.*\\.(?:png|jpg|ico|svg|css|js|json|woff|woff2|ttf)$).*)'],
 };
 
-function verifyAuthCookie(cookieHeader) {
+const MAX_AGE = 30 * 24 * 60 * 60; // 30 days
+
+async function verifyAuthCookie(cookieHeader) {
   if (!cookieHeader) return false;
 
-  // Extract ti-auth value from cookie header
   const match = cookieHeader.match(/ti-auth=([^;]+)/);
   if (!match) return false;
 
   const token = match[1];
+  if (token === 'authenticated') return false; // reject legacy cookies
 
-  // Legacy support: old "authenticated" string — treat as expired, force re-login
-  if (token === 'authenticated') return false;
+  const dotIdx = token.indexOf('.');
+  if (dotIdx === -1) return false;
 
-  // Verify signed token: "issued.signature"
-  if (!token.includes('.')) return false;
-  const [issuedStr, sig] = token.split('.');
+  const issuedStr = token.slice(0, dotIdx);
+  const sig = token.slice(dotIdx + 1);
   const issued = parseInt(issuedStr, 10);
   if (isNaN(issued)) return false;
 
-  // Verify signature using Web Crypto (Edge Runtime compatible)
-  // We can't use Node's crypto here, so we do a simple HMAC check
-  // by importing from login.js at build time. However, Edge middleware
-  // doesn't support Node crypto. Instead, we'll use a simpler approach:
-  // verify the timestamp is reasonable and the signature format is valid.
-  // The actual HMAC is verified server-side on login; here we just check
-  // the token structure and expiry.
-
-  const MAX_AGE = 30 * 24 * 60 * 60; // 30 days
+  // Server-enforced expiry
   const now = Math.floor(Date.now() / 1000);
-
-  // Token must not be expired
   if (now - issued > MAX_AGE) return false;
-
-  // Token must not be from the future (more than 1 minute tolerance)
   if (issued > now + 60) return false;
 
-  // Signature must be a 64-char hex string (SHA-256 HMAC)
-  if (!/^[a-f0-9]{64}$/.test(sig)) return false;
+  // Full HMAC verification using crypto.subtle (Edge Runtime compatible)
+  const secret = process.env.MODERATION_SECRET;
+  if (!secret) return false;
 
-  return true;
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const sigBytes = await crypto.subtle.sign('HMAC', key, encoder.encode(issuedStr));
+  const expected = Array.from(new Uint8Array(sigBytes)).map(b => b.toString(16).padStart(2, '0')).join('');
+
+  return sig === expected;
 }
 
-export default function middleware(request) {
+export default async function middleware(request) {
   const cookie = request.headers.get('cookie') || '';
 
-  if (verifyAuthCookie(cookie)) {
+  if (await verifyAuthCookie(cookie)) {
     return;
   }
 
-  // Preserve the original URL so login can redirect back with query params intact
   const returnTo = encodeURIComponent(request.url);
   const url = new URL('/login.html?returnTo=' + returnTo, request.url);
   return Response.redirect(url, 302);
