@@ -212,7 +212,7 @@ export default async function handler(req, res) {
         } catch (err) {
           console.error('Profile edit commit error:', err);
           res.setHeader('Content-Type', 'text/html');
-          return res.status(500).send(html('Error', 'Failed to apply edit: ' + err.message, '#c0392b'));
+          return res.status(500).send(html('Error', 'Something went wrong applying this edit. Please try again or contact the site admin.', '#c0392b'));
         }
       }
 

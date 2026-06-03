@@ -8,7 +8,7 @@ cloudinary.config({
 
 export default async function handler(req, res) {
   // Set CORS headers for local development
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', process.env.SITE_ORIGIN || 'https://ti-camp.org');
   res.setHeader('Access-Control-Allow-Methods', 'GET');
 
   if (req.method === 'OPTIONS') {
