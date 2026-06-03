@@ -87,6 +87,7 @@
     .branch-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--green-dark); }
     .branch-subtitle { font-size: 0.85rem; color: var(--text-mid); font-weight: 300; }
     .branch-controls { display: flex; gap: 0.5rem; align-items: center; }
+    .btn-short { display: none; }
     .btn {
       background: var(--green-dark); color: var(--cream); border: none;
       padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer;
@@ -245,12 +246,14 @@
       .branch-title { font-size: 1rem; }
       .branch-subtitle { font-size: 0.75rem; }
       .branch-controls {
-        width: 100%; overflow-x: scroll; -webkit-overflow-scrolling: touch;
-        padding-bottom: 0.3rem; flex-wrap: nowrap; display: flex;
+        width: 100%; display: flex; flex-wrap: wrap; gap: 0.4rem;
+        padding-bottom: 0.3rem;
       }
-      .branch-controls > * { flex-shrink: 0; }
-      .branch-controls .search-input { width: 150px; min-width: 150px; }
-      .branch-controls .btn { white-space: nowrap; }
+      .branch-controls .rel-input-wrap { width: 100%; }
+      .branch-controls .search-input { width: 100%; min-width: 0; }
+      .branch-controls .btn { font-size: 0.7rem; padding: 0.35rem 0.6rem; white-space: nowrap; flex: 1; }
+      .btn-full { display: none; }
+      .btn-short { display: inline; }
 
       .rel-finder {
         padding: 0.5rem 1rem; gap: 0.4rem;
@@ -301,8 +304,8 @@
         <div class="rel-autocomplete" id="search-ac"></div>
       </div>
       <span class="search-result-info" id="search-info"></span>
-      <button class="btn" onclick="fitToScreen()">Fit to Screen</button>
-      <button class="btn" onclick="expandAll()">Expand All</button>
+      <button class="btn" onclick="fitToScreen()"><span class="btn-full">Fit to Screen</span><span class="btn-short">Fit</span></button>
+      <button class="btn" onclick="expandAll()"><span class="btn-full">Expand All</span><span class="btn-short">Expand</span></button>
       <button class="btn" style="background:#8b3a3a" onclick="resetTree()">Reset</button>
     </div>
   </header>
