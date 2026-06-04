@@ -3825,7 +3825,48 @@
     "death_place": null,
     "bio": null,
     "generation": 5,
-    "facts": [],
+    "facts": [
+      {
+        "year": 1999,
+        "label": "Born",
+        "value": null
+      },
+      {
+        "year": 2017,
+        "label": "Graduated High School",
+        "value": "Illinois Mathematics and Science Academy in Aurora, IL"
+      },
+      {
+        "year": 2020,
+        "label": "Graduated College",
+        "value": "Bachelor's Degree in Computer Science and Statistics from Washington University in St. Louis"
+      },
+      {
+        "year": 2021,
+        "label": "Met Ben!",
+        "value": null
+      },
+      {
+        "year": 2021,
+        "label": "Completed Master's Degree",
+        "value": "Master's Degree in Data Analytics and Policy from Johns Hopkins University"
+      },
+      {
+        "year": 2022,
+        "label": "Moved to Hawaii",
+        "value": null
+      },
+      {
+        "year": 2025,
+        "label": "Engaged",
+        "value": null
+      },
+      {
+        "year": 2026,
+        "label": "Marriage",
+        "value": "Wedding on March 14, 2026 on Oahu in Hawaii"
+      }
+    ],
     "profile_photo": "ti-profile-photos/mariah-yelenick"
   },
   "patrick-thornton": {
