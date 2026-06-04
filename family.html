@@ -88,6 +88,7 @@
     .branch-subtitle { font-size: 0.85rem; color: var(--text-mid); font-weight: 300; }
     .branch-controls { display: flex; gap: 0.5rem; align-items: center; }
     .btn-short { display: none; }
+    .btn-rel-toggle { display: none; }
     .btn {
       background: var(--green-dark); color: var(--cream); border: none;
       padding: 0.4rem 0.9rem; border-radius: 4px; cursor: pointer;
@@ -239,10 +240,10 @@
 
     @media (max-width: 768px) {
       .branch-header {
-        flex-direction: column; align-items: flex-start;
-        padding: 0.5rem 1rem; gap: 0.4rem;
+        flex-direction: column; align-items: center;
+        padding: 0.5rem 1rem; gap: 0.4rem; text-align: center;
       }
-      .branch-header-left { flex-direction: column; gap: 0.2rem; }
+      .branch-header-left { flex-direction: column; gap: 0.2rem; align-items: center; }
       .branch-title { font-size: 1rem; }
       .branch-subtitle { font-size: 0.75rem; }
       .branch-controls {
@@ -254,6 +255,9 @@
       .branch-controls .btn { font-size: 0.7rem; padding: 0.35rem 0.6rem; white-space: nowrap; flex: 1; }
       .btn-full { display: none; }
       .btn-short { display: inline; }
+      .btn-rel-toggle { display: flex; background: var(--amber); flex-basis: 100%; justify-content: center; }
+      .rel-finder { display: none !important; }
+      .rel-finder.rel-open { display: flex !important; flex-wrap: wrap; gap: 0.4rem; padding: 0.6rem 1rem; position: relative; top: auto; }
 
       .rel-finder {
         padding: 0.5rem 1rem; gap: 0.4rem;
@@ -307,6 +311,7 @@
       <button class="btn" onclick="fitToScreen()"><span class="btn-full">Fit to Screen</span><span class="btn-short">Fit</span></button>
       <button class="btn" onclick="expandAll()"><span class="btn-full">Expand All</span><span class="btn-short">Expand</span></button>
       <button class="btn" style="background:#8b3a3a" onclick="resetTree()">Reset</button>
+      <button class="btn btn-rel-toggle" onclick="document.querySelector('.rel-finder').classList.toggle('rel-open')"><span class="btn-full">Find Relationship</span><span class="btn-short">Relationship</span></button>
     </div>
   </header>
 
