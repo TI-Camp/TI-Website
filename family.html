@@ -264,11 +264,11 @@
         background: var(--amber); color: white; border-color: var(--amber);
       }
       .rel-finder {
-        display: none; position: relative; top: auto;
+        display: none !important; position: relative !important; top: auto !important;
         padding: 0.8rem 1rem; gap: 0.5rem;
-        flex-wrap: wrap;
+        flex-wrap: wrap; box-shadow: none;
       }
-      .rel-finder.rel-open { display: flex; }
+      .rel-finder.rel-open { display: flex !important; }
       .rel-finder label { width: 100%; font-size: 0.85rem; }
       .rel-finder .rel-input-wrap { flex: 1; min-width: 0; }
       .rel-input { width: 100%; min-width: 0; }
@@ -2532,50 +2532,7 @@
       g.selectAll(".journey-label").remove();
     }
 
-    // ══════════════════════════════════════════════
-    // Step 1+2 TEST — open browser console to verify
-    // ══════════════════════════════════════════════
-
-    console.log("People found:", allPeopleFlat.length);
-    console.log("Parent map size:", parentMap.size);
-
-    function testLCA(nameA, nameB) {
-      const entryA = findPersonByName(nameA);
-      const entryB = findPersonByName(nameB);
-      if (!entryA) { console.warn("Not found:", nameA); return; }
-      if (!entryB) { console.warn("Not found:", nameB); return; }
-      const bloodA = getBloodNode(entryA);
-      const bloodB = getBloodNode(entryB);
-      if (bloodA === bloodB) {
-        console.log(`${nameA} ↔ ${nameB}  →  SPOUSES or SAME PERSON`);
-        return;
-      }
-      const result = findLCA(bloodA, bloodB);
-      if (!result) { console.warn("No common ancestor found"); return; }
-      let label = getRelationshipLabel(result.stepsA, result.stepsB);
-      if (entryA.isSpouse || entryB.isSpouse) label += " (by marriage)";
-      console.log(
-        `${nameA} ↔ ${nameB}  →  ${label.toUpperCase()}`,
-        `\n  LCA: ${result.lca.name} (gen ${result.lca.generation})`,
-        `\n  Steps: ${result.stepsA} up, ${result.stepsB} down`,
-        `\n  Path: ${result.path.map(n => n.name).join(" → ")}`
-      );
-    }
-
-    // Test cases — check browser console (Cmd+Option+J)
-    console.log("═══ RELATIONSHIP CALCULATOR TESTS ═══");
-    testLCA("Benjamin Boughton", "Jennifer Boughton");     // Siblings
-    testLCA("Benjamin Boughton", "Bill Boughton");         // Parent/child
-    testLCA("Benjamin Boughton", "Peter Horning");         // 1st cousins
-    testLCA("Benjamin Boughton", "Chloe Boughton");        // 1st cousins
-    testLCA("Benjamin Boughton", "Eila Horning");          // 1st cousins once removed
-    testLCA("Eila Horning", "Chloe Boughton");             // 2nd cousins
-    testLCA("Roland Richardson", "Adelaide Richardson");    // Siblings (Gen 1)
-    testLCA("Benjamin Boughton", "Nancy Kurlin");          // 1st cousins once removed
-    testLCA("Chloe Boughton", "Charlotte Parsley");        // 3rd cousins (across Roland → Adelaide)
-    testLCA("Benjamin Boughton", "Alex Scott");            // 2nd cousins once removed (across Roland → Coombs)
-    testLCA("Benjamin Boughton", "Joe Boughton");          // Grandfather (by marriage)
-    testLCA("Joe Boughton", "Althea Ford");                // Spouses' in-laws (by marriage)
+    // Relationship calculator test suite removed — was logging to console in production
 
     draw();
     setTimeout(fitToScreen, 50);
