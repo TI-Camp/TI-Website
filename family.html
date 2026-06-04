@@ -263,12 +263,24 @@
       .btn-rel-toggle.active {
         background: var(--amber); color: white; border-color: var(--amber);
       }
-      .rel-finder {
-        display: none !important; position: relative !important; top: auto !important;
-        padding: 0.8rem 1rem; gap: 0.5rem;
-        flex-wrap: wrap; box-shadow: none;
+      .rel-finder, .rel-finder:not(.rel-open) {
+        display: none;
+        position: relative;
+        top: auto;
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        box-shadow: none;
+        border: none;
       }
-      .rel-finder.rel-open { display: flex !important; }
+      .rel-finder.rel-open {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.8rem 1rem;
+        max-height: none;
+        overflow: visible;
+      }
       .rel-finder label { width: 100%; font-size: 0.85rem; }
       .rel-finder .rel-input-wrap { flex: 1; min-width: 0; }
       .rel-input { width: 100%; min-width: 0; }
