@@ -255,20 +255,27 @@
       .branch-controls .btn { font-size: 0.7rem; padding: 0.35rem 0.6rem; white-space: nowrap; flex: 1; }
       .btn-full { display: none; }
       .btn-short { display: inline; }
-      .btn-rel-toggle { display: flex; background: var(--amber); flex-basis: 100%; justify-content: center; }
-      .rel-finder { display: none !important; }
-      .rel-finder.rel-open { display: flex !important; flex-wrap: wrap; gap: 0.4rem; padding: 0.6rem 1rem; position: relative; top: auto; }
-
-      .rel-finder {
-        padding: 0.5rem 1rem; gap: 0.4rem;
-        overflow-x: auto; -webkit-overflow-scrolling: touch;
-        flex-wrap: nowrap;
+      .btn-rel-toggle {
+        display: flex; flex-basis: 100%; justify-content: center;
+        background: var(--green-dark); border: 2px solid var(--amber);
+        color: var(--amber); font-weight: 700;
       }
-      .rel-finder label { white-space: nowrap; }
-      .rel-input { width: 130px; min-width: 130px; }
-      .rel-find-btn { white-space: nowrap; flex-shrink: 0; }
-      .rel-result { white-space: nowrap; }
-      .rel-lca { white-space: nowrap; }
+      .btn-rel-toggle.active {
+        background: var(--amber); color: white; border-color: var(--amber);
+      }
+      .rel-finder {
+        display: none; position: relative; top: auto;
+        padding: 0.8rem 1rem; gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .rel-finder.rel-open { display: flex; }
+      .rel-finder label { width: 100%; font-size: 0.85rem; }
+      .rel-finder .rel-input-wrap { flex: 1; min-width: 0; }
+      .rel-input { width: 100%; min-width: 0; }
+      .rel-find-btn { white-space: nowrap; }
+      .rel-swap { flex-shrink: 0; }
+      .rel-result { width: 100%; }
+      .rel-lca { width: 100%; }
 
       #tree-container { top: 200px; }
       .legend { gap: 0.4rem; font-size: 0.65rem; padding: 0.4rem 0.6rem; }
@@ -311,7 +318,7 @@
       <button class="btn" onclick="fitToScreen()"><span class="btn-full">Fit to Screen</span><span class="btn-short">Fit</span></button>
       <button class="btn" onclick="expandAll()"><span class="btn-full">Expand All</span><span class="btn-short">Expand</span></button>
       <button class="btn" style="background:#8b3a3a" onclick="resetTree()">Reset</button>
-      <button class="btn btn-rel-toggle" onclick="document.querySelector('.rel-finder').classList.toggle('rel-open')"><span class="btn-full">Find Relationship</span><span class="btn-short">Relationship</span></button>
+      <button class="btn btn-rel-toggle" id="rel-toggle-btn" onclick="var f=document.querySelector('.rel-finder');var b=this;f.classList.toggle('rel-open');b.classList.toggle('active')"><span class="btn-full">Find Relationship</span><span class="btn-short">Find Relationship</span></button>
     </div>
   </header>
 
