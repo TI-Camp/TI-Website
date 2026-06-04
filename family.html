@@ -332,24 +332,24 @@
       <button class="btn" style="background:#8b3a3a" onclick="resetTree()">Reset</button>
       <button class="btn btn-rel-toggle" id="rel-toggle-btn" onclick="var f=document.querySelector('.rel-finder');var b=this;f.classList.toggle('rel-open');b.classList.toggle('active')"><span class="btn-full">Find Relationship</span><span class="btn-short">Find Relationship</span></button>
     </div>
-  </header>
 
-  <div class="rel-finder">
-    <label>Find Relationship:</label>
-    <div class="rel-input-wrap">
-      <input type="text" class="rel-input" id="rel-person-a" placeholder="Person 1..." autocomplete="off" />
-      <div class="rel-autocomplete" id="rel-ac-a"></div>
+    <div class="rel-finder">
+      <label>Find Relationship:</label>
+      <div class="rel-input-wrap">
+        <input type="text" class="rel-input" id="rel-person-a" placeholder="Person 1..." autocomplete="off" />
+        <div class="rel-autocomplete" id="rel-ac-a"></div>
+      </div>
+      <button class="rel-swap" onclick="swapPersons()" title="Swap">&hArr;</button>
+      <div class="rel-input-wrap">
+        <input type="text" class="rel-input" id="rel-person-b" placeholder="Person 2..." autocomplete="off" />
+        <div class="rel-autocomplete" id="rel-ac-b"></div>
+      </div>
+      <button class="rel-find-btn" onclick="calculateRelationship()">Find</button>
+      <span class="rel-result" id="rel-result"></span>
+      <span class="rel-lca" id="rel-lca"></span>
+      <button class="rel-find-btn" id="rel-show-btn" onclick="showOnTree()" style="display:none">Take the Journey</button>
     </div>
-    <button class="rel-swap" onclick="swapPersons()" title="Swap">&hArr;</button>
-    <div class="rel-input-wrap">
-      <input type="text" class="rel-input" id="rel-person-b" placeholder="Person 2..." autocomplete="off" />
-      <div class="rel-autocomplete" id="rel-ac-b"></div>
-    </div>
-    <button class="rel-find-btn" onclick="calculateRelationship()">Find</button>
-    <span class="rel-result" id="rel-result"></span>
-    <span class="rel-lca" id="rel-lca"></span>
-    <button class="rel-find-btn" id="rel-show-btn" onclick="showOnTree()" style="display:none">Take the Journey</button>
-  </div>
+  </header>
 
   <div id="tree-container">
     <svg id="tree-svg"></svg>
