@@ -353,7 +353,9 @@
   "jill-courts": {
     "name": "Jill Courts",
     "maiden_name": null,
-    "nicknames": [],
+    "nicknames": [
+      "Jill Boughton"
+    ],
     "birth_year": null,
     "birth_place": null,
     "death_year": null,
