@@ -2173,7 +2173,13 @@
     "death_place": null,
     "bio": "Robert F. Lovett, Jr.",
     "generation": 2,
-    "facts": []
+    "facts": [
+      {
+        "year": 1934,
+        "label": "Date of Birth.",
+        "value": "November 25, 1934. Cincinnati, Ohio."
+      }
+    ]
   },
   "linda-coombs-lovett": {
     "name": "Linda Coombs Lovett",
