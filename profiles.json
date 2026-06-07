@@ -1670,7 +1670,9 @@
   "coombs-richardson": {
     "name": "Coombs Richardson",
     "maiden_name": null,
-    "nicknames": [],
+    "nicknames": [
+      "Nana"
+    ],
     "birth_year": null,
     "birth_place": null,
     "death_year": null,
