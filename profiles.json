@@ -2164,7 +2164,9 @@
   "robert-fillmore-lovett": {
     "name": "Robert Fillmore Lovett",
     "maiden_name": null,
-    "nicknames": [],
+    "nicknames": [
+      "Robert Lovett Sr"
+    ],
     "birth_year": null,
     "birth_place": null,
     "death_year": null,
