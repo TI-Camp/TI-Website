@@ -2487,7 +2487,28 @@
     "death_place": null,
     "bio": null,
     "generation": 3,
-    "facts": []
+    "facts": [
+      {
+        "year": 1963,
+        "label": "Date of Birth",
+        "value": "New York, NY"
+      },
+      {
+        "year": 1991,
+        "label": "Married Amy Myers Sibert",
+        "value": "Washington, D.C."
+      },
+      {
+        "year": 1996,
+        "label": "Birth of Sophia Myers Lovett, daughter. Nickname 'Sophie.'",
+        "value": "Charlotte, NC"
+      },
+      {
+        "year": 1999,
+        "label": "× Birth of Robert Fillmore Lovett IV, son. Nickname 'Bo.'",
+        "value": "Charlotte, NC"
+      }
+    ]
   },
   "sara-c-newcomb": {
     "name": "Sara C. Newcomb",
