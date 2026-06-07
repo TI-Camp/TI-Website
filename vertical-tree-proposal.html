@@ -805,7 +805,7 @@
                     {
                       name: "Thomas L. Bogardus",
                       spouse: "Robert de Haan",
-                      generation: 3
+                      generation: 4
                     }
                   ]
                 }
@@ -1618,9 +1618,11 @@
 
     const searchAc = document.getElementById("search-ac");
     const searchInput = document.getElementById("search-input");
+    let selectedSearchEntry = null;
 
     // Show autocomplete dropdown as user types
     searchInput.addEventListener("input", function() {
+      selectedSearchEntry = null;
       const term = this.value.toLowerCase().trim();
       if (term.length >= 1) {
         const acMatches = sortedPeople.filter(p =>
@@ -1637,6 +1639,7 @@
           searchAc.querySelectorAll(".rel-option").forEach((el, i) => {
             el.addEventListener("click", () => {
               searchInput.value = acMatches[i].name;
+              selectedSearchEntry = acMatches[i];
               searchAc.classList.remove("open");
               doSearch(acMatches[i].name.toLowerCase());
             });
@@ -1728,8 +1731,19 @@
       });
       g.selectAll(".node-card").style("opacity", d => matchD3Set.has(d) ? 1 : 0.15);
 
-      // Zoom in tight to the first match
-      const firstMatch = root.descendants().find(d => matchDataNodes.has(d.data));
+      // Zoom to the exact selected entry if picked from autocomplete, else best text match
+      let firstMatch;
+      if (selectedSearchEntry) {
+        const targetGen = selectedSearchEntry.generation;
+        const targetName = selectedSearchEntry.name.toLowerCase();
+        firstMatch = Array.from(matchD3Set).find(d =>
+          d.data.isMarriageNode && d.data.name.toLowerCase() === targetName && d.data.generation === targetGen
+        ) || Array.from(matchD3Set).find(d =>
+          d.data.name && d.data.name.toLowerCase() === targetName && d.data.generation === targetGen
+        ) || Array.from(matchD3Set)[0];
+      } else {
+        firstMatch = Array.from(matchD3Set).find(d => d.data.name && d.data.name.toLowerCase().includes(term)) || Array.from(matchD3Set)[0];
+      }
       if (firstMatch) {
         const parentRect = svg.node().getBoundingClientRect();
         svg.transition().duration(400).call(
