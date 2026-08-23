@@ -228,6 +228,25 @@
     .tag-all { background: rgba(30, 77, 43, 0.1); color: var(--green-dark); }
     .tag-water { background: rgba(86, 180, 233, 0.15); color: #2a7eaa; }
 
+    .video-embed-wrap {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+    }
+    .video-embed-wrap iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+    .video-card-embed {
+      flex-direction: column;
+    }
+    .video-card-embed .video-info { width: 100%; }
+
     @media (max-width: 600px) {
       .video-card { flex-direction: column; }
       .video-thumb { width: 100%; height: 160px; }
@@ -329,11 +348,13 @@
       <summary>Navigating the Water <span class="section-count">6 videos</span></summary>
       <div class="section-body">
 
-        <div class="video-card">
-          <div class="video-thumb"><span class="play-icon">▶</span></div>
+        <div class="video-card video-card-embed">
+          <div class="video-embed-wrap">
+            <iframe src="https://www.youtube.com/embed/Ak-XqreFazM?si=WRxI4JqLsOgQ1sR0" title="Station to Treasure Island" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
           <div class="video-info">
             <h3>Station to Treasure Island</h3>
-            <p>Time-lapse of the route with slowdowns at key navigation markers.</p>
+            <p>Side-by-side route guide from the station to the island.</p>
             <span class="video-tag tag-water">WATER ROUTE</span>
           </div>
         </div>
