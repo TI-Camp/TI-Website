@@ -1460,7 +1460,9 @@
   "jami-compton": {
     "name": "Jami Compton",
     "maiden_name": null,
-    "nicknames": [],
+    "nicknames": [
+      "Jami Pressman"
+    ],
     "birth_year": null,
     "birth_place": null,
     "death_year": null,
