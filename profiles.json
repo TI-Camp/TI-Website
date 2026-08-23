@@ -1467,7 +1467,28 @@
     "death_place": null,
     "bio": null,
     "generation": 5,
-    "facts": []
+    "facts": [
+      {
+        "year": 1989,
+        "label": "Birth",
+        "value": null
+      },
+      {
+        "year": 2016,
+        "label": "Married Reuben Pressman",
+        "value": "Married on Pijiki"
+      },
+      {
+        "year": 2021,
+        "label": "Gave birth to Pepper Pressman",
+        "value": "July 15, 2021"
+      },
+      {
+        "year": 2023,
+        "label": "Gave birth to Capri Pressman",
+        "value": "September 13, 2023"
+      }
+    ]
   },
   "reuben-pressman": {
     "name": "Reuben Pressman",
