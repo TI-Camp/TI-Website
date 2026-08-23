@@ -2969,7 +2969,9 @@
   "hugh-garvin-1": {
     "name": "Hugh Garvin",
     "maiden_name": null,
-    "nicknames": [],
+    "nicknames": [
+      "Bub"
+    ],
     "birth_year": null,
     "birth_place": null,
     "death_year": null,
