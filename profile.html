@@ -824,7 +824,7 @@
 
       let profiles;
       try {
-        const resp = await fetch("profiles.json");
+        const resp = await fetch("profiles.json?v=" + Date.now());
         if (!resp.ok) throw new Error("Failed to load profiles");
         profiles = await resp.json();
       } catch (e) {
